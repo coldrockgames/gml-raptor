@@ -112,30 +112,30 @@ function unit_test_Strings() {
 	}
 
 	ut.tests.string_to_real_ok = function(test, data) {
-		test.assert_equals(42, string_to_real(" 42 ")		, "1");
-		test.assert_equals(-42, string_to_real(" -42 ")		, "2");
-		test.assert_equals(42, string_to_real(" 42,43,44 ")	, "3");
-		test.assert_null(string_to_real("hello world 42")	, "4");
+		test.assert_equals(42,  string_to_real(" 42 ")		, "1" );
+		test.assert_equals(-42, string_to_real(" -42 ")		, "2" );
+		test.assert_null(string_to_real(" 42,43,44 ")		, "3" );
+		test.assert_null(string_to_real("hello world 42")	, "4" );
 		
-		test.assert_equals(42, string_to_real_ex(" 42 ")	, "5");
-		test.assert_equals(-42, string_to_real_ex(" -42. ")	, "6");
-		test.assert_null(string_to_real_ex(" 42-43.44 ")	, "7");
-		test.assert_null(string_to_real_ex(" 42.43.44 ")	, "8");
-		test.assert_null(string_to_real_ex(" 42,43,44 ")	, "9");
+		test.assert_equals(42,  string_to_real_ex(" 42 ")	, "5" );
+		test.assert_equals(-42, string_to_real_ex(" -42. ")	, "6" );
+		test.assert_null(string_to_real_ex(" 42-43.44 ")	, "7" );
+		test.assert_null(string_to_real_ex(" 42.43.44 ")	, "8" );
+		test.assert_null(string_to_real_ex(" 42,43,44 ")	, "9" );
 		test.assert_null(string_to_real_ex("hello world 42"), "10");		
 	}
 
 	ut.tests.string_to_int_ok = function(test, data) {
-		test.assert_equals(42, string_to_int(" 42 ")		, "1");
-		test.assert_equals(-42, string_to_int(" -42,43,44 "), "2");
-		test.assert_null(string_to_int("hello world 42")	, "3");
+		test.assert_equals(42, string_to_int(" 42 ")		, "1" );
+		test.assert_null(string_to_int(" -42,43,44 ")		, "2" );
+		test.assert_null(string_to_int("hello world 42")	, "3" );
 		
-		test.assert_equals(42, string_to_int_ex(" 42 ")		, "4");
-		test.assert_equals(-42, string_to_int_ex(" -42 ")	, "5");
-		test.assert_null(string_to_int_ex(" -42. ")			, "6");
-		test.assert_null(string_to_int_ex(" 42-43.44 ")		, "7");
-		test.assert_null(string_to_int_ex(" 42.43.44 ")		, "8");
-		test.assert_null(string_to_int_ex(" 42,43,44 ")		, "9");
+		test.assert_equals(42, string_to_int_ex(" 42 ")		, "4" );
+		test.assert_equals(-42, string_to_int_ex(" -42 ")	, "5" );
+		test.assert_null(string_to_int_ex(" -42. ")			, "6" );
+		test.assert_null(string_to_int_ex(" 42-43.44 ")		, "7" );
+		test.assert_null(string_to_int_ex(" 42.43.44 ")		, "8" );
+		test.assert_null(string_to_int_ex(" 42,43,44 ")		, "9" );
 		test.assert_null(string_to_int_ex("hello world 42")	, "10");
 	}
 

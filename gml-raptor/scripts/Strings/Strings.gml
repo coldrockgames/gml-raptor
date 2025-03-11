@@ -212,7 +212,7 @@ function string_is_empty(str) {
 /// @desc	Tries to convert the string to a real. returns undefined, if failed
 function string_to_real(str) {
 	gml_pragma("forceinline");
-	try { return real(str); } catch(_) { return undefined; }
+	try { return real(string_trim(str)); } catch(_) { return undefined; }
 }
 
 /// @func	string_to_real_ex(str)
@@ -262,7 +262,7 @@ function string_to_real_ex(str, __allow_decimal = true) {
 /// @desc	Tries to convert the string to an int64. returns undefined, if failed
 function string_to_int(str) {
 	gml_pragma("forceinline");
-	try { return int64(str); } catch(_) { return undefined; }
+	try { return int64(string_trim(str)); } catch(_) { return undefined; }
 }
 
 /// @func	string_to_int_ex(str)

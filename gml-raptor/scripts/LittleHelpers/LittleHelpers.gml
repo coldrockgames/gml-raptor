@@ -125,9 +125,9 @@ function name_of(_instance, _with_ref_id = true) {
 		else {
 			if (IS_HTML) {
 				var hash = string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
-				return $"{(struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
+				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
 			} else
-				return $"{(struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? ptr(_instance) : "")}";
+				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? ptr(_instance) : "")}";
 		}
 	}
 	

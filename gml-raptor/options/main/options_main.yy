@@ -1,6 +1,18 @@
 {
   "$GMMainOptions":"v3",
   "%Name":"Main",
+  "ConfigValues":{
+    "unit_testing":{
+      "option_legacy_other_behaviour":"false",
+      "option_legacy_number_conversion":"false",
+      "option_legacy_json_parsing":"false",
+    },
+    "release":{
+      "option_legacy_other_behaviour":"false",
+      "option_legacy_number_conversion":"false",
+      "option_legacy_json_parsing":"false",
+    },
+  },
   "name":"Main",
   "option_audio_error_behaviour":true,
   "option_author":"",
@@ -10,9 +22,9 @@
   "option_gameguid":"5cb810e0-395c-4255-95c6-8272bb45e3e5",
   "option_gameid":"0",
   "option_game_speed":60,
-  "option_legacy_json_parsing":true,
-  "option_legacy_number_conversion":true,
-  "option_legacy_other_behaviour":true,
+  "option_legacy_json_parsing":false,
+  "option_legacy_number_conversion":false,
+  "option_legacy_other_behaviour":false,
   "option_mips_for_3d_textures":false,
   "option_remove_unused_assets":false,
   "option_sci_usesci":false,
