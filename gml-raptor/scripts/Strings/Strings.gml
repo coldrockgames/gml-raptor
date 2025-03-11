@@ -155,11 +155,12 @@ function string_last_index_of(str, substr, startpos = 1) {
 
 /// @func	string_match(str, wildcard_str)
 /// @desc	Checks whether a string matches a specific wildcard string.
-///			Wildcard character is '*' and it can appear at the beginning,
-///			the end, or both.
+///			Wildcard character is '*' and it can appear anywhere in the string, any number of times.
 ///			* at the beginning means "ends_with" (hello -> *llo)
 ///			* at the end means "starts_with" (hello -> he*)
 ///			* on both ends means "contains" (hello -> *ell*)
+///			* somewhere in the middle means "starts with and ends with" (hello -> he*o)
+///			You may combine the above in any way you like! ("Hello, World" -> "He*o*Wo*d*")
 ///			NOTE: if no '*' is in wildcard_str, then a == exact match counts!
 ///			Examples:
 ///			string_match("hello", "hel*") -> true
@@ -169,28 +170,33 @@ function string_last_index_of(str, substr, startpos = 1) {
 /// @param {string} wildcard_str
 /// @returns {bool}	
 function string_match(str, wildcard_str) {
-	if (wildcard_str == "*") 
-		return true;
-	
-	var startwith = false, endwith = false;
-	if (string_starts_with(wildcard_str, "*")) {
-		endwith = true;
-		wildcard_str = string_skip_start(wildcard_str, 1);
-	}
-	if (string_ends_with(wildcard_str, "*")) {
-		startwith = true;
-		wildcard_str = string_skip_end(wildcard_str, 1);
-	}
-	
-	var contain = startwith && endwith;
-	var rv = false;
+    if (wildcard_str == "*") 
+        return true;
 
-	if (contain)		rv = string_contains(str, wildcard_str);
-	else if (startwith) rv = string_starts_with(str, wildcard_str);
-	else if (endwith)	rv = string_ends_with(str, wildcard_str);
-	else				rv = str == wildcard_str;
+	if (string_index_of(wildcard_str, "*") == 0)
+		return str == wildcard_str;
 
-	return rv;
+	var full_len = string_length(str);
+    var parts = string_split(wildcard_str, "*", false);
+	var index = 1;
+	var found_at = 0;
+	var part;
+	var part_len;
+
+	for (var i = 0, len = array_length(parts); i < len; i++) {
+        part = parts[@i];
+		if (part == "") continue;
+		
+        part_len = string_length(part);
+        found_at = string_pos_ext(part, str, index);
+        if (found_at == 0) return false;
+        if (i == 0 && found_at != 1) return false; // test string start
+        if (i == len - 1 && found_at + part_len - 1 != full_len) return false; // test string end
+
+        index = found_at + part_len;
+    }
+	
+    return true;
 }
 
 /// @func	string_is_empty(str)
@@ -343,11 +349,12 @@ function string_get_hex(decimal, len = 2, to_uppercase = true) {
 ///			If _with_inheritance is true, interpret also succeeds if the _instance is a child of the
 ///			type name of _str. It is automatically detected, whether _instance is an object or class instance.
 ///			Example: 
-///			- You are ("self") an object or an instance of type Enemy that contains .data.name with a value of "Mummy"
+///			- You are ("self") an object or an instance of type Enemy 
+///			  that contains .data.name with a value of "Mummy"
 ///			- You call string_interpret("Enemy.data.name:Mummy", self) and it returns true, because
 ///           your .data.name == "Mummy"
 ///			- Would you call it with ("Enemy.data.name:Scarab", self) it would return false.
-///			This function is very useful to connect variables/members of objects in string, like when
+///			This function is very useful to connect variables/members of objects in strings, like when
 ///			you read data from json and want to compare it with runtime data of your living objects.
 ///			Boolean conversion is automatically in place, ":true" and ":false" are compared with "1" and "0"
 ///			(which is gml default)

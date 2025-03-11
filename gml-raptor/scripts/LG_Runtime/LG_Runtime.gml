@@ -12,8 +12,6 @@
 
 #macro __LG_INIT_ERROR_SHOWN	global.__lg_init_error_shown
 #macro __LG_INITIALIZED			global.__lg_initialized
-#macro __LG_HTML_NEED_CHECK		global.__lg_html_need_check
-#macro __LG_HTML_INITIALIZED	(!__LG_HTML_NEED_CHECK || (variable_global_exists("__lg_languages") && is_array(LG_AVAIL_LOCALES) && array_length(LG_AVAIL_LOCALES) > 0))
 
 __LG_ASYNC_FILES		= [];
 __LG_INIT_ERROR_SHOWN	= false;
@@ -22,50 +20,18 @@ __LG_INIT_ERROR_SHOWN	= false;
 /// @desc	Loads and fills an array of available languages. Normally you do not need to call this function,
 ///			as it gets called through the LG_init() process.
 function __LG_load_avail_languages() {
-	if (!directory_exists(working_directory + LG_ROOT_FOLDER)) {
-		flog($"No locale folder found! ** EXITING **");
-		EXIT_GAME;
-		return false;
-	}
-	LG_AVAIL_LOCALES = [];
-
-	var substring_first = string_length(__LG_LOCALE_BASE_NAME) + 1;
-	var f = file_find_first(
-		string_concat(working_directory, LG_ROOT_FOLDER, __LG_LOCALE_BASE_NAME, "*", DATA_FILE_EXTENSION), 0);
-	var i = 0;
-	while (f != "") {
-		array_push(LG_AVAIL_LOCALES, string_copy(f, substring_first, 2));
-		LG_AVAIL_LOCALES[@ i++] = string_copy(f, substring_first, 2);
-		ilog($"Found language: '{string_copy(f, substring_first, 2)}'");
-		f = file_find_next();
-	}
-	file_find_close();
+	LG_AVAIL_LOCALES = directory_list_directories(LG_ROOT_FOLDER);
+	
+	for (var i = 0, len = array_length(LG_AVAIL_LOCALES); i < len; i++)
+		LG_AVAIL_LOCALES[@i] = string_replace(LG_AVAIL_LOCALES[@i], LG_ROOT_FOLDER, "");
+	
 	ilog($"{array_length(LG_AVAIL_LOCALES)} language(s) found for this game");
-	return true;
-}
-
-/// @func	__LG_get_locale_filename(localeName)
-/// @desc	Builds the full filename of a language json resource file.
-function __LG_get_locale_filename(localeName) {
-	return string_concat(LG_ROOT_FOLDER, __LG_LOCALE_BASE_NAME, localeName, DATA_FILE_EXTENSION);
 }
 
 /// @func	__LG_locale_exists(localeName)
 /// @desc	Checks, whether a file for the specified locale exists.
 function __LG_locale_exists(localeName) {
-	return IS_HTML ? array_contains(LG_AVAIL_LOCALES, localeName) : file_exists(__LG_get_locale_filename(localeName));
-}
-
-/// @func	__LG_load_file(localeName)
-/// @desc	Checks, whether a file for the specified locale exists.
-function __LG_load_file(localeName) {
-	if (__LG_locale_exists(localeName)) {
-		dlog($"Loading locale '{localeName}'...");
-		__LG_STRINGS = file_read_struct(__LG_get_locale_filename(localeName), FILE_CRYPT_KEY);
-		dlog($"Locale '{localeName}' loaded successfully");
-		return true;
-	}
-	return false;
+	return array_contains(LG_AVAIL_LOCALES, localeName);
 }
 
 /// @func	LG_add_file_async(_filename)
@@ -82,8 +48,8 @@ function LG_add_file_async(_filename) {
 		return undefined;
 	
 	array_push(__LG_ASYNC_FILES, _filename);
-	var deffile = string_concat(LG_ROOT_FOLDER, _filename, "_", LG_DEFAULT_LANGUAGE, DATA_FILE_EXTENSION);
-	var curfile = string_concat(LG_ROOT_FOLDER, _filename, "_", LG_CURRENT_LOCALE, DATA_FILE_EXTENSION);
+	var deffile = string_concat(LG_ROOT_FOLDER, LG_DEFAULT_LANGUAGE, "/", _filename, DATA_FILE_EXTENSION);
+	var curfile = string_concat(LG_ROOT_FOLDER, LG_CURRENT_LOCALE  , "/", _filename, DATA_FILE_EXTENSION);
 	var def = file_read_struct_async(deffile, FILE_CRYPT_KEY);
 	if (def != undefined)
 		def
@@ -127,6 +93,16 @@ function LG_get_fallback_stringmap() {
 	return __LG_FALLBACK;
 }
 
+function __LG_flatten_tree(_struct) {
+	var rv = {};
+	var names = struct_get_names(_struct);
+	for (var i = 0, len = array_length(names); i < len; i++) {
+		var name = names[@i];
+		struct_join_into(rv, _struct[$ name]);
+	}
+	return rv;
+}
+
 /// @func	LG_init(locale_to_use = undefined)
 /// @desc	Initializes the LG system. If LG_AUTO_INIT_ON_STARTUP is set to false, 
 ///			must be called at start of the game.
@@ -134,6 +110,7 @@ function LG_get_fallback_stringmap() {
 ///			of the current language.
 ///			To "hot-swap" the display language, use the LG_hotswap(...) function.
 function LG_init(locale_to_use = undefined) {
+	__LG_INITIALIZED	= true;
 	__LG_ASYNC_FILES	= [];
 	__LG_FALLBACK		= undefined;
 	__LG_STRINGS		= undefined;
@@ -141,27 +118,23 @@ function LG_init(locale_to_use = undefined) {
 	LG_OS_LANGUAGE		= os_get_language();
 	LG_CURRENT_LOCALE	= (locale_to_use == undefined ? LG_OS_LANGUAGE : locale_to_use);
 	
-	var loaded = false;
-	if (IS_HTML)
-		loaded = __LG_HTML_INITIALIZED;
-	else
-		loaded = __LG_load_avail_languages();
+	__LG_load_avail_languages();
 	
-	__LG_INITIALIZED = loaded;
-	if (loaded) {
-		var default_exists = __LG_locale_exists(LG_DEFAULT_LANGUAGE);
-		var current_exists = __LG_locale_exists(LG_CURRENT_LOCALE);
-		if (default_exists) {
-			__LG_load_file(LG_DEFAULT_LANGUAGE);
-			__LG_FALLBACK = __LG_STRINGS;
-		}
-		if (current_exists)
-			__LG_load_file(LG_CURRENT_LOCALE);
-		if (!default_exists && !current_exists) {
-			flog($"** ERROR ** Neither default nor current OS locale exists! Aborting.");
-			EXIT_GAME;
-		}
-	}	
+	var default_exists = __LG_locale_exists(LG_DEFAULT_LANGUAGE);
+	var current_exists = __LG_locale_exists(LG_CURRENT_LOCALE);
+	
+	if (default_exists) {
+		__LG_STRINGS = __LG_flatten_tree(directory_read_data_tree(string_concat(LG_ROOT_FOLDER, LG_DEFAULT_LANGUAGE))[$ LG_DEFAULT_LANGUAGE]);
+		__LG_FALLBACK = __LG_STRINGS;
+	}
+	
+	if (current_exists)
+		__LG_STRINGS = __LG_flatten_tree(directory_read_data_tree(string_concat(LG_ROOT_FOLDER, LG_CURRENT_LOCALE))[$ LG_CURRENT_LOCALE]);
+		
+	if (!default_exists && !current_exists) {
+		flog($"** ERROR ** Neither default nor current OS locale exists! Aborting.");
+		EXIT_GAME;
+	}
 }
 
 /// @func	LG_hotswap(new_locale, _finished_callback = undefined, _switch_to_loading_screen = false)
@@ -212,15 +185,7 @@ function LG_hotswap(new_locale, _finished_callback = undefined, _switch_to_loadi
 function LG() {
 	var wildcard = false;
 	
-	if (!__LG_HTML_INITIALIZED) {
-		if (!__LG_INIT_ERROR_SHOWN) {
-			show_message(string_concat(
-				"LG Error: On HTML Runtime you must declare the available locales\nin the array LG_AVAIL_LOCALES!\n\n",
-				"Example: LG_AVAIL_LOCALES=[\"en\",\"de\",\"es\"]\n\n",
-				"In the HTML runtime you also need to call LG_Init() manually after the initialization of LG_AVAIL_LOCALES"));
-			__LG_INIT_ERROR_SHOWN = true;
-		}
-	} else if (!__LG_INITIALIZED) {
+	if (!__LG_INITIALIZED) {
 		if (!__LG_INIT_ERROR_SHOWN) {
 			show_message(string_concat(
 				"LG Error: Not initialized.\nIf you set LG_AUTO_INIT to false you MUST call LG_Init() before your first\n",
@@ -305,9 +270,8 @@ function LG() {
 			var sa = string_split(string_substring(str, 1, string_pos("]", str) - 1), ".");
 			TRY
 				var next = struct_get(_scope, sa[0]);
-				for (var i = 1, len = array_length(sa); i < len; i++) {
+				for (var i = 1, len = array_length(sa); i < len; i++) 
 					next = struct_get(next, sa[@i]);
-				}
 				
 				if (is_method(next))
 					return string(next());
@@ -415,14 +379,9 @@ function LG_resolve(str) {
 
 ENSURE_LOGGER;
 
-__LG_HTML_NEED_CHECK = IS_HTML;
-__LG_INITIALIZED = IS_HTML; // for html, we start initialized, there is a second check __LG_HTML_INITIALIZED 
-							// that takes care whether the required globals exist for HTML
+__LG_INITIALIZED = false;
 if (LG_AUTO_INIT_ON_STARTUP) {
 	show_debug_message("Initializing LG localization subsystem.");
-	if (IS_HTML)
-		show_debug_message(string_concat("LG is in HTML mode. Preset languages are ", string(HTML_LOCALES)));
-	else
-		LG_init();
+	LG_init();
 }
 	

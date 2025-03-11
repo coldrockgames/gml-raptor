@@ -109,26 +109,11 @@
           "CopyToMask":"0",
         },
       },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_de.json","ConfigValues":{
-        "release":{
-          "CopyToMask":"0",
-        },
-      },"CopyToMask":-1,"filePath":"datafiles/locale","name":"locale_de.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_de.jx","ConfigValues":{
-        "release":{
-          "CopyToMask":"-1",
-        },
-      },"CopyToMask":0,"filePath":"datafiles/locale","name":"locale_de.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_en.json","ConfigValues":{
-        "release":{
-          "CopyToMask":"0",
-        },
-      },"CopyToMask":-1,"filePath":"datafiles/locale","name":"locale_en.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_en.jx","ConfigValues":{
-        "release":{
-          "CopyToMask":"-1",
-        },
-      },"CopyToMask":0,"filePath":"datafiles/locale","name":"locale_en.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.json","CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",

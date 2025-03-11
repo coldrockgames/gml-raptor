@@ -2,16 +2,17 @@
 	Small file and directory helper functions
 */
 
+#macro __RAPTOR_JSFILELIST_NAME		$"jsfilelist{DATA_FILE_EXTENSION}"
+
 #region DIRECTORY FUNCTIONS
 /// @func	directory_list_files(_folder = "", _wildcard = "*.*", _recursive = false, attributes = 0)
 /// @desc	List all matching files from a directory in an array, optionally recursive
 ///			_attributes	is one of the attr constants according to yoyo manual
 ///         https://manual-en.yoyogames.com/#t=GameMaker_Language%2FGML_Reference%2FFile_Handling%2FFile_System%2Ffile_attributes.htm
-function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = false, _attributes = 0) {
-	if (IS_HTML) {
-		wlog($"** WARNING ** The function directory_list_files does not work in html target! Avoid calling it with \"if (!IS_HTML) ...\"");
-		return [];
-	}
+function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = false, _attributes = fa_none) {
+	if (IS_HTML) 
+		return __directory_list_files_html(_folder, _wildcard, _recursive, _attributes);
+	
 	_folder = __clean_file_name(_folder);
 	
 	var closure = {
@@ -39,7 +40,8 @@ function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = fals
 			
 			var f = file_find_first($"{look_in}{p.mask}", p.attr);
 			while (f != "") {
-				array_push(p.rv, $"{root}{f}");
+				if (p.attr == fa_none || file_attributes($"{look_in}{f}", p.attr))
+					array_push(p.rv, $"{root}{f}");
 				f = file_find_next();
 			}
 			file_find_close();		
@@ -48,6 +50,44 @@ function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = fals
 	
 	closure.reader(_folder, closure);
 	return closure.rv;
+}
+
+function __directory_list_files_html(_folder = "", _wildcard = "*.*", _recursive = false, _attributes = fa_none) {
+	if (!IS_HTML)
+		throw($"** ERROR ** The function __directory_list_files_html may not be invoked if not running HTML target!");
+
+	var rv = [];
+	var flist = file_read_struct(__RAPTOR_JSFILELIST_NAME, FILE_CRYPT_KEY, true);
+	var search = vsget(flist, _attributes == fa_none ? "files" : "directories");
+	
+	if (flist == undefined || search == undefined)
+		throw($"** ERROR ** '{__RAPTOR_JSFILELIST_NAME}' not found or contains invalid content");
+	
+	_folder = __clean_file_name(_folder);
+	var file;
+	
+	if (_recursive) {	
+		for (var i = 0, len = array_length(search); i < len; i++) {
+			file = search[@i];
+			if (string_match(file, _wildcard))
+			if ((_folder == "" || string_starts_with(file, _folder)) && string_match(file, _wildcard))
+				array_push(rv, file);
+		}
+	} else {
+		var rest;
+		var folder_len = string_length(_folder) + 2; // +1 for strings starting at 1 and +1 for /
+		for (var i = 0, len = array_length(search); i < len; i++) {
+			file = search[@i];
+			if (string_match(file, _wildcard))
+			if (_folder == "" || string_starts_with(file, _folder)) {
+				rest = _folder == "" ? file : string_substring(file, folder_len);
+				if (string_index_of(rest, "/") == 0 && string_match(rest, _wildcard))
+					array_push(rv, file);
+			}
+		}
+	}
+	
+	return rv;
 }
 
 /// @function	directory_list_directories(_folder = "", _recursive = false)
@@ -95,6 +135,34 @@ function directory_read_data_tree_async(_folder, _file_task_callback = undefined
 		
 		if (_file_task_callback != undefined)
 			_file_task_callback(file_task);
+	}
+	return rv;
+}
+
+/// @func	directory_read_data_tree(_folder, _file_task_callback = undefined)
+/// @desc	Reads an entire tree of data files (DATA_FILE_EXTENSION) into a single
+///			struct. Duplicate names are merged, not replaced, so you can freely split
+///			your larger data volumes into multiple files containing the same root object (like LG)
+///			NOTE: This is a SYNC operation, your game freezes while loading!
+///			If you are loading huge amounts of data, consider using directory_read_data_tree_async instead. 
+function directory_read_data_tree(_folder) {
+	var rv = {};
+	var gamefiles = directory_list_data_files(_folder, true);
+	for (var i = 0, len = array_length(gamefiles); i < len; i++) {
+		var fn = gamefiles[@i];
+		var membername = file_get_filename(fn, false);
+		var sa = string_split(fn, "/");
+		array_shift(sa); // remove "first" folder name, this is the root
+		array_pop(sa);   // remove the filename, we need structure only
+		var child = rv;
+		for (var j = 0, jen = array_length(sa); j < jen; j++) {
+			var next = sa[@j];
+			child[$ next] ??= {};
+			child = child[$ next];
+		}
+		
+		var into = vsgetx(child, membername, {});
+		struct_join_into(into, file_read_struct(fn, FILE_CRYPT_KEY));
 	}
 	return rv;
 }

@@ -171,5 +171,28 @@ function unit_test_Strings() {
 		test.assert_false(string_interpret("Coord3.z:0", new Coord4(), false), "should be false");
 	}
 
+	ut.tests.string_match_ok = function(test, data) {
+		// some simple tests
+		test.assert_true (string_match("test", "test")	, "1");
+		test.assert_false(string_match("test", "test ")	, "2");
+		test.assert_false(string_match("test ", "test")	, "3");
+		
+		// single wildcard tests
+		test.assert_true (string_match("Hello, World", "Hello*"), "4");
+		test.assert_true (string_match("Hello, World", "*World"), "5");
+		test.assert_false(string_match("Hello, World", "ello*"), "6");
+		test.assert_false(string_match("Hello, World", "*Worl"), "7");
+		
+		// double wildcard test (edges)
+		test.assert_true (string_match("Hello, World", "*, *"), "8");
+		test.assert_false(string_match("Hello, World", "*,W*"), "9");
+		
+		// inner wildcards
+		test.assert_true (string_match("Hello, World", "Hello*World"), "10");
+		test.assert_true (string_match("Hello, World", "He*o*Wo*d"), "11");
+		test.assert_true (string_match("Hello, World", "He*o*Wo*d*"), "12");
+		
+	}
+
 	ut.run();
 }
