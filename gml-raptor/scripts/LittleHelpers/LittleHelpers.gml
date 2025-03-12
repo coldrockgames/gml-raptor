@@ -159,12 +159,43 @@ function typename_of(_object_or_script_type) {
 }
 
 /// @func	address_of(_instance)
-/// @desc	Similar to name_of, but returns only the pointer (hash in html5) of the instance
+/// @desc	Similar to name_of, but returns only the pointer (a unique, but fake, pointer in html5) of the instance
 ///			as a string, without its type name or other informations or undefined, when _instance is undefined
 function address_of(_instance) {
 	if (!is_null(_instance)) {
 		if (IS_HTML) {
-			return string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
+			if (!variable_global_exists("__raptor_html_struct_pointers")) {
+				global.__raptor_html_struct_pointers = [];
+				global.__raptor_html_struct_pointer_counter = 0;
+			}
+			var wr = undefined;
+			for (var i = 0, len = array_length(global.__raptor_html_struct_pointers); i < len; i++) {
+				if (global.__raptor_html_struct_pointers[@i].ref == _instance) {
+					wr = global.__raptor_html_struct_pointers[@i];
+					break;
+				}
+			}
+			if (wr == undefined) {
+				wr = weak_ref_create(_instance);
+				wr.__address_fake = SUID;
+				array_push(global.__raptor_html_struct_pointers, wr);
+			}
+
+			if (global.__raptor_html_struct_pointer_counter++ == 100) {
+				var removecnt = 0;
+				for (var i = 0, len = array_length(global.__raptor_html_struct_pointers); i < len; i++) {
+					if (!weak_ref_alive(global.__raptor_html_struct_pointers[@i])) {
+						array_delete(global.__raptor_html_struct_pointers, i, 1);
+						i--;
+						len--;
+						removecnt++;
+					}
+				}
+				global.__raptor_html_struct_pointer_counter = 0;
+				dlog($"Raptor html weak ref cleanup removed {removecnt} dead refs");
+			}
+			
+			return $"html_fake_pointer_{wr.__address_fake}";
 		} else
 			return $"{ptr(_instance)}";
 	}

@@ -215,7 +215,8 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 
 				var loaded_data = struct_get(inst, __SAVEGAME_DATA_HEADER);
 				__file_reconstruct_class(data, loaded_data, restorestack);
-				
+				__savegame_restore_pointers(data, restorestack, instance_id_map);
+
 				if (vsget(self, __SAVEGAME_ONLOADING_NAME))
 					__SAVEGAME_ONLOADING_FUNCTION();
 				

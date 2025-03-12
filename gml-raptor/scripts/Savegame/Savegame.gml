@@ -82,6 +82,7 @@ ENSURE_RAPTOR_SAVEGAMEDATA;
 
 #macro __SAVEGAME_REF_MARKER			"##_savegame_ref_##."
 #macro __SAVEGAME_STRUCT_REF_MARKER		"##_savegame_structref_##."
+#macro __SAVEGAME_STRUCT_REFID_MARKER	"##_savegame_structid_##"
 
 enum savegame_event {
 	onGameSaving = 14,

@@ -29,7 +29,8 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 	}
 
 	static to_refstack = function(_struct) {
-		var refname = string_concat(__SAVEGAME_STRUCT_REF_MARKER, name_of(_struct));
+		var refid = vsgetx(_struct, __SAVEGAME_STRUCT_REFID_MARKER, SUID);
+		var refname = string_concat(__SAVEGAME_STRUCT_REF_MARKER, refid);
 		if (!vsget(refstack, refname)) {
 			vlog($"Adding '{refname}' to refstack");
 			refstack[$ refname] = true; // Temp-add "true" struct member to avoid endless loop
@@ -48,7 +49,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 		
 		try {
 			if (is_object_instance(_value)) {
-				var strid = string(real(_value));
+				var strid = string(real(_value.id));
 				vlog($"Replacing instance '{name_of(_value)}' for savegame");
 				rv.value = string_concat(__SAVEGAME_REF_MARKER, strid);
 				rv.success = true;				
@@ -70,6 +71,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
         
         var _names = struct_get_names(_source);
         var _i = 0;
+		var res;
         repeat(array_length(_names))
         {
             var _name = _names[_i];
@@ -85,7 +87,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 			}
             else if (is_object_instance(_value))
 			{
-				var res = replace_ref(_value);
+				res = replace_ref(_value);
 				if (res.success)
 					_value = res.value;
 				else
@@ -119,6 +121,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
         var _copy = array_create(_length,);
         
         var _i = 0;
+		var res;
         repeat(_length)
         {
             var _value = _source[_i];
@@ -133,7 +136,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 			}
             else if (is_object_instance(_value))
 			{
-				var res = replace_ref(_value);
+				res = replace_ref(_value);
 				if (res.success)
 					_value = res.value;
 				else

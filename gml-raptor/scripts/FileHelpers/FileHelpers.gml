@@ -194,7 +194,7 @@ function __file_get_constructed_class(from, restorestack) {
 		constname = from[$ __CONSTRUCTOR_NAME];
 		var class = asset_get_index(constname);
 		rv = new class();
-		//dlog($"Constructed '{constname}' {restorename} -> {address_of(rv)}");
+		
 		if (variable_struct_exists(rv, __INTERFACES_NAME)) {
 			var interfaces = rv[$ __INTERFACES_NAME];
 			for (var i = 0, len = array_length(interfaces); i < len; i++)
