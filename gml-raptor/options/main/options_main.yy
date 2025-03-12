@@ -6,6 +6,7 @@
       "option_legacy_other_behaviour":"false",
       "option_legacy_number_conversion":"false",
       "option_legacy_json_parsing":"false",
+      "option_audio_error_behaviour":"false",
     },
     "release":{
       "option_legacy_other_behaviour":"false",

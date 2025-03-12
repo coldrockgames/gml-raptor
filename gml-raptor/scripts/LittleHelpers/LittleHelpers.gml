@@ -62,7 +62,10 @@ function percent_mult(val, total) {
 function is_child_of(child, parent) {
 	if (is_null(child)) return false;
 	if (is_string(parent)) parent = asset_get_index(parent);
-	
+
+	if (!instance_exists(parent) && string_starts_with(string(parent), "ref script"))
+		return false;
+		
 	var to_find, to_find_parent;
 	if (instance_exists(child)) {
 		to_find = child.object_index;
@@ -123,11 +126,11 @@ function name_of(_instance, _with_ref_id = true) {
 		//if (instance_exists(_instance) && variable_struct_exists(_instance, "object_index"))
 			with(_instance) return _with_ref_id ? MY_NAME : object_get_name(object_index);
 		else {
-			if (IS_HTML) {
-				var hash = string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
-				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
-			} else
-				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? ptr(_instance) : "")}";
+			//if (IS_HTML) {
+			//	var hash = string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
+			//	return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
+			//} else
+				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? address_of(_instance) : "")}";
 		}
 	}
 	
@@ -195,7 +198,7 @@ function address_of(_instance) {
 				dlog($"Raptor html weak ref cleanup removed {removecnt} dead refs");
 			}
 			
-			return $"html_fake_pointer_{wr.__address_fake}";
+			return $"ptr_{wr.__address_fake}";
 		} else
 			return $"{ptr(_instance)}";
 	}

@@ -7,19 +7,19 @@
 	file gets restored.
 */
 
-/// @func		__savegame_remove_pointers(struct, refstack)
+/// @func		__savegame_remove_pointers(_struct, refstack)
 /// @desc
 /// @arg {struct} struct	The struct to clone and remove pointers
-function __savegame_remove_pointers(struct, refstack) {
-	return new __savegame_deep_copy_remove(struct, refstack).copy;
+function __savegame_remove_pointers(_struct, refstack) {
+	return new __savegame_deep_copy_remove(_struct, refstack).copy;
 }
 
-/// @func		__savegame_deep_copy_remove
+/// @func		__savegame_deep_copy_remove(source, _refstack)
 /// @desc	Derived from SNAP deep_copy this takes cares of methods (skip)
 ///					and instance id's that will not be copied but replaced with their id only
 function __savegame_deep_copy_remove(source, _refstack) constructor {
-	refstack = _refstack;
-    copy = undefined;
+	refstack	= _refstack;
+    copy		= undefined;
 
 	static is_ignored = function(_struct, _name) {
 		return string_contains(
@@ -29,12 +29,11 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 	}
 
 	static to_refstack = function(_struct) {
-		var refid = vsgetx(_struct, __SAVEGAME_STRUCT_REFID_MARKER, SUID);
-		var refname = string_concat(__SAVEGAME_STRUCT_REF_MARKER, refid);
+		var refname = string_concat(__SAVEGAME_STRUCT_REF_MARKER, name_of(_struct));
 		if (!vsget(refstack, refname)) {
 			vlog($"Adding '{refname}' to refstack");
-			refstack[$ refname] = true; // Temp-add "true" struct member to avoid endless loop
-			refstack[$ refname] = copy_struct(_struct);
+			refstack[$ refname]	 = true; // Temp-add "true" struct member to avoid endless loop
+			refstack[$ refname]	 = copy_struct(_struct);
 		}
 		return refname;
 	}

@@ -368,6 +368,13 @@ function string_interpret(_str, _instance, _with_inheritance = true) {
 			// early exit, if type name of instance and first entry do not match
 			var next = array_shift(sa);
 			if (_with_inheritance) {
+				//try {
+				//	if (!is_child_of(_instance, next))
+				//		return false;				
+				//} catch(_) {
+				//	if (!is_child_class_of(_instance, next))
+				//		return false;				
+				//}
 				if (is_object_instance(_instance)) {
 					if (!is_child_of(_instance, next))
 						return false;
