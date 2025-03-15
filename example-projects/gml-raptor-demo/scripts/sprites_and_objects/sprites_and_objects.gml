@@ -49,8 +49,10 @@ function instance_clone(_instance = self, layer_name_or_depth = undefined, struc
 /// @func	is_object_instance(_inst)
 /// @desc	Checks whether a variable holds a living (not deactivated) object instance
 function is_object_instance(_inst) {
-	return	!is_null(_inst) && 
-			!is_string(_inst) &&
+	if (is_null(_inst) || (typeof(_inst) != "ref" && (is_real(_inst) || is_string(_inst))))
+		return false;
+	
+	return	!is_string(_inst) &&
 			!is_array(_inst) &&
 			real(_inst) >= 100000 &&
 			(typeof(_inst) == "ref" || is_struct(_inst) || instance_exists(_inst)) &&

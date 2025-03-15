@@ -215,7 +215,7 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 
 				var loaded_data = struct_get(inst, __SAVEGAME_DATA_HEADER);
 				__file_reconstruct_class(data, loaded_data, restorestack);
-				
+
 				if (vsget(self, __SAVEGAME_ONLOADING_NAME))
 					__SAVEGAME_ONLOADING_FUNCTION();
 				
@@ -223,6 +223,12 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 		}
 	}
 
+	var names = struct_get_names(instance_id_map);
+	for (var i = 0, len = array_length(names); i < len; i++) {
+		var n = names[@i];
+		with (n) __savegame_restore_pointers(data, restorestack, instance_id_map);
+	}
+	
 	// Now all instances are loaded... restore object links
 	ilog($"Restoring object instance pointers...");
 	struct_remove(savegame, __SAVEGAME_REFSTACK_HEADER);

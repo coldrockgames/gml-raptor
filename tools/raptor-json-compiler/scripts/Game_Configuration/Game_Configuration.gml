@@ -9,11 +9,7 @@
 	onGameStart runs AFTER the ci_colors have been initialized.
 	It is recommended, to set at least the app_theme in the onGameStart function, so 
 	scribble gets initialized with the correct set of ci_colors.
-	
-	If the game is currently in HTML mode, HTML_LOCALES is used to set up the locale list.
-	Note for locales: The first entry in the array is the fallback (default) language and
-	should always contain 100% of all strings!
-	
+		
 	------------------------------------------------------
 	NOTE: HTML5 games never receive an onGameEnd callback!
 	------------------------------------------------------
@@ -21,9 +17,6 @@
 	(c)2022- coldrock.games, @grisgram at github
 	Please respect the MIT License for this library: https://opensource.org/licenses/MIT
 */
-
-// This macro is only used once in a html game when the game initalizes
-#macro HTML_LOCALES			["en"]
 
 // You need to set a global prefix for each of the raptor-files generated, because
 // in HTML, especially for itch.io games, you need a UNIQUE filename over all your products,

@@ -171,23 +171,29 @@ function unit_test_SaveGame() {
 	ut.tests.savegame_circular_instances_ok = function(test, _data) {
 		var ini = instance_create(0,0,"test",Saveable);
 		ini.data.hello = "world";
+		ini.data.uid = SUID;
 		with (ini) data.me = self;
 		
 		test.start_async();
 		savegame_save_game_async("unit_test" + DATA_FILE_EXTENSION)
 		.set_data("obj", ini)
 		.on_finished(function(_data) {
+			var _uid = _data.obj.data.uid;
 			instance_destroy(_data.obj);
 			GLOBALDATA.testdata = undefined;
 			
 			savegame_load_game_async("unit_test" + DATA_FILE_EXTENSION)
-			.on_finished(function(result) {
-				global.test.assert_true(result, "success");
+			.set_data("uid", _uid)
+			.on_finished(function(_data) {
 				var found = false;
+				var testme = undefined;
+				
 				with(Saveable) {
 					if (vsget(data, "hello") != undefined) {
 						found = true;
-						global.test.assert_equals(address_of(self), address_of(data.me), "recursion");
+						testme = self;
+						global.test.assert_true(_data.uid == data.uid, "recursion");
+						global.test.assert_equals(testme, data.me, "instance compare");
 						instance_destroy(self);
 						break;
 					}

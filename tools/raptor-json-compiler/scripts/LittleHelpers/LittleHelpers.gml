@@ -62,7 +62,10 @@ function percent_mult(val, total) {
 function is_child_of(child, parent) {
 	if (is_null(child)) return false;
 	if (is_string(parent)) parent = asset_get_index(parent);
-	
+
+	if (!instance_exists(parent) && string_starts_with(string(parent), "ref script"))
+		return false;
+		
 	var to_find, to_find_parent;
 	if (instance_exists(child)) {
 		to_find = child.object_index;
@@ -123,11 +126,11 @@ function name_of(_instance, _with_ref_id = true) {
 		//if (instance_exists(_instance) && variable_struct_exists(_instance, "object_index"))
 			with(_instance) return _with_ref_id ? MY_NAME : object_get_name(object_index);
 		else {
-			if (IS_HTML) {
-				var hash = string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
-				return $"{(struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
-			} else
-				return $"{(struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? ptr(_instance) : "")}";
+			//if (IS_HTML) {
+			//	var hash = string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
+			//	return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
+			//} else
+				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? address_of(_instance) : "")}";
 		}
 	}
 	
@@ -159,16 +162,58 @@ function typename_of(_object_or_script_type) {
 }
 
 /// @func	address_of(_instance)
-/// @desc	Similar to name_of, but returns only the pointer (hash in html5) of the instance
-///			as a string, without its type name or other informations or undefined, when _instance is undefined
+/// @desc	Similar to name_of, but returns only the pointer 
+///			(a unique, but fake, pointer in html5) of the instance
+///			as a string, without its type name or other informations
+///			or undefined, when _instance is undefined
 function address_of(_instance) {
 	if (!is_null(_instance)) {
 		if (IS_HTML) {
-			return string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
+			if (!variable_global_exists("__raptor_html_struct_pointers")) {
+				__FAKE_GAMECONTROLLER;
+				global.__raptor_html_struct_pointers = [];
+				global.__raptor_html_struct_pointer_counter = GAME_FRAME;
+			}
+			var wr = undefined;
+			for (var i = 0, len = array_length(global.__raptor_html_struct_pointers); i < len; i++) {
+				if (global.__raptor_html_struct_pointers[@i].ref == _instance) {
+					wr = global.__raptor_html_struct_pointers[@i];
+					break;
+				}
+			}
+			if (wr == undefined) {
+				wr = weak_ref_create(_instance);
+				wr.__address_fake = SUID;
+				array_push(global.__raptor_html_struct_pointers, wr);
+			}
+
+			if (GAME_FRAME - global.__raptor_html_struct_pointer_counter >= 300) {
+				var removecnt = 0;
+				for (var i = 0, len = array_length(global.__raptor_html_struct_pointers); i < len; i++) {
+					if (!weak_ref_alive(global.__raptor_html_struct_pointers[@i])) {
+						array_delete(global.__raptor_html_struct_pointers, i, 1);
+						i--;
+						len--;
+						removecnt++;
+					}
+				}
+				global.__raptor_html_struct_pointer_counter = GAME_FRAME;
+				dlog($"Raptor html weak ref cleanup removed {removecnt} dead refs");
+			}
+			
+			return $"ptr_{wr.__address_fake}";
 		} else
 			return $"{ptr(_instance)}";
 	}
 	return undefined;
+}
+
+/// @func	asset_of(_expression)
+/// @desc	Checks whether _expression is the NAME of an asset (like "objEnemy") 
+///			and returns asset_get_index(_expression) if yes, otherwise _expression is returned.
+function asset_of(_expression) {
+	gml_pragma("forceinline");
+	return is_string(_expression) ? asset_get_index(_expression) : _expression;
 }
 
 /// @func	layer_of(_instance)
@@ -516,4 +561,20 @@ function rgb_of(_color) {
 		color_get_green(_color),
 		color_get_blue(_color)
 	);
+}
+
+/// @func	extract_init(_struct, _remove = false)
+/// @desc	Extracts an "init" member of the specified struct, if it exists,
+///			and returns it. Optionally, the "init" is also removed from the _struct.
+///			This is especially useful for instance creation, when you read data 
+///			from json configuration files, that might or might-not contain init structs.
+///			Use it like "instance_create(...., extract_init(json));
+function extract_init(_struct, _remove = false) {
+	if (struct_exists(_struct, "init") && is_struct(_struct.init)) {
+		var rv = _struct.init;
+		if (_remove)
+			struct_remove(_struct, "init");
+		return rv;
+	}
+	return undefined;
 }
