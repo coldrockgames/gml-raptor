@@ -139,36 +139,58 @@ function unit_test_Strings() {
 		test.assert_null(string_to_int_ex("hello world 42")	, "10");
 	}
 
-	ut.tests.string_interpret_direct_ok = function(test, data) {
+	ut.tests.string_interpret_compare_direct_ok = function(test, data) {
 		var teststruct = new VersionedDataStruct();
-		test.assert_true(string_interpret("VersionedDataStruct", teststruct));
+		test.assert_true(string_interpret_compare("VersionedDataStruct", teststruct));
 	}
 
-	ut.tests.string_interpret_first_level_ok = function(test, data) {
+	ut.tests.string_interpret_compare_first_level_ok = function(test, data) {
 		var teststruct = new VersionedDataStruct();
 		teststruct.name = "unit test"
-		test.assert_true(string_interpret("VersionedDataStruct.name:unit test", teststruct));
+		test.assert_true(string_interpret_compare("VersionedDataStruct.name:unit test", teststruct));
 	}
 
-	ut.tests.string_interpret_deep_ok = function(test, data) {
+	ut.tests.string_interpret_compare_deep_ok = function(test, data) {
 		var teststruct = new DataBuilder().set_data("testvalue", 42);
-		test.assert_true(string_interpret("DataBuilder.data.testvalue:42", teststruct));
+		test.assert_true(string_interpret_compare("DataBuilder.data.testvalue:42", teststruct));
 	}
 
-	ut.tests.string_interpret_first_level_func_ok = function(test, data) {
+	ut.tests.string_interpret_compare_first_level_func_ok = function(test, data) {
 		var teststruct = new VersionedDataStruct();
 		teststruct.get_name = function() { return "unit test"; };
-		test.assert_true(string_interpret("VersionedDataStruct.get_name():unit test", teststruct));
+		test.assert_true(string_interpret_compare("VersionedDataStruct.get_name():unit test", teststruct));
 	}
 
-	ut.tests.string_interpret_deep_func_ok = function(test, data) {
+	ut.tests.string_interpret_compare_deep_func_ok = function(test, data) {
 		var teststruct = new DataBuilder().set_data("testfunc", function() { return 42; });
-		test.assert_true(string_interpret("DataBuilder.data.testfunc():42", teststruct));
+		test.assert_true(string_interpret_compare("DataBuilder.data.testfunc():42", teststruct));
 	}
 
-	ut.tests.string_interpret_inheritance_ok = function(test, data) {
-		test.assert_true(string_interpret("Coord3.z:0", new Coord4()), "should be true");
-		test.assert_false(string_interpret("Coord3.z:0", new Coord4(), false), "should be false");
+	ut.tests.string_interpret_compare_inheritance_ok = function(test, data) {
+		test.assert_true(string_interpret_compare("Coord3.z:0", new Coord4()), "should be true");
+		test.assert_false(string_interpret_compare("Coord3.z:0", new Coord4(), false), "should be false");
+	}
+
+	ut.tests.string_interpret_execute_first_level_ok = function(test, data) {
+		var teststruct = new VersionedDataStruct();
+		teststruct.name = "unit test"
+		test.assert_equals("unit test", string_interpret_execute("name", teststruct));
+	}
+
+	ut.tests.string_interpret_execute_deep_ok = function(test, data) {
+		var teststruct = new DataBuilder().set_data("testvalue", 42);
+		test.assert_equals(42, string_interpret_execute("data.testvalue", teststruct));
+	}
+
+	ut.tests.string_interpret_execute_first_level_func_ok = function(test, data) {
+		var teststruct = new VersionedDataStruct();
+		teststruct.get_name = function() { return "unit test"; };
+		test.assert_equals("unit test", string_interpret_execute("get_name()", teststruct));
+	}
+
+	ut.tests.string_interpret_execute_deep_func_ok = function(test, data) {
+		var teststruct = new DataBuilder().set_data("testfunc", function() { return 42; });
+		test.assert_equals(42, string_interpret_execute("data.testfunc()", teststruct));
 	}
 
 	ut.tests.string_match_ok = function(test, data) {
@@ -192,6 +214,28 @@ function unit_test_Strings() {
 		test.assert_true (string_match("Hello, World", "He*o*Wo*d"), "11");
 		test.assert_true (string_match("Hello, World", "He*o*Wo*d*"), "12");
 		
+	}
+
+	ut.tests.string_quote_ok = function(test, data) {
+		test.assert_equals("\"Hello\"", string_quote("Hello")		, "1");
+		test.assert_equals("'Hello'"  , string_quote("Hello", "'")	, "2");
+		test.assert_equals("#Hello#"  , string_quote("Hello", "#")	, "3");
+		
+		test.assert_equals("[Hello]"  , string_quote("Hello", "[")	, "4");
+		test.assert_equals("(Hello)"  , string_quote("Hello", "(")	, "5");
+		test.assert_equals("{Hello}"  , string_quote("Hello", "{")	, "6");
+		
+		test.assert_equals("[Hello]"  , string_quote("Hello", "[]")	, "7");
+		test.assert_equals("(Hello)"  , string_quote("Hello", "()")	, "8");
+		test.assert_equals("{Hello}"  , string_quote("Hello", "{}")	, "9");
+		
+		test.assert_equals("[Hello>"  , string_quote("Hello", "[>")	, "A");
+	}
+
+	ut.tests.string_unquote_ok = function(test, data) {
+		test.assert_equals("Hello", string_unquote("\"Hello\"")	, "1");
+		test.assert_equals("Hello", string_unquote("'Hello'")	, "2");
+		test.assert_equals("'Hello\"", string_unquote("'Hello\"")	, "3");
 	}
 
 	ut.run();

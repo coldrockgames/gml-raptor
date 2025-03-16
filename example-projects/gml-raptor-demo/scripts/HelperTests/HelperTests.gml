@@ -24,6 +24,23 @@ function unit_test_little_helpers() {
 		test.assert_false(bit_get(t, 3), "b2 get");		
 	}
  
+	ut.tests.extract_init_ok = function(test, data) {
+		var str = {
+			a: 1
+		};
+		
+		test.assert_null(extract_init(str), "1");
+		
+		str.init = {
+			b: 2
+		}
+		var i = str.init;
+		
+		test.assert_equals(i, extract_init(str), "2");
+		test.assert_equals(i, extract_init(str, true), "3");
+		// now init must have been gone
+		test.assert_false(struct_exists(str, "init"), "4");
+	}
+ 
 	ut.run();
 }
-

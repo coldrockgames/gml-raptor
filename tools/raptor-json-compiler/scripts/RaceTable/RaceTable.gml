@@ -38,7 +38,8 @@ function RaceTable(_name = "", _table_struct = undefined) constructor {
 		__query_recursive(rv, unique_drops);
 		if (drop_instances) {
 			for (var i = 0, len = array_length(rv); i < len; i++) 
-				__drop_item(rv[@i], _layer_name_or_depth, _pool_name);
+				if (!is_null(rv[@i].item.type))
+					__drop_item(rv[@i], _layer_name_or_depth, _pool_name);
 		}
 	
 		return rv;
@@ -54,8 +55,10 @@ function RaceTable(_name = "", _table_struct = undefined) constructor {
 	///			Returns an array of instances. The "onRaceDrop" callback has already been executed.
 	static create_instances = function(_query_result, _layer_name_or_depth, _pool_name) {
 		var rv = [];
-		for (var i = 0, len = array_length(_query_result); i < len; i++) 
-			array_push(rv, __drop_item(_query_result[@i], _layer_name_or_depth, _pool_name));
+		for (var i = 0, len = array_length(_query_result); i < len; i++) {
+			if (!is_null(_query_result[@i].item.type))
+				array_push(rv, __drop_item(_query_result[@i], _layer_name_or_depth, _pool_name));
+		}
 		return rv;
 	}
 

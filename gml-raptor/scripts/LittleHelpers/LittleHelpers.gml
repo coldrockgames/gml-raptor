@@ -162,14 +162,17 @@ function typename_of(_object_or_script_type) {
 }
 
 /// @func	address_of(_instance)
-/// @desc	Similar to name_of, but returns only the pointer (a unique, but fake, pointer in html5) of the instance
-///			as a string, without its type name or other informations or undefined, when _instance is undefined
+/// @desc	Similar to name_of, but returns only the pointer 
+///			(a unique, but fake, pointer in html5) of the instance
+///			as a string, without its type name or other informations
+///			or undefined, when _instance is undefined
 function address_of(_instance) {
 	if (!is_null(_instance)) {
 		if (IS_HTML) {
 			if (!variable_global_exists("__raptor_html_struct_pointers")) {
+				__FAKE_GAMECONTROLLER;
 				global.__raptor_html_struct_pointers = [];
-				global.__raptor_html_struct_pointer_counter = 0;
+				global.__raptor_html_struct_pointer_counter = GAME_FRAME;
 			}
 			var wr = undefined;
 			for (var i = 0, len = array_length(global.__raptor_html_struct_pointers); i < len; i++) {
@@ -184,7 +187,7 @@ function address_of(_instance) {
 				array_push(global.__raptor_html_struct_pointers, wr);
 			}
 
-			if (global.__raptor_html_struct_pointer_counter++ == 100) {
+			if (GAME_FRAME - global.__raptor_html_struct_pointer_counter >= 300) {
 				var removecnt = 0;
 				for (var i = 0, len = array_length(global.__raptor_html_struct_pointers); i < len; i++) {
 					if (!weak_ref_alive(global.__raptor_html_struct_pointers[@i])) {
@@ -194,7 +197,7 @@ function address_of(_instance) {
 						removecnt++;
 					}
 				}
-				global.__raptor_html_struct_pointer_counter = 0;
+				global.__raptor_html_struct_pointer_counter = GAME_FRAME;
 				dlog($"Raptor html weak ref cleanup removed {removecnt} dead refs");
 			}
 			
@@ -203,6 +206,14 @@ function address_of(_instance) {
 			return $"{ptr(_instance)}";
 	}
 	return undefined;
+}
+
+/// @func	asset_of(_expression)
+/// @desc	Checks whether _expression is the NAME of an asset (like "objEnemy") 
+///			and returns asset_get_index(_expression) if yes, otherwise _expression is returned.
+function asset_of(_expression) {
+	gml_pragma("forceinline");
+	return is_string(_expression) ? asset_get_index(_expression) : _expression;
 }
 
 /// @func	layer_of(_instance)
@@ -550,4 +561,20 @@ function rgb_of(_color) {
 		color_get_green(_color),
 		color_get_blue(_color)
 	);
+}
+
+/// @func	extract_init(_struct, _remove = false)
+/// @desc	Extracts an "init" member of the specified struct, if it exists,
+///			and returns it. Optionally, the "init" is also removed from the _struct.
+///			This is especially useful for instance creation, when you read data 
+///			from json configuration files, that might or might-not contain init structs.
+///			Use it like "instance_create(...., extract_init(json));
+function extract_init(_struct, _remove = false) {
+	if (struct_exists(_struct, "init") && is_struct(_struct.init)) {
+		var rv = _struct.init;
+		if (_remove)
+			struct_remove(_struct, "init");
+		return rv;
+	}
+	return undefined;
 }

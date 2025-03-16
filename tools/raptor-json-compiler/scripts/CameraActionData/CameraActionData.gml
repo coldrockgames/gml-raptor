@@ -134,8 +134,15 @@ function camera_action_data(cam_index, frames, script_to_call, enqueue_if_runnin
 		if (__internal_finished_callback != undefined)	
 			__internal_finished_callback(self);
 			
-		if (finished_callback != undefined)	
-			finished_callback(self);
+		if (finished_callback != undefined) {
+			var me = self;
+			run_delayed(ROOMCONTROLLER, 1, function(_data) {
+				_data.cb(_data.arg);
+			}, {
+				cb: finished_callback,
+				arg: me,
+			});
+		}
 		
 		// start next from queue (if available)
 		var i = 0; repeat(array_length(__CAMERA_RUNTIME.camera_action_queue)) {

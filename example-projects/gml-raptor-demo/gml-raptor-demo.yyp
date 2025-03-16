@@ -119,61 +119,71 @@
     {"$GMFolder":"","%Name":"Timelines","folderPath":"folders/Timelines.yy","name":"Timelines","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"gml_raptor_demo_2503_game_settings.json","ConfigValues":{
+    {"$GMIncludedFile":"","%Name":"gml_raptor_demo_2504_game_settings.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
-      },"CopyToMask":-1,"filePath":"datafiles","name":"gml_raptor_demo_2503_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"gml_raptor_demo_2503_game_settings.jx","ConfigValues":{
+      },"CopyToMask":-1,"filePath":"datafiles","name":"gml_raptor_demo_2504_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"gml_raptor_demo_2504_game_settings.jx","ConfigValues":{
         "release":{
           "CopyToMask":"-1",
         },
-      },"CopyToMask":0,"filePath":"datafiles","name":"gml_raptor_demo_2503_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+      },"CopyToMask":0,"filePath":"datafiles","name":"gml_raptor_demo_2504_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
       },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_de.json","ConfigValues":{
+    {"$GMIncludedFile":"","%Name":"jsfilelist.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
-      },"CopyToMask":-1,"filePath":"datafiles/locale","name":"locale_de.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_de.jx","ConfigValues":{
+      },"CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.jx","ConfigValues":{
         "release":{
           "CopyToMask":"-1",
         },
-      },"CopyToMask":0,"filePath":"datafiles/locale","name":"locale_de.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_en.json","ConfigValues":{
+      },"CopyToMask":0,"filePath":"datafiles","name":"jsfilelist.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
-      },"CopyToMask":-1,"filePath":"datafiles/locale","name":"locale_en.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale_en.jx","ConfigValues":{
+      },"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
         "release":{
           "CopyToMask":"-1",
         },
-      },"CopyToMask":0,"filePath":"datafiles/locale","name":"locale_en.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"raptor_demo_de.json","ConfigValues":{
+      },"CopyToMask":0,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"raptor_demo.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
-      },"CopyToMask":-1,"filePath":"datafiles/locale","name":"raptor_demo_de.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"raptor_demo_de.jx","ConfigValues":{
+      },"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"raptor_demo.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"raptor_demo.jx","ConfigValues":{
         "release":{
           "CopyToMask":"-1",
         },
-      },"CopyToMask":0,"filePath":"datafiles/locale","name":"raptor_demo_de.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"raptor_demo_en.json","ConfigValues":{
+      },"CopyToMask":0,"filePath":"datafiles/locale/de","name":"raptor_demo.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
-      },"CopyToMask":-1,"filePath":"datafiles/locale","name":"raptor_demo_en.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"raptor_demo_en.jx","ConfigValues":{
+      },"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
         "release":{
           "CopyToMask":"-1",
         },
-      },"CopyToMask":0,"filePath":"datafiles/locale","name":"raptor_demo_en.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+      },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"raptor_demo.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"raptor_demo.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"raptor_demo.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"raptor_demo.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",

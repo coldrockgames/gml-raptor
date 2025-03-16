@@ -109,11 +109,36 @@
           "CopyToMask":"0",
         },
       },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"jsfilelist.json","CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.json","CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.jx","CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.json","CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.jx","CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles","name":"jsfilelist.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
@@ -603,8 +628,8 @@
     {"roomId":{"name":"rmStartup","path":"rooms/rmStartup/rmStartup.yy",},},
     {"roomId":{"name":"rmMain","path":"rooms/rmMain/rmMain.yy",},},
     {"roomId":{"name":"rmUnitTests","path":"rooms/rmUnitTests/rmUnitTests.yy",},},
-    {"roomId":{"name":"rmTemplate","path":"rooms/rmTemplate/rmTemplate.yy",},},
     {"roomId":{"name":"rmHtmlTemplate","path":"rooms/rmHtmlTemplate/rmHtmlTemplate.yy",},},
+    {"roomId":{"name":"rmTemplate","path":"rooms/rmTemplate/rmTemplate.yy",},},
   ],
   "templateType":null,
   "TextureGroups":[

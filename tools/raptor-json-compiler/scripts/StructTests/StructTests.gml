@@ -169,11 +169,11 @@ function unit_test_Structs() {
 		}
 		var res = deep_copy(master);
 
-		test.assert_not_equals(address_of(master), address_of(res), "c1 eq");
+		test.assert_not_equals(master, res, "c1 eq");
 		test.assert_equals(master.s1.val1, res.s1.val1, "c1 v");
 		test.assert_equals(master.s1.child, master.s2, "c1 pc");
 		test.assert_equals(master.s1.child.parent, master.s1, "c1 pc");
-		test.assert_not_equals(address_of(master.s1.f1), address_of(res.s1.f1), "c1 af");
+		test.assert_not_equals(master.s1.f1, res.s1.f1, "c1 af");
 		test.assert_equals(7, master.s1.f1(2,5), "c1 fm");
 		test.assert_equals(7, res.s1.f1(2,5), "c1 fr");
 		res.s1.val1 = 5;
@@ -189,17 +189,17 @@ function unit_test_Structs() {
 		];
 		res = deep_copy(master);
 		
-		test.assert_not_equals(address_of(master), address_of(res), "c1 eq");
-		test.assert_equals(master[0].val1, res[0].val1, "c1 v");
-		test.assert_equals(master[0].child, master[1], "c1 pc");
-		test.assert_equals(master[0].child.parent, master[0], "c1 pc");
-		test.assert_not_equals(address_of(master[0].f1), address_of(res[0].f1), "c1 af");
-		test.assert_equals(7, master[0].f1(2,5), "c1 fm");
-		test.assert_equals(7, res[0].f1(2,5), "c1 fr");
+		test.assert_not_equals(master, res, "c2 eq");
+		test.assert_equals(master[0].val1, res[0].val1, "c2 v");
+		test.assert_equals(master[0].child, master[1], "c2 pc");
+		test.assert_equals(master[0].child.parent, master[0], "c2 pc");
+		test.assert_not_equals(master[0].f1, res[0].f1, "c2 af");
+		test.assert_equals(7, master[0].f1(2,5), "c2 fm");
+		test.assert_equals(7, res[0].f1(2,5), "c2 fr");
 		res[0].val1 = 5;
 		res[0].val2 = 4;
-		test.assert_equals(3, master[0].f2(), "c1 f2m");
-		test.assert_equals(9, res[0].f2(), "c1 f2r");
+		test.assert_equals(3, master[0].f2(), "c2 f2m");
+		test.assert_equals(9, res[0].f2(), "c2 f2r");
 	}
 
 	ut.run();

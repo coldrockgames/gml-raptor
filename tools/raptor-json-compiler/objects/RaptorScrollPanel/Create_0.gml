@@ -26,6 +26,9 @@ __mouse_delta		= 0;
 __mouse_multi		= mouse_drag_inverted ? mouse_drag_multiplier : -mouse_drag_multiplier;
 __scale_x			= 1;
 __scale_y			= 1;
+__html_y_flip		= 0;
+__html_y_offset		= 0;
+__html_y_sizing		= (__get_scissor ? 1 : -1);
 
 __scrolldim			= new SpriteDim(object_get_sprite(Scrollbar));
 __hbarsize			= (horizontal_scrollbar ? __scrolldim.height : 0);
@@ -96,6 +99,12 @@ __update_scroller = function(_inst, _by) {
 __draw_instance = function(_force = false) {
 	if (!visible || is_null(content)) return;
 	
+	if (!__get_scissor) {
+		// in html we have flipped y
+		__html_y_flip	= (-y + 2 * __hbarsize) * __scale_y;
+		__html_y_offset	= __hbarsize;
+	}
+	
 	__clipw = sprite_width  - __vbarsize;
 	__cliph = sprite_height - __hbarsize;
 	
@@ -141,26 +150,27 @@ __draw_instance = function(_force = false) {
 	content.x = x + content.sprite_xoffset + drag_xoffset;
 	content.y = y + content.sprite_yoffset + drag_yoffset;
 	with(content)
-		if (SELF_HAVE_MOVED && control_tree != undefined) 
+		if (SELF_HAVE_MOVED && control_tree != undefined)
 			control_tree.move_children(SELF_MOVE_DELTA_X, SELF_MOVE_DELTA_Y);
 
 	// calculate scissor multiplier based on draw mode
-	__ap		= application_get_position();
-	__aw		= __ap[2] - __ap[0] + 1;
-	__ah		= __ap[3] - __ap[1] + 1;
-	__scale_x	= __aw / APP_SURF_WIDTH ;
-	__scale_y	= __ah / APP_SURF_HEIGHT;
+	__ap = application_get_position();
+	__aw			= __ap[2] - __ap[0] + 1;
+	__ah			= __ap[3] - __ap[1] + __html_y_sizing;
 	
 	if (draw_on_gui) {
-		__draw_x	= x * UI_VIEW_TO_CAM_FACTOR_X;
-		__draw_y	= y * UI_VIEW_TO_CAM_FACTOR_Y;
-		__scale_x	/= UI_VIEW_TO_CAM_FACTOR_X;
-		__scale_y	/= UI_VIEW_TO_CAM_FACTOR_Y;
-		__clipw		*= UI_VIEW_TO_CAM_FACTOR_X;
-		__cliph		*= UI_VIEW_TO_CAM_FACTOR_Y;
+		__scale_x		= __aw / UI_VIEW_WIDTH ;
+		__scale_y		= __ah / UI_VIEW_HEIGHT;
+		__draw_x		= x * UI_VIEW_TO_CAM_FACTOR_X;
+		__draw_y		= y * UI_VIEW_TO_CAM_FACTOR_Y;
+		__clipw		   *= UI_VIEW_TO_CAM_FACTOR_X;
+		__cliph		   *= UI_VIEW_TO_CAM_FACTOR_Y;
+		//__cliph		   -= __html_y_offset;
 	} else {
-		__draw_x	= x;
-		__draw_y	= y;
+		__scale_x		= __aw / APP_SURF_WIDTH ;
+		__scale_y		= __ah / APP_SURF_HEIGHT;
+		__draw_x		= x;
+		__draw_y		= y;
 	}
 	
 	__base_draw_instance(_force);
@@ -170,7 +180,7 @@ __draw_instance = function(_force = false) {
 	//dlog($"SCISSOR DEBUG: {__draw_x} * {__scale_x}, {__draw_y} * {__scale_y}");
 	gpu_set_scissor(
 		__draw_x * __scale_x + __ap[0], 
-		__draw_y * __scale_y + __ap[1], 
+		(__draw_y - __html_y_offset) * __scale_y + __ap[1] + __html_y_flip, 
 		ceil(__clipw * __scale_x), 
 		ceil(__cliph * __scale_y)
 	);

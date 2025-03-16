@@ -155,11 +155,12 @@ function string_last_index_of(str, substr, startpos = 1) {
 
 /// @func	string_match(str, wildcard_str)
 /// @desc	Checks whether a string matches a specific wildcard string.
-///			Wildcard character is '*' and it can appear at the beginning,
-///			the end, or both.
+///			Wildcard character is '*' and it can appear anywhere in the string, any number of times.
 ///			* at the beginning means "ends_with" (hello -> *llo)
 ///			* at the end means "starts_with" (hello -> he*)
 ///			* on both ends means "contains" (hello -> *ell*)
+///			* somewhere in the middle means "starts with and ends with" (hello -> he*o)
+///			You may combine the above in any way you like! ("Hello, World" -> "He*o*Wo*d*")
 ///			NOTE: if no '*' is in wildcard_str, then a == exact match counts!
 ///			Examples:
 ///			string_match("hello", "hel*") -> true
@@ -169,28 +170,33 @@ function string_last_index_of(str, substr, startpos = 1) {
 /// @param {string} wildcard_str
 /// @returns {bool}	
 function string_match(str, wildcard_str) {
-	if (wildcard_str == "*") 
-		return true;
-	
-	var startwith = false, endwith = false;
-	if (string_starts_with(wildcard_str, "*")) {
-		endwith = true;
-		wildcard_str = string_skip_start(wildcard_str, 1);
-	}
-	if (string_ends_with(wildcard_str, "*")) {
-		startwith = true;
-		wildcard_str = string_skip_end(wildcard_str, 1);
-	}
-	
-	var contain = startwith && endwith;
-	var rv = false;
+    if (wildcard_str == "*") 
+        return true;
 
-	if (contain)		rv = string_contains(str, wildcard_str);
-	else if (startwith) rv = string_starts_with(str, wildcard_str);
-	else if (endwith)	rv = string_ends_with(str, wildcard_str);
-	else				rv = str == wildcard_str;
+	if (string_index_of(wildcard_str, "*") == 0)
+		return str == wildcard_str;
 
-	return rv;
+	var full_len = string_length(str);
+    var parts = string_split(wildcard_str, "*", false);
+	var index = 1;
+	var found_at = 0;
+	var part;
+	var part_len;
+
+	for (var i = 0, len = array_length(parts); i < len; i++) {
+        part = parts[@i];
+		if (part == "") continue;
+		
+        part_len = string_length(part);
+        found_at = string_pos_ext(part, str, index);
+        if (found_at == 0) return false;
+        if (i == 0 && found_at != 1) return false; // test string start
+        if (i == len - 1 && found_at + part_len - 1 != full_len) return false; // test string end
+
+        index = found_at + part_len;
+    }
+	
+    return true;
 }
 
 /// @func	string_is_empty(str)
@@ -206,7 +212,7 @@ function string_is_empty(str) {
 /// @desc	Tries to convert the string to a real. returns undefined, if failed
 function string_to_real(str) {
 	gml_pragma("forceinline");
-	try { return real(str); } catch(_) { return undefined; }
+	try { return real(string_trim(str)); } catch(_) { return undefined; }
 }
 
 /// @func	string_to_real_ex(str)
@@ -256,7 +262,7 @@ function string_to_real_ex(str, __allow_decimal = true) {
 /// @desc	Tries to convert the string to an int64. returns undefined, if failed
 function string_to_int(str) {
 	gml_pragma("forceinline");
-	try { return int64(str); } catch(_) { return undefined; }
+	try { return int64(string_trim(str)); } catch(_) { return undefined; }
 }
 
 /// @func	string_to_int_ex(str)
@@ -334,24 +340,28 @@ function string_get_hex(decimal, len = 2, to_uppercase = true) {
 	return rv;
 }
 
-/// @func	string_interpret(_str, _instance, _with_inheritance = true)
+/// @func	string_interpret_compare(_str, _instance, _with_inheritance = true)
 /// @desc	Interprets a string that may contain dot-notation, like
-///			"myinst.data.name:value" and interprets this against the supplied instance.
+///			"myinst.data.name:value" and compares this against the supplied instance.
 ///			If _str does not contain a dot-notation, name_of(_instance,false) is compared against _str.
 ///			If _str ends with "()", the last part of the chain is considered a function and will be invoked
 ///			on the instance. ONLY PARAMETERLESS FUNCTIONS ARE SUPPORTED! (like ".get_name()")
 ///			If _with_inheritance is true, interpret also succeeds if the _instance is a child of the
 ///			type name of _str. It is automatically detected, whether _instance is an object or class instance.
 ///			Example: 
-///			- You are ("self") an object or an instance of type Enemy that contains .data.name with a value of "Mummy"
-///			- You call string_interpret("Enemy.data.name:Mummy", self) and it returns true, because
+///			- You are ("self") an object or an instance of type Enemy 
+///			  that contains .data.name with a value of "Mummy"
+///			- You call string_interpret_compare("Enemy.data.name:Mummy", self) and it returns true, because
 ///           your .data.name == "Mummy"
 ///			- Would you call it with ("Enemy.data.name:Scarab", self) it would return false.
-///			This function is very useful to connect variables/members of objects in string, like when
+///			This function is very useful to connect variables/members of objects in strings, like when
 ///			you read data from json and want to compare it with runtime data of your living objects.
 ///			Boolean conversion is automatically in place, ":true" and ":false" are compared with "1" and "0"
 ///			(which is gml default)
-function string_interpret(_str, _instance, _with_inheritance = true) {
+function string_interpret_compare(_str, _instance, _with_inheritance = true) {
+	if (is_null(_str))
+		return false;
+		
 	if (string_contains(_str, ".")) {
 		if (string_contains(_str, ":")) {
 			var colon = string_index_of(_str, ":");
@@ -390,4 +400,77 @@ function string_interpret(_str, _instance, _with_inheritance = true) {
 			throw("String interpreter with dot-notation requires ':' for value separation");
 	} else
 		return _str == name_of(_instance, false);
+}
+
+/// @func	string_interpret_execute(_str, _instance)
+/// @desc	Interprets a string that may contain dot-notation, like
+///			"myinst.data.name" and executes/accesses this on the supplied instance.
+///			In contrast to string_interpret_compare, this function does not return a bool,
+///			it returns the _value of the instance.
+///			Example: You string_interpret_execute("data.name", objPlayer), then this function will
+///			will return the value of data.name of the player.
+///			If _str ends with "()", the last part of the chain is considered a function and will be invoked
+///			on the instance. ONLY PARAMETERLESS FUNCTIONS ARE SUPPORTED! (like ".get_name()")
+///			If _with_inheritance is true, interpret also succeeds if the _instance is a child of the
+///			type name of _str. It is automatically detected, whether _instance is an object or class instance.
+///			This function is very useful to connect variables/members of objects in strings, like when
+///			you read data from json and want to execute them at runtime data on your living objects.
+///			NOTE: This function may cause an exception, if the path to the value does not exist
+///			on the instance
+function string_interpret_execute(_str, _instance) {
+	if (is_null(_str))
+		return undefined;
+	
+	var sa = string_split(_str, ".");
+
+	// early exit, if type name of instance and first entry do not match
+	var next			= _instance;
+	var last			= string_trim(array_pop(sa));
+	var is_func			= string_ends_with(last, "()");
+	if (is_func) last	= string_skip_end(last, 2);
+	
+	while (array_length(sa) > 0) 
+		next = next[$ array_shift(sa)];
+			
+	if (is_func)
+		return next[$ last]();
+	else
+		return next[$ last];
+		
+}
+
+/// @func	string_quote(_str, _quote = "\"")
+/// @desc	Encloses a string in quotes or any bracket.
+///			By default, double quotes ("") are used, but the function accepts
+///			any character as quote and is smart enough to detect, whether you want braces
+///			to enclose the string.
+///			Examples, set _quote to:
+///			":  Hello -> "Hello"
+///			':  Hello -> 'Hello'
+///			[ or ( or {: Hello -> [Hello] or (Hello) or {Hello}
+///			Any 2-letter combination, like []: Hello -> [Hello]
+///			But fany combinations also possible: [> Hello -> [Hello>
+function string_quote(_str, _quote = "\"") {
+	if (string_length(_quote) == 1) {
+		switch(_quote) {
+			case "[":	return $"[{_str}]";
+			case "(":	return $"({_str})";
+			case "{":	return string_concat("{", _str, "}");
+			default:	return $"{_quote}{_str}{_quote}";
+		}
+	} else if (string_length(_quote) == 2) {
+		return $"{string_char_at(_quote, 1)}{_str}{string_char_at(_quote, 2)}";
+	} else
+		return $"{_quote}{_str}{_quote}";
+}
+
+/// @func	string_unquote(_str)
+/// @desc	"Unquotes" a string by removing the first and last character of the string,
+///			but only, if it starts and ends with the same quote character (" or ').
+function string_unquote(_str) {
+	if (string_starts_with(_str, "\"") && string_ends_with(_str, "\"") ||
+		string_starts_with(_str, "'") && string_ends_with(_str, "'"))
+		return string_skip_end(string_skip_start(_str, 1), 1);
+	
+	return _str;
 }

@@ -7,6 +7,7 @@
 /// @arg {struct} struct	The struct to restore pointers
 function __savegame_restore_pointers(struct, refstack, id_map) {        
 	var circstack = [];
+	
     if (is_struct(struct))
     {
         __savegame_restore_struct_pointers(struct, refstack, circstack, id_map);
@@ -20,13 +21,12 @@ function __savegame_restore_pointers(struct, refstack, id_map) {
 function __savegame_restore_struct_pointers(_source, refstack, circstack, id_map)
 {
 	var restorename = $"restored_{address_of(_source)}";
-	//var restorename = $"restore_{name_of(_source)}";
-	if (array_contains(circstack, restorename)) 
+	if (array_contains(circstack, restorename))
 		return;
 	array_push(circstack, restorename);
 	
 	var cached = vsget(refstack, restorename);
-	if (cached != undefined)
+	if (cached != undefined) 
 		return cached;
 	
     var _names = struct_get_names(_source);
@@ -40,7 +40,7 @@ function __savegame_restore_struct_pointers(_source, refstack, circstack, id_map
 	        if (is_string(_value) && string_starts_with(_value, __SAVEGAME_REF_MARKER))
 			{
 				_value = string_replace(_value, __SAVEGAME_REF_MARKER, "");
-				//vlog($"Restoring instance id in struct: {_value}");
+				vlog($"Restoring instance id in struct: {_value}");
 				struct_set(_source, _name, vsget(id_map, _value, noone));
 			} 
 			else if (is_array(_value))
@@ -70,7 +70,7 @@ function __savegame_restore_array_pointers(_source, refstack, circstack, id_map)
 	        if (is_string(_value) && string_starts_with(_value, __SAVEGAME_REF_MARKER))
 			{
 				_value = string_replace(_value, __SAVEGAME_REF_MARKER, "");
-				//vlog($"Restoring instance id in array: {_value}");
+				vlog($"Restoring instance id in array: {_value}");
 				_source[@ _i] = vsget(id_map, _value, noone);
 			} 
 			else if (is_struct(_value))
