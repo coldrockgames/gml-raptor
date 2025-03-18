@@ -123,42 +123,38 @@ function object_tree(_object_or_instance, _as_strings = true) {
 function name_of(_instance, _with_ref_id = true) {
 	if (!is_null(_instance)) {
 		if (is_object_instance(_instance))
-		//if (instance_exists(_instance) && variable_struct_exists(_instance, "object_index"))
 			with(_instance) return _with_ref_id ? MY_NAME : object_get_name(object_index);
-		else {
-			//if (IS_HTML) {
-			//	var hash = string_replace_all(sha1_string_unicode(string(_instance)), " ", "");
-			//	return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? hash : "")}";
-			//} else
-				return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? address_of(_instance) : "")}";
-		}
+		else
+			return $"{(is_struct(_instance) && struct_exists(_instance, __CONSTRUCTOR_NAME) ? $"{_instance[$ __CONSTRUCTOR_NAME]}{(_with_ref_id ? "-" : "")}" : "")}{(_with_ref_id ? address_of(_instance) : "")}";
 	}
 	
 	return undefined;
 }
 
-/// @func	typename_of(_object_or_script_type)
-/// @desc	Gets the type name (= asset name) of either an object or a script asset
-function typename_of(_object_or_script_type) {
-	if (is_string(_object_or_script_type))
-		return _object_or_script_type;
+/// @func	typename_of(_type)
+/// @desc	Gets the type name (= asset name) of an asset
+function typename_of(_type) {
+	if (is_string(_type))
+		return _type;
 
-	var rv;	
 	try {
-		rv = object_get_name(_object_or_script_type);
-		if (is_null(rv) || rv == "<undefined>")
-			rv = script_get_name(_object_or_script_type);
-	} catch (_) {
-		try {
-			rv = script_get_name(_object_or_script_type);
-			if (is_null(rv) || rv == "<undefined>")
-				rv = undefined;
-		} catch (_) {
-			rv = undefined;
-		}
-	}
-	
-	return rv;
+		var scr = script_get_name(_type);
+		if (!is_null(scr) || scr != "<undefined>")
+			return scr;
+	} catch (_) { }
+
+	var str = string(_type);
+	if (string_starts_with(str, "ref room"))		return room_get_name(_type);	
+	if (string_starts_with(str, "ref font"))		return font_get_name(_type);	
+	if (string_starts_with(str, "ref path"))		return path_get_name(_type);	
+	if (string_starts_with(str, "ref audio"))		return audio_get_name(_type);	
+	if (string_starts_with(str, "ref object"))		return object_get_name(_type);	
+	if (string_starts_with(str, "ref script"))		return script_get_name(_type);	
+	if (string_starts_with(str, "ref sprite"))		return sprite_get_name(_type);	
+	if (string_starts_with(str, "ref shader"))		return shader_get_name(_type);	
+	if (string_starts_with(str, "ref tileset"))		return tileset_get_name(_type);	
+	if (string_starts_with(str, "ref timeline"))	return timeline_get_name(_type);
+	return undefined;
 }
 
 /// @func	address_of(_instance)
@@ -563,18 +559,58 @@ function rgb_of(_color) {
 	);
 }
 
-/// @func	extract_init(_struct, _remove = false)
+/// @func	extract_init(_struct, _remove = false, _init_struct_name = "init")
 /// @desc	Extracts an "init" member of the specified struct, if it exists,
 ///			and returns it. Optionally, the "init" is also removed from the _struct.
 ///			This is especially useful for instance creation, when you read data 
 ///			from json configuration files, that might or might-not contain init structs.
 ///			Use it like "instance_create(...., extract_init(json));
-function extract_init(_struct, _remove = false) {
-	if (struct_exists(_struct, "init") && is_struct(_struct.init)) {
-		var rv = _struct.init;
+function extract_init(_struct, _remove = false, _init_struct_name = "init") {
+	var rv = vsget(_struct, _init_struct_name);
+	if (is_struct(rv)) {
 		if (_remove)
-			struct_remove(_struct, "init");
+			struct_remove(_struct, _init_struct_name);
 		return rv;
 	}
 	return undefined;
+}
+
+/// @func	asset_from_string(_asset_name_or_type)
+/// @desc	Recreates the asset index from a type name read from json or a savegame
+function asset_from_string(_asset_name) {
+	return 
+		is_null(_asset_name) ? 
+		undefined :
+		(is_string(_asset_name) ? asset_get_index(_asset_name) : _asset_name);
+}
+
+/// @func	asset_to_string(_asset)
+/// @desc	Convert an asset (or object) name to a string to be saved to json or a savegame
+function asset_to_string(_asset) {
+	return
+		is_null(_asset) ?
+		undefined :
+		(is_string(_asset) ? _asset : typename_of(_asset));
+}
+
+/// @func	color_from_array(_rgb_array)
+/// @desc	Reads a 3-element-array into an rgb color from a json array
+function color_from_array(_rgb_array) {
+	if (is_array(_rgb_array) && array_length(_rgb_array) == 3) {
+		return make_color_rgb(_rgb_array[@0], _rgb_array[@1], _rgb_array[@2]);
+	}
+	return _rgb_array;
+}
+
+/// @func	color_to_array(_color)
+/// @desc	Converts any color to a 3-element-array, which can be stored in a json
+function color_to_array(_color) {
+	return 
+		!is_null(_color) ? 
+		[
+			color_get_red(_color),
+			color_get_green(_color),
+			color_get_blue(_color)
+		] :
+		[255, 255, 255];
 }

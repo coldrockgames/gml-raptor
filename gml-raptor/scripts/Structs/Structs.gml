@@ -251,7 +251,7 @@ function struct_join_into_no_rebind(target, sources) {
 ///			Statics are also transferred, as you would expect
 ///			Methods in the structs will be rebound to the new struct
 function deep_copy(_struct_or_array) {
-	if (!is_struct(_struct_or_array) && !is_array(_struct_or_array))
+	if (is_null(_struct_or_array) || (!is_struct(_struct_or_array) && !is_array(_struct_or_array)))
 		return _struct_or_array;
 		
 	__ENSURE_STRUCT_JOIN_CIRCULAR_CACHE;
