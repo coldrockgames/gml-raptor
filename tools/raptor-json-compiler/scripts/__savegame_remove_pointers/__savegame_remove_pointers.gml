@@ -7,19 +7,19 @@
 	file gets restored.
 */
 
-/// @func		__savegame_remove_pointers(struct, refstack)
+/// @func		__savegame_remove_pointers(_struct, refstack)
 /// @desc
 /// @arg {struct} struct	The struct to clone and remove pointers
-function __savegame_remove_pointers(struct, refstack) {
-	return new __savegame_deep_copy_remove(struct, refstack).copy;
+function __savegame_remove_pointers(_struct, refstack) {
+	return new __savegame_deep_copy_remove(_struct, refstack).copy;
 }
 
-/// @func		__savegame_deep_copy_remove
+/// @func		__savegame_deep_copy_remove(source, _refstack)
 /// @desc	Derived from SNAP deep_copy this takes cares of methods (skip)
 ///					and instance id's that will not be copied but replaced with their id only
 function __savegame_deep_copy_remove(source, _refstack) constructor {
-	refstack = _refstack;
-    copy = undefined;
+	refstack	= _refstack;
+    copy		= undefined;
 
 	static is_ignored = function(_struct, _name) {
 		return string_contains(
@@ -32,8 +32,8 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 		var refname = string_concat(__SAVEGAME_STRUCT_REF_MARKER, name_of(_struct));
 		if (!vsget(refstack, refname)) {
 			vlog($"Adding '{refname}' to refstack");
-			refstack[$ refname] = true; // Temp-add "true" struct member to avoid endless loop
-			refstack[$ refname] = copy_struct(_struct);
+			refstack[$ refname]	 = true; // Temp-add "true" struct member to avoid endless loop
+			refstack[$ refname]	 = copy_struct(_struct);
 		}
 		return refname;
 	}
@@ -48,7 +48,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 		
 		try {
 			if (is_object_instance(_value)) {
-				var strid = string(real(_value));
+				var strid = string(real(_value.id));
 				vlog($"Replacing instance '{name_of(_value)}' for savegame");
 				rv.value = string_concat(__SAVEGAME_REF_MARKER, strid);
 				rv.success = true;				
@@ -70,6 +70,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
         
         var _names = struct_get_names(_source);
         var _i = 0;
+		var res;
         repeat(array_length(_names))
         {
             var _name = _names[_i];
@@ -85,7 +86,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 			}
             else if (is_object_instance(_value))
 			{
-				var res = replace_ref(_value);
+				res = replace_ref(_value);
 				if (res.success)
 					_value = res.value;
 				else
@@ -119,6 +120,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
         var _copy = array_create(_length,);
         
         var _i = 0;
+		var res;
         repeat(_length)
         {
             var _value = _source[_i];
@@ -133,7 +135,7 @@ function __savegame_deep_copy_remove(source, _refstack) constructor {
 			}
             else if (is_object_instance(_value))
 			{
-				var res = replace_ref(_value);
+				res = replace_ref(_value);
 				if (res.success)
 					_value = res.value;
 				else

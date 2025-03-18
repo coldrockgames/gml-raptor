@@ -49,8 +49,9 @@ function class_tree(_class_instance) {
 	return string_split(_class_instance[$ __PARENT_CONSTRUCTOR_NAME], "|", true);
 }
 
-/// @func is_class_of(_struct, _class_name)
-/// @desc Returns, whether the struct has used the "construct" command and the type is the specified class_name
+/// @func	is_class_of(_struct, _class_name)
+/// @desc	Returns, whether the struct has used the "construct" command 
+///			and the type is the specified class_name
 function is_class_of(_struct, _class_name) {
 	gml_pragma("forceinline");
 	if (!is_string(_class_name)) _class_name = script_get_name(_class_name);
@@ -58,8 +59,10 @@ function is_class_of(_struct, _class_name) {
 }
 
 /// @func	is_child_class_of(_struct, _class_name)
-/// @desc	Returns, whether the struct has used the "construct" command and the type is the specified class_name
-///			or the specified _class_name appears anywhere in the inheritance chain of this _struct
+/// @desc	Returns, whether the struct has used the "construct" command 
+///			and the type is the specified class_name
+///			or the specified _class_name appears anywhere 
+///			in the inheritance chain of this _struct
 function is_child_class_of(_struct, _class_name) {
 	gml_pragma("forceinline");
 	if (!is_string(_class_name)) _class_name = script_get_name(_class_name);
@@ -248,7 +251,7 @@ function struct_join_into_no_rebind(target, sources) {
 ///			Statics are also transferred, as you would expect
 ///			Methods in the structs will be rebound to the new struct
 function deep_copy(_struct_or_array) {
-	if (!is_struct(_struct_or_array) && !is_array(_struct_or_array))
+	if (is_null(_struct_or_array) || (!is_struct(_struct_or_array) && !is_array(_struct_or_array)))
 		return _struct_or_array;
 		
 	__ENSURE_STRUCT_JOIN_CIRCULAR_CACHE;

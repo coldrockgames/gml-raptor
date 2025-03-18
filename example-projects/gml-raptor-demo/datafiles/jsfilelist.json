@@ -1,0 +1,21 @@
+{ 
+    "files": [ 
+        "raptor_license.txt", 
+        "scribble_license.txt", 
+        "snap_license.txt", 
+        "gml_raptor_demo_2504_game_settings.jx", 
+        "jsfilelist.jx", 
+        "locale/de/locale.jx", 
+        "locale/de/raptor_demo.jx", 
+        "locale/en/locale.jx", 
+        "locale/en/raptor_demo.jx", 
+        "race/demotable.jx", 
+        "race/racedemo.jx", 
+    ], 
+    "directories": [ 
+        "locale", 
+        "race", 
+        "locale/de", 
+        "locale/en", 
+    ] 
+} 

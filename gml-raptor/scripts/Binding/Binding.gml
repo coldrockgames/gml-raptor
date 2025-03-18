@@ -17,19 +17,18 @@ function __Binding(
 
 	key = $"{_prefix}_{name_of(_myself)}.{_my_property}.{name_of(_source_instance)}";
 	
-	target_instance  = _myself;
-	target_property  = _my_property;
-	source_instance  = _source_instance;
-	source_property  = _source_property;
+	target_instance		= _myself;
+	target_property		= _my_property;
+	source_instance		= _source_instance;
+	source_property		= _source_property;
 
-	converter		 = _converter;
-	on_value_changed = _on_value_changed;
+	converter			= _converter;
+	on_value_changed	= _on_value_changed;
 
 	// when binding is set up, a change occurs from "undefined"->"initial value"
 	// This flag prevents a "on_value_changed" from being invoked during set up.
-	__first_change	 = true;
-	__value_buf		 = undefined; // Buffers the old value for on_value_changed callback
-
+	__first_change		= true;
+	__value_buf			= undefined; // Buffers the old value for on_value_changed callback
 
 	BINDINGS.add(self);
 
@@ -71,8 +70,9 @@ function PushBinding(
 	_source_instance	= undefined, 
 	_source_property	= "", 
 	_converter			= undefined,
-	_on_value_changed	= undefined) : __Binding(
-		"push",	_myself, _my_property, _source_instance, _source_property, _converter, _on_value_changed) constructor {
+	_on_value_changed	= undefined,
+	_prefix				= "push") : __Binding(
+		_prefix, _myself, _my_property, _source_instance, _source_property, _converter, _on_value_changed) constructor {
 	construct(PushBinding);
 }
 	
@@ -82,8 +82,9 @@ function PullBinding(
 	_source_instance	= undefined, 
 	_source_property	= "", 
 	_converter			= undefined,
-	_on_value_changed	= undefined) : __Binding(
-		"pull",
+	_on_value_changed	= undefined,
+	_prefix				= "pull") : __Binding(
+		_prefix,
 		_myself, _my_property, 
 		_source_instance, _source_property, 
 		_converter, _on_value_changed) constructor {
@@ -93,8 +94,9 @@ function PullBinding(
 function WatcherBinding(
 	_source_instance	= undefined, 
 	_source_property	= undefined, 
-	_on_value_changed	= undefined) : 
-	PushBinding(_source_instance, _source_property, _source_instance, _source_property,,_on_value_changed) constructor {
+	_on_value_changed	= undefined,
+	_prefix				= "watcher") : 
+	PushBinding(_source_instance, _source_property, _source_instance, _source_property,, _on_value_changed, _prefix) constructor {
 	construct(WatcherBinding);
 		
 	static update_binding = function() {

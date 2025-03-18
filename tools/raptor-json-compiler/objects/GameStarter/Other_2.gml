@@ -1,12 +1,5 @@
 /// @desc start the game engine(s)
 
-// Initialize LG on HTML frontend
-if (IS_HTML) {
-	browser_click_handler = open_link_in_new_tab;
-	LG_AVAIL_LOCALES = HTML_LOCALES;
-	LG_init();
-}
-
 #macro GAME_CHANNEL_STRING	global.__game_channel_string
 GAME_CHANNEL_STRING = LG($"=legal/game_channel_{CONFIGURATION_NAME}");
 
