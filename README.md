@@ -81,5 +81,5 @@ Very special thanks to `Alex` [@pamims](https://github.com/pamims) for proof rea
 ### CONTACT ME
 Beside the communication channel here, you can reach me as @Grisgram on the [GameMakerKitchen Discord](https://discord.gg/8krYCqr).
 
-(c)2022-2024 [coldrock.games](https://www.coldrock.games)
+(c)2022-2025 [coldrock.games](https://www.coldrock.games)
 
