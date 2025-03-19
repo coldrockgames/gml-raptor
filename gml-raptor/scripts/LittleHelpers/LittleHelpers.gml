@@ -137,23 +137,27 @@ function typename_of(_type) {
 	if (is_string(_type))
 		return _type;
 
+	var str = string(_type);
+	
+	if (string_starts_with(str, "ref animcurve"	))	return undefined; // gml does not have a function for this
+	if (string_starts_with(str, "ref sequence"	))	return undefined; // gml does not have a function for this
+	if (string_starts_with(str, "ref room"		))	return room_get_name(_type);	
+	if (string_starts_with(str, "ref font"		))	return font_get_name(_type);	
+	if (string_starts_with(str, "ref path"		))	return path_get_name(_type);	
+	if (string_starts_with(str, "ref sound"		))	return audio_get_name(_type);	
+	if (string_starts_with(str, "ref object"	))	return object_get_name(_type);	
+	if (string_starts_with(str, "ref script"	))	return script_get_name(_type);
+	if (string_starts_with(str, "ref sprite"	))	return sprite_get_name(_type);	
+	if (string_starts_with(str, "ref shader"	))	return shader_get_name(_type);	
+	if (string_starts_with(str, "ref tileset"	))	return tileset_get_name(_type);	
+	if (string_starts_with(str, "ref timeline"	))	return timeline_get_name(_type);
+
 	try {
 		var scr = script_get_name(_type);
 		if (!is_null(scr) || scr != "<undefined>")
 			return scr;
 	} catch (_) { }
-
-	var str = string(_type);
-	if (string_starts_with(str, "ref room"))		return room_get_name(_type);	
-	if (string_starts_with(str, "ref font"))		return font_get_name(_type);	
-	if (string_starts_with(str, "ref path"))		return path_get_name(_type);	
-	if (string_starts_with(str, "ref audio"))		return audio_get_name(_type);	
-	if (string_starts_with(str, "ref object"))		return object_get_name(_type);	
-	if (string_starts_with(str, "ref script"))		return script_get_name(_type);	
-	if (string_starts_with(str, "ref sprite"))		return sprite_get_name(_type);	
-	if (string_starts_with(str, "ref shader"))		return shader_get_name(_type);	
-	if (string_starts_with(str, "ref tileset"))		return tileset_get_name(_type);	
-	if (string_starts_with(str, "ref timeline"))	return timeline_get_name(_type);
+	
 	return undefined;
 }
 
