@@ -496,7 +496,47 @@ onTransitBack = function(_transition_data) {
 	----------------------
 */
 #region VIRTUAL ROOM CONTROL
+__virtual_rooms = {};
 
+/// @func get_virtual_room(_name)
+get_virtual_room = function(_name) {
+	return __virtual_rooms[$ _name];
+}
 
+/// @func is_virtual_room_selected()
+is_virtual_room_selected = function() {
+	return VIRTUAL_ROOM != undefined;
+}
+
+/// @func create_virtual_room(_x1, _y1, _width, _height, _name)
+create_virtual_room = function(_x1, _y1, _width, _height, _name) {
+	var virtual_room = new VirtualRoom(_x1, _y1, _width, _height, _name);
+	__virtual_rooms[$ _name] = virtual_room;
+	return virtual_room;
+}
+
+/// @func set_camera_to_virtual_room(_name)
+set_camera_to_virtual_room = function(_name) {
+	VIRTUAL_ROOM	= get_virtual_room(_name);
+	CAM_MIN_X		= VIRTUAL_ROOM_LEFT_EDGE;
+	CAM_MIN_Y		= VIRTUAL_ROOM_TOP_EDGE;
+	CAM_MAX_X		= VIRTUAL_ROOM_RIGHT_EDGE;
+	CAM_MAX_Y		= VIRTUAL_ROOM_BOTTOM_EDGE;
+	
+	if (VIRTUAL_ROOM == undefined) {
+		elog($"Virtual Room '{_name}' does not exist!");
+		return false;
+	}
+	return true;
+}
+
+/// @func set_camera_to_room()
+set_camera_to_room = function() {
+	VIRTUAL_ROOM	= undefined;
+	CAM_MIN_X		= 0;
+	CAM_MIN_Y		= 0;
+	CAM_MAX_X		= room_width;
+	CAM_MAX_Y		= room_height;
+}
 
 #endregion
