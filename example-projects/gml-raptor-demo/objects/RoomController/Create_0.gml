@@ -498,40 +498,62 @@ onTransitBack = function(_transition_data) {
 #region VIRTUAL ROOM CONTROL
 __virtual_rooms = {};
 
-/// @func get_virtual_room(_name)
+/// @func	get_virtual_room(_name)
+/// @desc	Returns a virtual room with the given name.
+///			(You may want to modify your virtual room at runtime.)
 get_virtual_room = function(_name) {
 	return __virtual_rooms[$ _name];
 }
 
-/// @func is_virtual_room_selected()
-is_virtual_room_selected = function() {
-	return VIRTUAL_ROOM != undefined;
+/// @func	is_virtual_room_selected(_name)
+/// @desc	Checks if the given virtual room is currently selected.
+is_virtual_room_selected = function(_name) {
+	return VIRTUAL_ROOM != undefined && VIRTUAL_ROOM.name == _name;
 }
 
-/// @func create_virtual_room(_x1, _y1, _width, _height, _name)
-create_virtual_room = function(_x1, _y1, _width, _height, _name) {
-	var virtual_room = new VirtualRoom(_x1, _y1, _width, _height, _name);
+/// @func	create_virtual_room(_x, _y, _width, _height, _name)
+/// @desc	Creates and returns the new virtual room.
+create_virtual_room = function(_x, _y, _width, _height, _name) {
+	var virtual_room = new VirtualRoom(_x, _y, _width, _height, _name);
 	__virtual_rooms[$ _name] = virtual_room;
 	return virtual_room;
 }
 
-/// @func set_camera_to_virtual_room(_name)
-set_camera_to_virtual_room = function(_name) {
-	VIRTUAL_ROOM	= get_virtual_room(_name);
-	CAM_MIN_X		= VIRTUAL_ROOM_LEFT_EDGE;
-	CAM_MIN_Y		= VIRTUAL_ROOM_TOP_EDGE;
-	CAM_MAX_X		= VIRTUAL_ROOM_RIGHT_EDGE;
-	CAM_MAX_Y		= VIRTUAL_ROOM_BOTTOM_EDGE;
-	
-	if (VIRTUAL_ROOM == undefined) {
-		elog($"Virtual Room '{_name}' does not exist!");
+/// @func	delete_virtual_room(_name)
+/// @desc	Deletes the given room if it is not currently selected.
+delete_virtual_room = function(_name) {
+	if (is_virtual_room_selected(_name)) {
+		wlog($"** WARNING ** Virtual Room with the name '{_name}' is currently selected! You have to deselect it first in order to delete it.");
 		return false;
 	}
+	
+	struct_remove(__virtual_rooms, _name);
 	return true;
 }
 
-/// @func set_camera_to_room()
-set_camera_to_room = function() {
+/// @func	set_camera_to_virtual_room(_name)
+/// @desc	Sets the camera min/max coordinates according to the given virtual room.
+///			(The virtual room is now selected.)
+set_camera_to_virtual_room = function(_name) {
+	VIRTUAL_ROOM = get_virtual_room(_name);
+	
+	if (!is_virtual_room_selected(_name)) {
+		wlog($"** WARNING ** Virtual Room with the name '{_name}' does not exist!");
+		return false;
+	}
+	
+	CAM_MIN_X = VIRTUAL_ROOM_LEFT_EDGE;
+	CAM_MIN_Y = VIRTUAL_ROOM_TOP_EDGE;
+	CAM_MAX_X = VIRTUAL_ROOM_RIGHT_EDGE;
+	CAM_MAX_Y = VIRTUAL_ROOM_BOTTOM_EDGE;
+	
+	return true;
+}
+
+/// @func	set_camera_to_phisical_room()
+/// @desc	Sets the camera min/max coordinates according to the phisical room.
+///			(No virtual room is now selected.)
+set_camera_to_phisical_room = function() {
 	VIRTUAL_ROOM	= undefined;
 	CAM_MIN_X		= 0;
 	CAM_MIN_Y		= 0;
