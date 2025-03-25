@@ -156,7 +156,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.11.0.179",
+    "IDEVersion":"2024.8.1.171",
   },
   "name":"gml-raptor",
   "resources":[
@@ -579,6 +579,7 @@
     {"id":{"name":"UnitTest_Configuration","path":"scripts/UnitTest_Configuration/UnitTest_Configuration.yy",},},
     {"id":{"name":"UnitTest","path":"scripts/UnitTest/UnitTest.yy",},},
     {"id":{"name":"VersionedDataStruct","path":"scripts/VersionedDataStruct/VersionedDataStruct.yy",},},
+    {"id":{"name":"VirtualRoom","path":"scripts/VirtualRoom/VirtualRoom.yy",},},
     {"id":{"name":"__shd_scribble_bake_effect_4dir","path":"shaders/__shd_scribble_bake_effect_4dir/__shd_scribble_bake_effect_4dir.yy",},},
     {"id":{"name":"__shd_scribble_bake_effect_8dir_2px","path":"shaders/__shd_scribble_bake_effect_8dir_2px/__shd_scribble_bake_effect_8dir_2px.yy",},},
     {"id":{"name":"__shd_scribble_bake_effect_8dir","path":"shaders/__shd_scribble_bake_effect_8dir/__shd_scribble_bake_effect_8dir.yy",},},

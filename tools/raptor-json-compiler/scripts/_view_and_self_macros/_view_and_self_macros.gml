@@ -100,6 +100,21 @@ CAM_MAX_Y					= 0;
 #macro ROOM_CENTER					ROOM_CENTER_X, ROOM_CENTER_Y
 #macro ROOM_ASPECT_RATIO			(ROOM_WIDTH / ROOM_HEIGHT)
 
+// Virtual Room helpers
+#macro VIRTUAL_ROOM					global.__virtual_room
+VIRTUAL_ROOM = undefined;
+
+#macro VIRTUAL_ROOM_WIDTH			VIRTUAL_ROOM.width
+#macro VIRTUAL_ROOM_HEIGHT			VIRTUAL_ROOM.height
+#macro VIRTUAL_ROOM_TOP_EDGE		VIRTUAL_ROOM.top
+#macro VIRTUAL_ROOM_LEFT_EDGE		VIRTUAL_ROOM.left
+#macro VIRTUAL_ROOM_RIGHT_EDGE		VIRTUAL_ROOM.get_right()
+#macro VIRTUAL_ROOM_BOTTOM_EDGE		VIRTUAL_ROOM.get_bottom()
+#macro VIRTUAL_ROOM_CENTER_X		VIRTUAL_ROOM.get_center_x()
+#macro VIRTUAL_ROOM_CENTER_Y		VIRTUAL_ROOM.get_center_y()
+#macro VIRTUAL_ROOM_CENTER			VIRTUAL_ROOM_CENTER_X, VIRTUAL_ROOM_CENTER_Y
+#macro VIRTUAL_ROOM_ASPECT_RATIO	(VIRTUAL_ROOM_WIDTH / VIRTUAL_ROOM_HEIGHT)
+
 // SELF Coordinates (object dimensions only, without absolute screen position)
 #macro SELF_WIDTH					sprite_width
 #macro SELF_HEIGHT					sprite_height
