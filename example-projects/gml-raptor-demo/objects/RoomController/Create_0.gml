@@ -498,6 +498,12 @@ onTransitBack = function(_transition_data) {
 #region VIRTUAL ROOM CONTROL
 __virtual_rooms = {};
 
+/// @func	virtual_room_exists(_name)
+/// @desc	Checks if a virtual room with the given name exists.
+virtual_room_exists = function(_name) {
+	return get_virtual_room(_name) != undefined;
+}
+
 /// @func	get_virtual_room(_name)
 /// @desc	Returns a virtual room with the given name.
 ///			(You may want to modify your virtual room at runtime.)
@@ -522,7 +528,7 @@ create_virtual_room = function(_x, _y, _width, _height, _name) {
 /// @func	delete_virtual_room(_name)
 /// @desc	Deletes the given room if it is not currently selected.
 delete_virtual_room = function(_name) {
-	if (is_virtual_room_selected(_name)) {
+	if (!virtual_room_exists(_name)) {
 		wlog($"** WARNING ** Virtual Room with the name '{_name}' is currently selected! You have to deselect it first in order to delete it.");
 		return false;
 	}
@@ -537,7 +543,7 @@ delete_virtual_room = function(_name) {
 set_camera_to_virtual_room = function(_name) {
 	VIRTUAL_ROOM = get_virtual_room(_name);
 	
-	if (!is_virtual_room_selected(_name)) {
+	if (!virtual_room_exists(_name)) {
 		wlog($"** WARNING ** Virtual Room with the name '{_name}' does not exist!");
 		return false;
 	}
@@ -550,10 +556,10 @@ set_camera_to_virtual_room = function(_name) {
 	return true;
 }
 
-/// @func	set_camera_to_phisical_room()
-/// @desc	Sets the camera min/max coordinates according to the phisical room.
+/// @func	set_camera_to_physical_room()
+/// @desc	Sets the camera min/max coordinates according to the physical room.
 ///			(No virtual room is now selected.)
-set_camera_to_phisical_room = function() {
+set_camera_to_physical_room = function() {
 	VIRTUAL_ROOM	= undefined;
 	CAM_MIN_X		= 0;
 	CAM_MIN_Y		= 0;
