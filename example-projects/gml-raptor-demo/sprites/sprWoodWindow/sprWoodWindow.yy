@@ -56,7 +56,7 @@
   "origin":0,
   "parent":{
     "name":"wook_skin_sprites",
-    "path":"folders/_gml_raptor_ui_/skins/wook_skin_sprites.yy",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui/skins/wook_skin_sprites.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

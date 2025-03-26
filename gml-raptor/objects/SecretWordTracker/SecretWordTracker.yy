@@ -10,8 +10,8 @@
   "name":"SecretWordTracker",
   "overriddenProperties":[],
   "parent":{
-    "name":"helpers",
-    "path":"folders/_gml_raptor_ui_/helpers.yy",
+    "name":"gml-raptor-helpers",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-helpers.yy",
   },
   "parentObjectId":{
     "name":"_raptorBase",

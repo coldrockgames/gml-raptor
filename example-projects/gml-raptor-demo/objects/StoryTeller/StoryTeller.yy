@@ -11,8 +11,8 @@
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"_baseControl","path":"objects/_baseControl/_baseControl.yy",},"propertyId":{"name":"autosize","path":"objects/_baseControl/_baseControl.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"False",},
   ],
   "parent":{
-    "name":"helpers",
-    "path":"folders/_gml_raptor_ui_/helpers.yy",
+    "name":"gml-raptor-helpers",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-helpers.yy",
   },
   "parentObjectId":{
     "name":"Label",
