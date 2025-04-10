@@ -1,5 +1,5 @@
 {
-  "$GMProject":"",
+  "$GMProject":"v1",
   "%Name":"raptor-json-compiler",
   "AudioGroups":[
     {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
@@ -45,9 +45,9 @@
     {"$GMFolder":"","%Name":"UnitTestEngine","folderPath":"folders/_gml_raptor_/UnitTestEngine.yy","name":"UnitTestEngine","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_gml_raptor_packages_","folderPath":"folders/_gml_raptor_packages_.yy","name":"_gml_raptor_packages_","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"gml-animated-flag","folderPath":"folders/_gml_raptor_packages_/gml-animated-flag.yy","name":"gml-animated-flag","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"gml-raptor-helpers","folderPath":"folders/_gml_raptor_packages_/gml-raptor-helpers.yy","name":"gml-raptor-helpers","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"gml-highscorer","folderPath":"folders/_gml_raptor_packages_/gml-highscorer.yy","name":"gml-highscorer","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"gml-outline-shader","folderPath":"folders/_gml_raptor_packages_/gml-outline-shader.yy","name":"gml-outline-shader","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"gml-raptor-helpers","folderPath":"folders/_gml_raptor_packages_/gml-raptor-helpers.yy","name":"gml-raptor-helpers","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"gml-raptor-ui","folderPath":"folders/_gml_raptor_packages_/gml-raptor-ui.yy","name":"gml-raptor-ui","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"messagebox","folderPath":"folders/_gml_raptor_packages_/gml-raptor-ui/messagebox.yy","name":"messagebox","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"skins","folderPath":"folders/_gml_raptor_packages_/gml-raptor-ui/skins.yy","name":"skins","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -90,6 +90,7 @@
     {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"main","folderPath":"folders/Rooms/main.yy","name":"main","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
+  "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{
         "beta":{
@@ -132,7 +133,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.11.0.179",
+    "IDEVersion":"2024.13.0.190",
   },
   "name":"raptor-json-compiler",
   "resources":[
@@ -606,8 +607,8 @@
   "TextureGroups":[
     {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
         "release":{
-          "groupParent":"null",
           "compressFormat":"bz2",
+          "groupParent":"null",
           "loadType":"default",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},

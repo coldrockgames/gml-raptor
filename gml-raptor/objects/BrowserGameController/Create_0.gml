@@ -7,8 +7,8 @@ __active = IS_HTML;
 curr_width = browser_width;
 curr_height = browser_height;
 
-if (__active)
-	browser_scrollbars_enable();
+//if (__active)
+//	browser_scrollbars_enable();
 
 /// @func					update_canvas()
 /// @desc				Update the browser canvas
