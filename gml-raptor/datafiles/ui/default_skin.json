@@ -1,0 +1,46 @@
+{
+	"window_def": {
+		"sprite_index": "#asset:sprDefaultWindow",
+		"titlebar_height": 34
+	},
+	"messagebox_x_button": 	{ "window_x_button_object": "#asset:MessageBoxXButton", },
+	"window_x_button": 		{ "window_x_button_object": "#asset:WindowXButton", 	},
+
+	"CheckBox": 	{ "sprite_index": 	"#asset:sprDefaultCheckbox" 	},
+	"InputBox": 	{ "sprite_index": 	"#asset:sprDefaultInputBox" 	},
+	"ImageButton": 	{ "sprite_index": 	"#asset:sprDefaultButton " 	},
+	"Label": 		{ "sprite_index": 	"#asset:sprDefaultLabel" 		},
+	
+	"MessageBoxWindow": "#join:window_def, messagebox_x_button",
+	"MessageBoxXButton": { "sprite_to_use": "#asset:sprDefaultXButton" },
+	
+	"MouseCursor": {
+		"sprite_index": 				"#asset:sprDefaultMouseCursor",
+		"mouse_cursor_sprite": 			"#asset:sprDefaultMouseCursor",
+		"mouse_cursor_sprite_sizing": 	"#asset:sprDefaultMouseCursorSizing"
+	},
+	
+	"Panel": 		{ "sprite_index": 	"#asset:spr1pxTrans" },
+	"RadioButton": 	{ "sprite_index": 	"#asset:sprDefaultRadioButton" },
+	
+	"Slider": {
+		"sprite_index": 				"#asset:sprDefaultSliderRailH",
+		"rail_sprite_horizontal": 		"#asset:sprDefaultSliderRailH",
+		"rail_sprite_vertical": 		"#asset:sprDefaultSliderRailV",
+		"knob_sprite": 					"#asset:sprDefaultSliderKnob"
+	},
+	
+	"Scrollbar": {
+		"sprite_index": 				"#asset:sprDefaultScrollbarRailH",
+		"rail_sprite_horizontal": 		"#asset:sprDefaultScrollbarRailH",
+		"rail_sprite_vertical": 		"#asset:sprDefaultScrollbarRailV",
+		"knob_sprite": 					"#asset:sprDefaultScrollbarKnob"
+	},
+	
+	"TextButton": 	{ "sprite_index": 	"#asset:sprDefaultButton " },
+	"Tooltip": 		{ "sprite_index": 	"#asset:sprDefaultTooltip" },
+	
+	"Window": 		"#join:window_def, window_x_button",
+	"WindowXButton": { "sprite_to_use": "#asset:sprDefaultXButton" },
+}
+

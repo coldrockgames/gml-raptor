@@ -12,6 +12,7 @@
 #macro SKIN					UI_SKINS.active_skin
 
 #macro __DEFAULT_UI_SKIN_NAME	"default"
+#macro __RAPTOR_PRE_SKIN_APPLY	"__raptor_skin_applied"
 
 function UiSkinManager() constructor {
 	construct(UiSkinManager);
@@ -28,6 +29,28 @@ function UiSkinManager() constructor {
 		ilog($"UiSkinManager registered skin '{_skin.name}'");
 		if (_activate_now || was_active)
 			activate_skin(_skin.name);
+	}
+
+	/// @func	load_skin_async(_filename, _activate_now = false)
+	/// @desc	Loads a skin from a json file
+	static load_skin_async = function(_filename, _activate_now = false) {
+		_filename = __clean_file_name(_filename);
+		if (!string_ends_with(_filename, DATA_FILE_EXTENSION)) _filename += DATA_FILE_EXTENSION;
+		return file_read_struct_async(_filename, FILE_CRYPT_KEY)
+			.__raptor_data("filename", _filename)
+			.__raptor_data("activate", _activate_now)
+			.__raptor_finished(function(_skin, _buffer, _data) {
+				if (_skin != undefined) {
+					dlog($"UI Skin '{_data.filename}' loaded successfully");
+					if (!struct_exists(_skin, "name"))
+						_skin.name = file_get_filename(_data.filename, false);
+					var new_skin = new UiSkin(_skin.name);
+					struct_join_into(new_skin.asset_skin, _skin);
+					UI_SKINS.add_skin(new_skin, _data.activate);
+				} else
+					elog($"** ERROR ** Async load of UI Skin '{_data.filename}' failed!");
+				return _skin;
+			});
 	}
 
 	/// @func refresh_skin()
@@ -70,7 +93,7 @@ function UiSkinManager() constructor {
 	}
 
 	static __assign_all_skin_sprites = function() {
-		var names = ds_map_keys_to_array(active_skin.asset_skin);
+		var names = struct_get_names(active_skin.asset_skin);
 		for (var i = 0, len = array_length(names); i < len; i++) {
 			var key = names[@i];
 			var oidx = asset_get_index(key);

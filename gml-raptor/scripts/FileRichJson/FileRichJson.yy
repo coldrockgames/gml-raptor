@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"FileRichJson",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FileRichJson",
+  "parent":{
+    "name":"Files",
+    "path":"folders/_gml_raptor_/Files.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
