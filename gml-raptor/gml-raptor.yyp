@@ -1,5 +1,5 @@
 {
-  "$GMProject":"",
+  "$GMProject":"v1",
   "%Name":"gml-raptor",
   "AudioGroups":[
     {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
@@ -92,6 +92,7 @@
     {"$GMFolder":"","%Name":"_raptorTemplateRoom","folderPath":"folders/Rooms/_raptorTemplateRoom.yy","name":"_raptorTemplateRoom","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"main","folderPath":"folders/Rooms/main.yy","name":"main","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
+  "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.json","ConfigValues":{
         "release":{
@@ -156,7 +157,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.11.0.179",
+    "IDEVersion":"2024.13.1.193",
   },
   "name":"gml-raptor",
   "resources":[
@@ -363,7 +364,6 @@
     {"id":{"name":"ExpensiveCache","path":"scripts/ExpensiveCache/ExpensiveCache.yy",},},
     {"id":{"name":"FileAsyncWorker","path":"scripts/FileAsyncWorker/FileAsyncWorker.yy",},},
     {"id":{"name":"FileHelpers","path":"scripts/FileHelpers/FileHelpers.yy",},},
-    {"id":{"name":"FileRichJson","path":"scripts/FileRichJson/FileRichJson.yy",},},
     {"id":{"name":"FilesAsync","path":"scripts/FilesAsync/FilesAsync.yy",},},
     {"id":{"name":"FilesSync","path":"scripts/FilesSync/FilesSync.yy",},},
     {"id":{"name":"FilesTests","path":"scripts/FilesTests/FilesTests.yy",},},
@@ -637,25 +637,25 @@
   "TextureGroups":[
     {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
         "release":{
-          "groupParent":"null",
           "compressFormat":"bz2",
+          "groupParent":"null",
           "loadType":"default",
         },
         "unit_testing":{
-          "groupParent":"null",
           "compressFormat":"bz2",
+          "groupParent":"null",
           "loadType":"default",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"ui","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
-        "unit_testing":{
-          "groupParent":"null",
+        "beta":{
           "compressFormat":"bz2",
+          "groupParent":"null",
           "loadType":"default",
         },
-        "beta":{
-          "groupParent":"null",
+        "unit_testing":{
           "compressFormat":"bz2",
+          "groupParent":"null",
           "loadType":"default",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"ui","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},

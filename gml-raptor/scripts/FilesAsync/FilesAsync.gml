@@ -123,7 +123,6 @@ function file_write_struct_plain_async(filename, struct, print_pretty = true) {
 		.__raptor_finished(function(_prev, _buffer, _data) {
 			if (variable_struct_exists(__FILE_CACHE, _data.filename)) {
 				dlog($"Updated cache for file '{_data.filename}' (struct)");
-				__struct_apply_rich_json("", true, _data.struct, _data.struct);
 				struct_set(__FILE_CACHE, _data.filename, deep_copy(_data.struct));
 			}
 			return true;
@@ -152,7 +151,6 @@ function file_read_struct_plain_async(filename, add_to_cache = false) {
 					if (!string_is_empty(_prev)) {
 						var indata = SnapFromJSON(_prev);
 						rv = __file_reconstruct_root(indata);
-						__struct_apply_rich_json("", _data.add_to_cache, rv, rv);
 						if (_data.cache) {
 							dlog($"Added file '{_data.filename}' to cache (struct)");
 							struct_set(__FILE_CACHE, _data.filename, deep_copy(rv));
@@ -188,7 +186,6 @@ function file_write_struct_encrypted_async(filename, struct, cryptkey) {
 		.__raptor_finished(function(_prev, _buffer, _data) {
 			if (variable_struct_exists(__FILE_CACHE, _data.filename)) {
 				dlog($"Updated cache for file '{_data.filename}' (encrypted struct)");
-				__struct_apply_rich_json(_data.cryptkey, true, _data.struct, _data.struct);
 				struct_set(__FILE_CACHE, _data.filename, deep_copy(_data.struct));
 			}
 			return true;
@@ -221,7 +218,6 @@ function file_read_struct_encrypted_async(filename, cryptkey, add_to_cache = fal
 					if (bufsize > 0) {
 						var indata = SnapBufferReadBinary(_buffer, 0);
 						rv = __file_reconstruct_root(indata);
-						__struct_apply_rich_json(_data.cryptkey, _data.cache, rv, rv);
 						if (_data.cache) {
 							dlog($"Added file '{_data.filename}' to cache (encrypted struct)");
 							struct_set(__FILE_CACHE, _data.filename, deep_copy(rv));
