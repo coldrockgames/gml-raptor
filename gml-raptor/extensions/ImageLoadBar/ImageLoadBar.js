@@ -5,7 +5,7 @@ function ImageLoadBar_hook(ctx, width, height, total, current, image) {
 	
 	function getv(s) {
 		if (window.gml_Script_gmcallback_imgloadbar) {
-			return window.gml_Script_gmcallback_imgloadbar(inst, null,
+			return window.gml_Script_gmcallback_imgloadbar(inst, image,
 				s, current, total,
 				width, height, image ? image.width : 0, image ? image.height : 0)
 		} else return undefined;
@@ -28,6 +28,8 @@ function ImageLoadBar_hook(ctx, width, height, total, current, image) {
 			return r;
 		} else return d;
 	}
+	// --- [object CanvasRenderingContext2D]-1920-940-18-1-null
+	console.log("--- " + ctx + "-" + width + "-" + height + "-" + total + "-" + current + "-" + image);
 	// get parameters:
 	var backgroundColor = getc("background_color", "#FFFFFF");
 	var barBackgroundColor = getc("bar_background_color", "#FFFFFF");
