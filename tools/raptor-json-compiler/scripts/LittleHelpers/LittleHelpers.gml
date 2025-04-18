@@ -618,3 +618,30 @@ function color_to_array(_color) {
 		] :
 		[255, 255, 255];
 }
+
+/// @func color_from_hexcode(_hexcode)
+/// @desc Converts a hexcode to a color. (supports rgb and bgr)
+function color_from_hexcode(_hexcode) {
+	var c0 = string_first(_hexcode, 1);
+	var c1 = string_parse_hex(string_substring(_hexcode, 2, 2));
+	var c2 = string_parse_hex(string_substring(_hexcode, 4, 2));
+	var c3 = string_parse_hex(string_substring(_hexcode, 6, 2));
+	
+	switch (c0) {
+		case "#": 
+			return make_color_rgb(c1, c2, c3);
+			break;
+		case "$": 
+			return make_color_bgr(c1, c2, c3);
+			break;
+		default:
+			throw($"Hexcode '{_hexcode}' could not be converted. (Missing '#' or '$')");
+			break;
+	}
+}
+
+/// @func make_color_bgr(_blue, _green, _red)
+function make_color_bgr(_blue, _green, _red) {
+	return make_color_rgb(_red, _green, _blue);
+}
+

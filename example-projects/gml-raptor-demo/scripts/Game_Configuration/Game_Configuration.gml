@@ -83,6 +83,7 @@ function onGameStart() {
 	
 	UI_THEMES.activate_theme("coldrock");
 
+	UI_SKINS.add_skin(new DemoSkin(), true);
 	UI_SKINS.add_skin(new WoodSkin());
 	
 	// Setup Scribble

@@ -28,6 +28,7 @@ function gmcallback_imgloadbar(argument0, argument1, argument2, argument3, argum
 	var ch = argument4; // canvas height
 	var iw = argument5; // image width
 	var ih = argument6; // image height
+	
 	switch (argument0) {
 	    case "image_rect":
 	        //r[0] = (current_time div 500) mod 4 * (iw div 4);
@@ -40,14 +41,14 @@ function gmcallback_imgloadbar(argument0, argument1, argument2, argument3, argum
 	        r[2] = iw;
 	        r[3] = ih;
 			return r;
-	    case "background_color": return "#111111";
-	    case "bar_background_color": return "#000000";
-	    case "bar_foreground_color": return "#1111CC";
-	    case "bar_border_color": return "#050588";
-	    case "bar_width": return round(cw * 0.6);
-	    case "bar_height": return 24;
-	    case "bar_border_width": return 2;
-	    case "bar_offset": return 10;
+	    case "background_color":		return "#111111";
+	    case "bar_background_color":	return "#000000";
+	    case "bar_foreground_color":	return "#1111CC";
+	    case "bar_border_color":		return "#050588";
+	    case "bar_width":				return round(cw * 0.6);
+	    case "bar_height":				return 24;
+	    case "bar_border_width":		return 2;
+	    case "bar_offset":				return 10;
 	}
 	return undefined;
 }

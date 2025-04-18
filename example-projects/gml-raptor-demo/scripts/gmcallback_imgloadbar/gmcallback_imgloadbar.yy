@@ -6,7 +6,7 @@
   "name":"gmcallback_imgloadbar",
   "parent":{
     "name":"_loading_bar_files",
-    "path":"folders/__GAME_SETUP__/browser_extensions/_loading_bar_files.yy",
+    "path":"folders/_gml_raptor_/BrowserExtensions/_loading_bar_files.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

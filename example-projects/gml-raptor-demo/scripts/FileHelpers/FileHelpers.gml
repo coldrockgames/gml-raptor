@@ -5,6 +5,17 @@
 #macro __RAPTOR_JSFILELIST_NAME		$"jsfilelist{DATA_FILE_EXTENSION}"
 
 #region DIRECTORY FUNCTIONS
+/// @func	__check_if_folder(_path)
+/// @desc	A helper function to determine in an OS other than windows, whether a given path
+///			is a directory or not.
+function __check_if_folder(_path) {
+	_path = string_ends_with(_path, "/") ? string_skip_end(_path, 1) : _path;
+	var f = file_bin_open(_path, 0);
+	var is_file = f != -1 && file_bin_size(f) >= 0;
+	if (f != -1) file_bin_close(f);
+	return !is_file;
+}
+
 /// @func	directory_list_files(_folder = "", _wildcard = "*.*", _recursive = false, attributes = 0)
 /// @desc	List all matching files from a directory in an array, optionally recursive
 ///			_attributes	is one of the attr constants according to yoyo manual
@@ -27,15 +38,28 @@ function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = fals
 			
 			if (p.rec) {
 				var dirs = [];
-				var f = file_find_first($"{look_in}*", fa_directory);
-				while (f != "") {
-					if (file_attributes($"{look_in}{f}", fa_directory))
+				if (os_type == os_windows) {
+					var f = file_find_first($"{look_in}*", fa_directory);
+					while (f != "") {
+						if (file_attributes($"{look_in}{f}", fa_directory))
+							array_push(dirs, $"{root}{f}/");
+						f = file_find_next();
+					}
+					file_find_close();
+					for (var i = 0, len = array_length(dirs); i < len; i++)
+						p.reader(dirs[@i], p);
+				} else {
+					var f = file_find_first($"{look_in}*", fa_directory);
+					while (f != "") {
 						array_push(dirs, $"{root}{f}/");
-					f = file_find_next();
+						f = file_find_next();
+					}
+					file_find_close();
+					for (var i = 0, len = array_length(dirs); i < len; i++) {
+						if (__check_if_folder(dirs[@i])) 
+							p.reader(dirs[@i], p);
+					}
 				}
-				file_find_close();
-				for (var i = 0, len = array_length(dirs); i < len; i++)
-					p.reader(dirs[@i], p);
 			}
 			
 			var f = file_find_first($"{look_in}{p.mask}", p.attr);

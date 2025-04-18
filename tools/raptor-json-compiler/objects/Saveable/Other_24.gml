@@ -5,7 +5,6 @@
 */
 event_inherited();
 __RAPTORDATA.is_enabled = is_enabled;
-__RAPTORDATA.skinnable  = skinnable;
 __RAPTORDATA.tooltip_text = tooltip_text;
 __RAPTORDATA.auto_show_tooltip = auto_show_tooltip;
 __RAPTORDATA.tooltip_object = is_null(tooltip_object) ? undefined : object_get_name(tooltip_object);

@@ -208,7 +208,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 				if (__states[@i].name == name) {
 					if (!__states[@i].enabled)
 						break;
-						
+
 					active_state = __states[@i];
 					active_state.data = data;
 					__listpool_processible = (active_state.on_step != undefined);

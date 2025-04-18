@@ -10,8 +10,8 @@
     "path":"folders/Rooms.yy",
   },
   "parentObjectId":{
-    "name":"BrowserGameController",
-    "path":"objects/BrowserGameController/BrowserGameController.yy",
+    "name":"GameController",
+    "path":"objects/GameController/GameController.yy",
   },
   "persistent":true,
   "physicsAngularDamping":0.1,

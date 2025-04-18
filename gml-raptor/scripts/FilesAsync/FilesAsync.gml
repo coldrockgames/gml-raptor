@@ -143,7 +143,7 @@ function file_read_struct_plain_async(filename, add_to_cache = false) {
 		TRY
 			return file_read_text_file_async(filename, "", add_to_cache)
 			.__raptor_data("filename", filename)
-			.__raptor_data("add_to_cache", add_to_cache)
+			.__raptor_data("cache", add_to_cache)
 			.__raptor_finished(function(_prev, _buffer, _data) {
 				vlog($"Read {(string_is_empty(_prev) ? "0" : string_length(_prev))} characters from file");
 				var rv = undefined;

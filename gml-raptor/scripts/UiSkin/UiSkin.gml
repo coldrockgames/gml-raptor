@@ -98,13 +98,10 @@ function UiSkin(_name = "default") constructor {
 			return;
 			
 		with(_instance) {
-			if (skinnable) {
-				// ATTENTION! if != false does NOT mean if true!! (undefined is also != false!)
-				if (onSkinChanging(skindata) != false) {
-					// each step MIGHT set skinnable to false to avoid further manipulation!
-					if (skinnable) integrate_skin_data(skindata);
-					if (skinnable) onSkinChanged(skindata);
-				}
+			// ATTENTION! if != false does NOT mean if true!! (undefined is also != false!)
+			if (onSkinChanging(skindata) != false) {
+				integrate_skin_data(skindata);
+				onSkinChanged(skindata);
 			}
 		}
 	}

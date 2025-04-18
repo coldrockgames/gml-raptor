@@ -1,3 +1,3 @@
 /// @desc update canvas for the room
-if (__active) 
+if (__html_active) 
 	update_canvas();

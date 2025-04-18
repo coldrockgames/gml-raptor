@@ -20,31 +20,8 @@
 	When you activate a skin, raptor loops through the keys and uses object_set_sprite(...) on each of them!
 */
 
-function WoodSkin(_name = "wood") : DefaultSkin(_name) constructor {
+function DemoSkin(_name = "demo") : DefaultSkin(_name) constructor {
 
-	var woodwindow = { 
-		sprite_index: sprWoodWindow,
-		draw_color: THEME_WHITE,
-		draw_color_mouse_over: THEME_WHITE,
-		focus_border_color: THEME_WHITE,
-		titlebar_height: 38
-	}
-
-	var text_control = function(spr) {
-		return {
-			sprite_index: spr,
-		};
-	}
-
-	asset_skin[$ "Label"]				= text_control(sprWoodLabel);
-	asset_skin[$ "TextButton"]			= text_control(sprWoodButton);
-	asset_skin[$ "Tooltip"]				= { sprite_index: sprWoodTooltip }
-	asset_skin[$ "Window"]				= woodwindow;
-	asset_skin[$ "MessageBoxWindow"]	= woodwindow;
-	asset_skin[$ "DemoAlignmentWindow"]	= woodwindow;
-	asset_skin[$ "DemoAnchoringWindow"]	= woodwindow;
-	asset_skin[$ "DemoDockingWindow"]	= woodwindow;
-	asset_skin[$ "DemoLoginWindow"]		= woodwindow;
 	asset_skin[$ "InfoLabel"]			= { sprite_index: sprInfo }
 
 }
