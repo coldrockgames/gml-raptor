@@ -28,6 +28,7 @@ function gmcallback_imgloadbar(argument0, argument1, argument2, argument3, argum
 	var ch = argument4; // canvas height
 	var iw = argument5; // image width
 	var ih = argument6; // image height
+	ilog($"--- LOAD BAR");
 	switch (argument0) {
 	    case "image_rect":
 	        //r[0] = (current_time div 500) mod 4 * (iw div 4);

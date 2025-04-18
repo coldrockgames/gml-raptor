@@ -82,5 +82,21 @@ function unit_test_little_helpers() {
 		test.assert_equals(0, arr[2], "10");
 	}
 
+	ut.tests.color_from_hexcode_ok = function(test, data) {
+		var red  = color_from_hexcode("#FF0000");
+		var blue = color_from_hexcode("$FF0000");
+		
+		test.assert_equals(make_color_rgb(255, 0, 0), red, "red");
+		test.assert_equals(make_color_bgr(255, 0, 0), blue, "blue");
+	}
+
+	ut.tests.make_color_bgr_ok = function(test, data) {
+		var blue_rgb = make_color_rgb(0, 0, 255);
+		
+		var blue_bgr = make_color_bgr(255, 0, 0);
+		
+		test.assert_equals(blue_rgb, blue_bgr, "blue");
+	}
+
 	ut.run();
 }

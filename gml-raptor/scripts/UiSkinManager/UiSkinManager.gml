@@ -31,28 +31,6 @@ function UiSkinManager() constructor {
 			activate_skin(_skin.name);
 	}
 
-	/// @func	load_skin_async(_filename, _activate_now = false)
-	/// @desc	Loads a skin from a json file
-	static load_skin_async = function(_filename, _activate_now = false) {
-		_filename = __clean_file_name(_filename);
-		if (!string_ends_with(_filename, DATA_FILE_EXTENSION)) _filename += DATA_FILE_EXTENSION;
-		return file_read_struct_async(_filename, FILE_CRYPT_KEY)
-			.__raptor_data("filename", _filename)
-			.__raptor_data("activate", _activate_now)
-			.__raptor_finished(function(_skin, _buffer, _data) {
-				if (_skin != undefined) {
-					dlog($"UI Skin '{_data.filename}' loaded successfully");
-					if (!struct_exists(_skin, "name"))
-						_skin.name = file_get_filename(_data.filename, false);
-					var new_skin = new UiSkin(_skin.name);
-					struct_join_into(new_skin.asset_skin, _skin);
-					UI_SKINS.add_skin(new_skin, _data.activate);
-				} else
-					elog($"** ERROR ** Async load of UI Skin '{_data.filename}' failed!");
-				return _skin;
-			});
-	}
-
 	/// @func refresh_skin()
 	/// @desc Invoked from RoomController in RoomStart event to transport the
 	///				 active skin from room to room

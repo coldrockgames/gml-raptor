@@ -157,7 +157,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.13.0.190",
+    "IDEVersion":"2024.13.1.193",
   },
   "name":"gml-raptor",
   "resources":[
@@ -174,7 +174,6 @@
     {"id":{"name":"acLinearYMinus","path":"animcurves/acLinearYMinus/acLinearYMinus.yy",},},
     {"id":{"name":"acLinearYPlus","path":"animcurves/acLinearYPlus/acLinearYPlus.yy",},},
     {"id":{"name":"acWave","path":"animcurves/acWave/acWave.yy",},},
-    {"id":{"name":"browser_click_handler","path":"extensions/browser_click_handler/browser_click_handler.yy",},},
     {"id":{"name":"browser_hdpi","path":"extensions/browser_hdpi/browser_hdpi.yy",},},
     {"id":{"name":"ImageLoadBar","path":"extensions/ImageLoadBar/ImageLoadBar.yy",},},
     {"id":{"name":"fntUnitTest","path":"fonts/fntUnitTest/fntUnitTest.yy",},},
@@ -334,7 +333,6 @@
     {"id":{"name":"Binding","path":"scripts/Binding/Binding.yy",},},
     {"id":{"name":"BitsnBytes","path":"scripts/BitsnBytes/BitsnBytes.yy",},},
     {"id":{"name":"Broadcasting","path":"scripts/Broadcasting/Broadcasting.yy",},},
-    {"id":{"name":"Browser_Click_Handler","path":"scripts/Browser_Click_Handler/Browser_Click_Handler.yy",},},
     {"id":{"name":"Buffers","path":"scripts/Buffers/Buffers.yy",},},
     {"id":{"name":"CameraActionData","path":"scripts/CameraActionData/CameraActionData.yy",},},
     {"id":{"name":"CameraActions","path":"scripts/CameraActions/CameraActions.yy",},},
@@ -364,7 +362,6 @@
     {"id":{"name":"ExpensiveCache","path":"scripts/ExpensiveCache/ExpensiveCache.yy",},},
     {"id":{"name":"FileAsyncWorker","path":"scripts/FileAsyncWorker/FileAsyncWorker.yy",},},
     {"id":{"name":"FileHelpers","path":"scripts/FileHelpers/FileHelpers.yy",},},
-    {"id":{"name":"FileRichJson","path":"scripts/FileRichJson/FileRichJson.yy",},},
     {"id":{"name":"FilesAsync","path":"scripts/FilesAsync/FilesAsync.yy",},},
     {"id":{"name":"FilesSync","path":"scripts/FilesSync/FilesSync.yy",},},
     {"id":{"name":"FilesTests","path":"scripts/FilesTests/FilesTests.yy",},},

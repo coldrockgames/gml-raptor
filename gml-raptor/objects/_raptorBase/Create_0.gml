@@ -41,8 +41,10 @@ integrate_skin_data = function(_skindata) {
 		replace_sprite(_skindata.sprite_index,-1,-1,false);
 }
 
-SKIN.apply_skin(self); // apply sprites NOW...
-run_delayed(self, 0, function() { SKIN.apply_skin(self); }); //... and the full skin after all create code is done
+if (!vsget(self, __RAPTOR_PRE_SKIN_APPLY, false)) {
+	SKIN.apply_skin(self); // apply sprites NOW...
+	run_delayed(self, 0, function() { SKIN.apply_skin(self); }); //... and the full skin after all create code is done
+}
 
 #endregion
 
