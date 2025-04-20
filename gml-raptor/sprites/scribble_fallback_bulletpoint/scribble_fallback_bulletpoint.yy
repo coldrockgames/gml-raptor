@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"v1",
+  "$GMSprite":"",
   "%Name":"scribble_fallback_bulletpoint",
   "bboxMode":0,
   "bbox_bottom":10,

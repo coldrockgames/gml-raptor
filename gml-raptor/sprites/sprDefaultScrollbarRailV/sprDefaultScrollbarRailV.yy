@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"v1",
+  "$GMSprite":"",
   "%Name":"sprDefaultScrollbarRailV",
   "bboxMode":0,
   "bbox_bottom":71,
