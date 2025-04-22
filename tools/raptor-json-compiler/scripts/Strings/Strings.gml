@@ -211,8 +211,24 @@ function string_is_empty(str) {
 /// @func	string_to_real(str)
 /// @desc	Tries to convert the string to a real. returns undefined, if failed
 function string_to_real(str) {
-	gml_pragma("forceinline");
-	try { return real(string_trim(str)); } catch(_) { return undefined; }
+	if (!IS_HTML) {
+		try { return real(string_trim(str)); } catch(_) { return undefined; }
+	} else {
+		var trimmed = string_trim(str);
+		var len = string_length(trimmed);
+		var i = 1;
+		var c;
+		var valid = true;
+		while (i <= len) {
+			c = string_char_at(trimmed, i);
+			if (!is_between(ord(c), ord("0"), ord("9")) && !is_any_of(c, ".", "-", "+")) {
+				valid = false;
+				break;
+			}
+			i++;
+		}
+		try { return valid ? real(trimmed) : undefined; } catch(_) { return undefined; }
+	}
 }
 
 /// @func	string_to_real_ex(str)
@@ -261,8 +277,24 @@ function string_to_real_ex(str, __allow_decimal = true) {
 /// @func	string_to_int(str)
 /// @desc	Tries to convert the string to an int64. returns undefined, if failed
 function string_to_int(str) {
-	gml_pragma("forceinline");
-	try { return int64(string_trim(str)); } catch(_) { return undefined; }
+	if (!IS_HTML) {
+		try { return int64(string_trim(str)); } catch(_) { return undefined; }
+	} else {
+		var trimmed = string_trim(str);
+		var len = string_length(trimmed);
+		var i = 1;
+		var c;
+		var valid = true;
+		while (i <= len) {
+			c = string_char_at(trimmed, i);
+			if (!is_between(ord(c), ord("0"), ord("9")) && !is_any_of(c, "-", "+")) {
+				valid = false;
+				break;
+			}
+			i++;
+		}
+		try { return valid ? int64(trimmed) : undefined; } catch(_) { return undefined; }
+	}
 }
 
 /// @func	string_to_int_ex(str)

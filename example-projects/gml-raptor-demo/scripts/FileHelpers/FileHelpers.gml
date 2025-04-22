@@ -27,15 +27,28 @@ function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = fals
 			
 			if (p.rec) {
 				var dirs = [];
-				var f = file_find_first($"{look_in}*", fa_directory);
-				while (f != "") {
-					if (file_attributes($"{look_in}{f}", fa_directory))
+				if (os_type == os_windows) {
+					var f = file_find_first($"{look_in}*", fa_directory);
+					while (f != "") {
+						if (file_attributes($"{look_in}{f}", fa_directory))
+							array_push(dirs, $"{root}{f}/");
+						f = file_find_next();
+					}
+					file_find_close();
+					for (var i = 0, len = array_length(dirs); i < len; i++)
+						p.reader(dirs[@i], p);
+				} else {
+					var f = file_find_first($"{look_in}*", fa_directory);
+					while (f != "") {
 						array_push(dirs, $"{root}{f}/");
-					f = file_find_next();
+						f = file_find_next();
+					}
+					file_find_close();
+					for (var i = 0, len = array_length(dirs); i < len; i++) {
+						if (directory_exists(dirs[@i])) 
+							p.reader(dirs[@i], p);
+					}
 				}
-				file_find_close();
-				for (var i = 0, len = array_length(dirs); i < len; i++)
-					p.reader(dirs[@i], p);
 			}
 			
 			var f = file_find_first($"{look_in}{p.mask}", p.attr);

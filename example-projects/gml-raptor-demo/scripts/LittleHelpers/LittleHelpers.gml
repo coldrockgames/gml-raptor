@@ -137,23 +137,27 @@ function typename_of(_type) {
 	if (is_string(_type))
 		return _type;
 
+	var str = string(_type);
+	
+	if (string_starts_with(str, "ref animcurve"	))	return undefined; // gml does not have a function for this
+	if (string_starts_with(str, "ref sequence"	))	return undefined; // gml does not have a function for this
+	if (string_starts_with(str, "ref room"		))	return room_get_name(_type);	
+	if (string_starts_with(str, "ref font"		))	return font_get_name(_type);	
+	if (string_starts_with(str, "ref path"		))	return path_get_name(_type);	
+	if (string_starts_with(str, "ref sound"		))	return audio_get_name(_type);	
+	if (string_starts_with(str, "ref object"	))	return object_get_name(_type);	
+	if (string_starts_with(str, "ref script"	))	return script_get_name(_type);
+	if (string_starts_with(str, "ref sprite"	))	return sprite_get_name(_type);	
+	if (string_starts_with(str, "ref shader"	))	return shader_get_name(_type);	
+	if (string_starts_with(str, "ref tileset"	))	return tileset_get_name(_type);	
+	if (string_starts_with(str, "ref timeline"	))	return timeline_get_name(_type);
+
 	try {
 		var scr = script_get_name(_type);
 		if (!is_null(scr) || scr != "<undefined>")
 			return scr;
 	} catch (_) { }
-
-	var str = string(_type);
-	if (string_starts_with(str, "ref room"))		return room_get_name(_type);	
-	if (string_starts_with(str, "ref font"))		return font_get_name(_type);	
-	if (string_starts_with(str, "ref path"))		return path_get_name(_type);	
-	if (string_starts_with(str, "ref audio"))		return audio_get_name(_type);	
-	if (string_starts_with(str, "ref object"))		return object_get_name(_type);	
-	if (string_starts_with(str, "ref script"))		return script_get_name(_type);	
-	if (string_starts_with(str, "ref sprite"))		return sprite_get_name(_type);	
-	if (string_starts_with(str, "ref shader"))		return shader_get_name(_type);	
-	if (string_starts_with(str, "ref tileset"))		return tileset_get_name(_type);	
-	if (string_starts_with(str, "ref timeline"))	return timeline_get_name(_type);
+	
 	return undefined;
 }
 
@@ -614,3 +618,30 @@ function color_to_array(_color) {
 		] :
 		[255, 255, 255];
 }
+
+/// @func color_from_hexcode(_hexcode)
+/// @desc Converts a hexcode to a color. (supports rgb and bgr)
+function color_from_hexcode(_hexcode) {
+	var c0 = string_first(_hexcode, 1);
+	var c1 = string_parse_hex(string_substring(_hexcode, 2, 2));
+	var c2 = string_parse_hex(string_substring(_hexcode, 4, 2));
+	var c3 = string_parse_hex(string_substring(_hexcode, 6, 2));
+	
+	switch (c0) {
+		case "#": 
+			return make_color_rgb(c1, c2, c3);
+			break;
+		case "$": 
+			return make_color_bgr(c1, c2, c3);
+			break;
+		default:
+			throw($"Hexcode '{_hexcode}' could not be converted. (Missing '#' or '$')");
+			break;
+	}
+}
+
+/// @func make_color_bgr(_blue, _green, _red)
+function make_color_bgr(_blue, _green, _red) {
+	return make_color_rgb(_red, _green, _blue);
+}
+

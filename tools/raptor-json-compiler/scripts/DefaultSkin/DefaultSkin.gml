@@ -30,37 +30,37 @@ function DefaultSkin(_name = "default") : UiSkin(_name) constructor {
 		};
 	}
 
-	asset_skin[? "CheckBox"]			= { sprite_index: sprDefaultCheckbox }
-	asset_skin[? "InputBox"]			= { sprite_index: sprDefaultInputBox }
-	asset_skin[? "Label"]				= { sprite_index: sprDefaultLabel	 }
+	asset_skin[$ "CheckBox"]			= { sprite_index: sprDefaultCheckbox }
+	asset_skin[$ "InputBox"]			= { sprite_index: sprDefaultInputBox }
+	asset_skin[$ "Label"]				= { sprite_index: sprDefaultLabel	 }
 
-	asset_skin[? "MouseCursor"]			= { 
+	asset_skin[$ "MouseCursor"]			= { 
  											sprite_index: sprDefaultMouseCursor,
 											mouse_cursor_sprite: sprDefaultMouseCursor,
  											mouse_cursor_sprite_sizing: sprDefaultMouseCursorSizing
  										  }
-	asset_skin[? "Panel"]				= { sprite_index: spr1pxTrans			}
-	asset_skin[? "RadioButton"]			= { sprite_index: sprDefaultRadioButton }
-	asset_skin[? "Slider"]				= { 
+	asset_skin[$ "Panel"]				= { sprite_index: spr1pxTrans			}
+	asset_skin[$ "RadioButton"]			= { sprite_index: sprDefaultRadioButton }
+	asset_skin[$ "Slider"]				= { 
 											sprite_index: sprDefaultSliderRailH,
 											rail_sprite_horizontal: sprDefaultSliderRailH,
 											rail_sprite_vertical: sprDefaultSliderRailV,
 											knob_sprite: sprDefaultSliderKnob
 										  }
-	asset_skin[? "Scrollbar"]			= { 
+	asset_skin[$ "Scrollbar"]			= { 
 											sprite_index: sprDefaultScrollbarRailH,
 											rail_sprite_horizontal: sprDefaultScrollbarRailH,
 											rail_sprite_vertical: sprDefaultScrollbarRailV,
 											knob_sprite: sprDefaultScrollbarKnob
 										  }
-	asset_skin[? "TextButton"]			= { sprite_index: sprDefaultButton  }
-	asset_skin[? "ImageButton"]			= { sprite_index: sprDefaultButton  }
-	asset_skin[? "Tooltip"]				= { sprite_index: sprDefaultTooltip }
-	asset_skin[? "Window"]				= window_def(WindowXButton);
-	asset_skin[? "MessageBoxWindow"]	= window_def(MessageBoxXButton);
+	asset_skin[$ "TextButton"]			= { sprite_index: sprDefaultButton  }
+	asset_skin[$ "ImageButton"]			= { sprite_index: sprDefaultButton  }
+	asset_skin[$ "Tooltip"]				= { sprite_index: sprDefaultTooltip }
+	asset_skin[$ "Window"]				= window_def(WindowXButton);
+	asset_skin[$ "MessageBoxWindow"]	= window_def(MessageBoxXButton);
 	
-	asset_skin[? "WindowXButton"]		= { sprite_to_use: sprDefaultXButton }
-	asset_skin[? "MessageBoxXButton"]	= { sprite_to_use: sprDefaultXButton }
+	asset_skin[$ "WindowXButton"]		= { sprite_to_use: sprDefaultXButton }
+	asset_skin[$ "MessageBoxXButton"]	= { sprite_to_use: sprDefaultXButton }
 
 }
 

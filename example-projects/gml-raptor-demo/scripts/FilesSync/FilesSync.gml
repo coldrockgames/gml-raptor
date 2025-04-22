@@ -219,7 +219,6 @@ function file_read_struct_encrypted(filename, cryptkey, add_to_cache = false) {
 				var indata = SnapBufferReadBinary(buffer, 0);
 				rv = __file_reconstruct_root(indata);
 				buffer_delete(buffer);
-		
 				if (add_to_cache) {
 					dlog($"Added file '{filename}' to cache (encrypted struct)");
 					struct_set(__FILE_CACHE, filename, deep_copy(rv));

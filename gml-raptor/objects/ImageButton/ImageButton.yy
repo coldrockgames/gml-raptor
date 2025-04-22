@@ -9,8 +9,8 @@
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"_baseControl","path":"objects/_baseControl/_baseControl.yy",},"propertyId":{"name":"draw_color_mouse_over","path":"objects/_baseControl/_baseControl.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"c_white",},
   ],
   "parent":{
-    "name":"_gml_raptor_ui_",
-    "path":"folders/_gml_raptor_ui_.yy",
+    "name":"gml-raptor-ui",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui.yy",
   },
   "parentObjectId":{
     "name":"RaptorImageButton",

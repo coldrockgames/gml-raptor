@@ -9,6 +9,12 @@
 ///			on a named layer or supply an integer to create it on a specified depth
 function instance_create(xp, yp, layer_name_or_depth, object, struct = undefined) {
 	layer_name_or_depth = if_null(layer_name_or_depth, 0);
+	var skin = SKIN.get_inherited_skindata(object);
+	if (skin != undefined) {
+		struct = struct_join_into(struct ?? {}, skin);
+		struct_set(struct, __RAPTOR_PRE_SKIN_APPLY, true);
+	}
+		
 	if (struct == undefined)
 		return is_string(layer_name_or_depth) ?
 			instance_create_layer(xp, yp, layer_name_or_depth, object) :

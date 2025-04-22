@@ -22,7 +22,7 @@
   "option_html5_outputdebugtoconsole":true,
   "option_html5_outputname":"index.html",
   "option_html5_scale":0,
-  "option_html5_splash_png":"${base_options_dir}/html5/splash.png",
+  "option_html5_splash_png":"${options_dir}/html5/splash.png",
   "option_html5_texture_page":"4096x4096",
   "option_html5_usebuiltinfont":true,
   "option_html5_usebuiltinparticles":true,

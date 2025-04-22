@@ -80,7 +80,7 @@ function activate_purple_theme() {
 }
 
 function activate_default_skin() {
-	UI_SKINS.activate_skin("default");
+	UI_SKINS.activate_skin("demo");
 }
 
 function activate_wood_skin() {

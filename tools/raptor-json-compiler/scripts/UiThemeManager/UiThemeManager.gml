@@ -31,7 +31,7 @@ function UiThemeManager() constructor {
 		if (_activate_now || was_active)
 			activate_theme(_theme.name);
 	}
-	
+		
 	/// @func refresh_theme()
 	/// @desc Invoked from RoomController in RoomStart event to transport the
 	///				 active theme from room to room

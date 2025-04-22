@@ -12,6 +12,7 @@
 #macro SKIN					UI_SKINS.active_skin
 
 #macro __DEFAULT_UI_SKIN_NAME	"default"
+#macro __RAPTOR_PRE_SKIN_APPLY	"__raptor_skin_applied"
 
 function UiSkinManager() constructor {
 	construct(UiSkinManager);
@@ -70,7 +71,7 @@ function UiSkinManager() constructor {
 	}
 
 	static __assign_all_skin_sprites = function() {
-		var names = ds_map_keys_to_array(active_skin.asset_skin);
+		var names = struct_get_names(active_skin.asset_skin);
 		for (var i = 0, len = array_length(names); i < len; i++) {
 			var key = names[@i];
 			var oidx = asset_get_index(key);

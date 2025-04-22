@@ -6,7 +6,7 @@
   "name":"DefaultSkin",
   "parent":{
     "name":"skins",
-    "path":"folders/_gml_raptor_ui_/skins.yy",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui/skins.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

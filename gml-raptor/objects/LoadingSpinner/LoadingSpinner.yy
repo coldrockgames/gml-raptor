@@ -6,8 +6,8 @@
   "name":"LoadingSpinner",
   "overriddenProperties":[],
   "parent":{
-    "name":"_gml_raptor_ui_",
-    "path":"folders/_gml_raptor_ui_.yy",
+    "name":"gml-raptor-ui",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui.yy",
   },
   "parentObjectId":{
     "name":"RaptorLoadingSpinner",

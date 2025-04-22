@@ -80,7 +80,6 @@ function onGameStart() {
 	//UI_THEMES.add_theme(new your_game_theme_name(), true);
 	//UI_SKINS.add_skin(new your_game_skin_name(), true);
 
-
 	// Setup Scribble
 	// ------------------------------------------------------------------
 	//scribble_font_bake_outline_and_shadow("acme28","acme28_out",0,0,SCRIBBLE_OUTLINE.EIGHT_DIR,2,true);

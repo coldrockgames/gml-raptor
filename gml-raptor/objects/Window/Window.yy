@@ -8,8 +8,8 @@
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"RaptorWindow","path":"objects/RaptorWindow/RaptorWindow.yy",},"propertyId":{"name":"window_x_button_object","path":"objects/RaptorWindow/RaptorWindow.yy",},"resource":{"name":"WindowXButton","path":"objects/WindowXButton/WindowXButton.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"WindowXButton",},
   ],
   "parent":{
-    "name":"_gml_raptor_ui_",
-    "path":"folders/_gml_raptor_ui_.yy",
+    "name":"gml-raptor-ui",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui.yy",
   },
   "parentObjectId":{
     "name":"RaptorWindow",

@@ -11,8 +11,8 @@
   "name":"Eye",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/_gml_raptor_/Objects.yy",
+    "name":"gml-raptor-helpers",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-helpers.yy",
   },
   "parentObjectId":{
     "name":"Saveable",

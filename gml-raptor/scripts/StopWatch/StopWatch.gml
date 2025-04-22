@@ -35,7 +35,7 @@ function StopWatch(_name = "StopWatch") constructor {
 	/// @desc	Logs the time with an optional action (like "stopwatch <elapsed> 000ms")
 	static log_millis = function(_action = "elapsed") {
 		var rv = (get_timer() - tstart) / 1000;
-		dlog($"{name} {action} {rv}ms");
+		dlog($"{name} {_action} {rv}ms");
 		return rv;
 	}
 
@@ -43,7 +43,7 @@ function StopWatch(_name = "StopWatch") constructor {
 	/// @desc	Logs the time with an optional action (like "stopwatch <elapsed> 000µs")
 	static log_micros = function(_action = "elapsed") {
 		var rv = (get_timer() - tstart);
-		dlog($"{name} {action} {rv}µs");
+		dlog($"{name} {_action} {rv}µs");
 		return rv;
 	}
 }

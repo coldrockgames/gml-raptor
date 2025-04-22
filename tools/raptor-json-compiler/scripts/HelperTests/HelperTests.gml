@@ -52,13 +52,16 @@ function unit_test_little_helpers() {
 		test.assert_equals(spr1pxTrans, asset_from_string("spr1pxTrans"),		"04");	// sprite
 		test.assert_equals(-1, asset_from_string("some_non_existing_class"),	"05");	// invalid
 		
-		test.assert_equals("UnitTest"   , asset_to_string(UnitTest),			"11");	// script
-		test.assert_equals("_raptorBase", asset_to_string(_raptorBase),			"12");	// object
-		test.assert_equals("rmUnitTests", asset_to_string(rmUnitTests),			"13");	// room
-		test.assert_equals("spr1pxTrans", asset_to_string(spr1pxTrans),			"14");	// sprite
-		test.assert_equals("fntUnitTest", asset_to_string(fntUnitTest),			"15");	// font
-		test.assert_equals("DisabledShader", asset_to_string(DisabledShader),	"16");	// shader
-		test.assert_equals("string"		,asset_to_string("string"),			"17");	// invalid
+		if (!IS_HTML) {
+			// object type reflection not supported in html
+			test.assert_equals("UnitTest"		, asset_to_string(UnitTest),		"11");	// script
+			test.assert_equals("_raptorBase"	, asset_to_string(_raptorBase),		"12");	// object
+			test.assert_equals("rmUnitTests"	, asset_to_string(rmUnitTests),		"13");	// room
+			test.assert_equals("spr1pxTrans"	, asset_to_string(spr1pxTrans),		"14");	// sprite
+			test.assert_equals("fntUnitTest"	, asset_to_string(fntUnitTest),		"15");	// font
+			test.assert_equals("DisabledShader"	, asset_to_string(DisabledShader),	"16");	// shader
+			test.assert_equals("string"			, asset_to_string("string"),		"17");	// invalid
+		}
 	}
 
 	ut.tests.color_from_to_json_ok = function(test, data) {
@@ -80,6 +83,22 @@ function unit_test_little_helpers() {
 		test.assert_equals(255, arr[0], "8");
 		test.assert_equals(0, arr[1], "9");
 		test.assert_equals(0, arr[2], "10");
+	}
+
+	ut.tests.color_from_hexcode_ok = function(test, data) {
+		var red  = color_from_hexcode("#FF0000");
+		var blue = color_from_hexcode("$FF0000");
+		
+		test.assert_equals(make_color_rgb(255, 0, 0), red, "red");
+		test.assert_equals(make_color_bgr(255, 0, 0), blue, "blue");
+	}
+
+	ut.tests.make_color_bgr_ok = function(test, data) {
+		var blue_rgb = make_color_rgb(0, 0, 255);
+		
+		var blue_bgr = make_color_bgr(255, 0, 0);
+		
+		test.assert_equals(blue_rgb, blue_bgr, "blue");
 	}
 
 	ut.run();

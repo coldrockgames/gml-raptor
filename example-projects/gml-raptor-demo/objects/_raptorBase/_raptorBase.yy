@@ -30,7 +30,6 @@
     {"$GMObjectProperty":"v1","%Name":"log_create_destroy","filters":[],"listItems":[],"multiselect":false,"name":"log_create_destroy","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"False","varType":3,},
     {"$GMObjectProperty":"v1","%Name":"is_enabled","filters":[],"listItems":[],"multiselect":false,"name":"is_enabled","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"True","varType":3,},
     {"$GMObjectProperty":"v1","%Name":"on_enabled_changed","filters":[],"listItems":[],"multiselect":false,"name":"on_enabled_changed","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"undefined","varType":4,},
-    {"$GMObjectProperty":"v1","%Name":"skinnable","filters":[],"listItems":[],"multiselect":false,"name":"skinnable","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"True","varType":3,},
   ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",

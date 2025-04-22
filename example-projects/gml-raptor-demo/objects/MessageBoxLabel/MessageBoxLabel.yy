@@ -7,7 +7,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"messagebox",
-    "path":"folders/_gml_raptor_ui_/messagebox.yy",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui/messagebox.yy",
   },
   "parentObjectId":{
     "name":"RaptorMessageBoxLabel",

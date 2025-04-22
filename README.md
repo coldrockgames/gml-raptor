@@ -1,5 +1,5 @@
-<p align="center"><img src="https://github.com/Grisgram/gml-raptor/blob/dev/_assets_/logos_and_banners/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
-<h1 align="center">Release 2504</h1>
+<p align="center"><img src="https://github.com/coldrockgames/gml-raptor/blob/dev/_assets_/logos_and_banners/2025/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
+<h1 align="center">Release 2504.1</h1>
 
 `gml-raptor` is a ready-to-use project template for [GameMaker Studio 2.3+](https://gamemaker.io) with a comprehensive [wiki documentation](https://github.com/Grisgram/gml-raptor/wiki) that provides lots of classes and functions that will speed up your game development!<br/>
 [The Releases page](https://github.com/Grisgram/gml-raptor/releases) contains the latest version in `.yyz` format (project template) and ready-to-import local packages in `.yymps` format.
@@ -27,9 +27,9 @@ In case you are a night owl like me and you want to support my work,<br/>especia
 You need [![gmlogo](https://user-images.githubusercontent.com/19487451/177008359-37a3cdb7-2068-4ac8-84ef-4c455c2194de.png)](https://gamemaker.io)&nbsp;&nbsp;Studio 2.3+ to use `raptor`.<br/>
 These versions of external libraries are packaged into the current `raptor` release:
 
-| GMS Version | Scribble | SNAP | Canvas | OutlineShader | AnimatedFlag | HighScorer |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|2411|9.3.5|7.0.1|2.2|3.3|1.5|1.6|
+| GMS Version | Scribble | SNAP | Canvas |
+|:-:|:-:|:-:|:-:|
+|2413.1|9.3.5|7.0.1|2.2|
 
 ### HOW RELEASES ARE ORGANIZED
 * Find the latest release at the [Releases](https://github.com/Grisgram/gml-raptor/releases) page

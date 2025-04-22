@@ -496,7 +496,101 @@ onTransitBack = function(_transition_data) {
 	----------------------
 */
 #region VIRTUAL ROOM CONTROL
+__virtual_rooms = {};
+
+/// @func	virtual_room_exists(_name)
+/// @desc	Checks if a virtual room with the given name exists.
+virtual_room_exists = function(_name) {
+	return virtual_room_get(_name) != undefined;
+}
+
+/// @func	virtual_room_get(_name)
+/// @desc	Returns a virtual room with the given name.
+///			(You may want to modify your virtual room at runtime.)
+virtual_room_get = function(_name) {
+	return __virtual_rooms[$ _name];
+}
+
+/// @func	virtual_room_is_active(_name)
+/// @desc	Checks if a virtual room is currently active.
+virtual_room_is_active = function(_name) {
+	return VIRTUAL_ROOM != undefined && VIRTUAL_ROOM.name == _name;
+}
+
+/// @func	virtual_room_create(_name, _x, _y, _width, _height, _activate = false)
+/// @desc	Creates and returns the new virtual room.
+virtual_room_create = function(_name, _x, _y, _width, _height, _activate = false) {
+	__virtual_rooms[$ _name] ??= new VirtualRoom(_name);
+	return virtual_room_update(_name, _x, _y, _width, _height, _activate);
+}
 
 
+/// @func	virtual_room_update(_name, _x, _y, _width, _height, _activate = false)
+/// @desc	Updates an existing virtual room.
+virtual_room_update = function(_name, _x, _y, _width, _height, _activate = false) {
+	if (!virtual_room_exists(_name)) {
+		wlog($"** WARNING ** Virtual Room with the name '{_name}' does not exist!");
+		return undefined;
+	}
+	
+	var virtual_room = virtual_room_get(_name);
+	
+	virtual_room.left	= _x;
+	virtual_room.top	= _y;
+	virtual_room.width	= _width;
+	virtual_room.height	= _height;
+	
+	if (_activate)
+		virtual_room_activate(_name);
+	else if (virtual_room_is_active(_name))
+		__virtual_room_update_camera();
+	
+	return virtual_room;
+}
+
+/// @func	virtual_room_delete(_name)
+/// @desc	Delets the given room if it is not currently active.
+virtual_room_delete = function(_name) {
+	if (!virtual_room_exists(_name)) {
+		wlog($"** WARNING ** Virtual Room with the name '{_name}' is currently selected! You have to deselect it first in order to delete it.");
+		return false;
+	}
+	
+	struct_remove(__virtual_rooms, _name);
+	return true;
+}
+
+/// @func	virtual_room_activate(_name)
+/// @desc	Sets the camera min/max coordinates according to the given virtual room.
+///			(The given virtual room is now active.)
+virtual_room_activate = function(_name) {
+	if (!virtual_room_exists(_name)) {
+		wlog($"** WARNING ** Virtual Room with the name '{_name}' does not exist!");
+		return false;
+	}
+	
+	VIRTUAL_ROOM = virtual_room_get(_name);
+	__virtual_room_update_camera();
+	
+	return true;
+}
+
+/// @func	virtual_room_deactivate()
+/// @desc	Sets the camera min/max coordinates according to the physical room.
+///			(No virtual room is now active.)
+virtual_room_deactivate = function() {
+	VIRTUAL_ROOM	= undefined;
+	CAM_MIN_X		= 0;
+	CAM_MIN_Y		= 0;
+	CAM_MAX_X		= room_width;
+	CAM_MAX_Y		= room_height;
+}
+
+__virtual_room_update_camera = function() {
+	CAM_MIN_X = VIRTUAL_ROOM_LEFT_EDGE;
+	CAM_MIN_Y = VIRTUAL_ROOM_TOP_EDGE;
+	CAM_MAX_X = VIRTUAL_ROOM_RIGHT_EDGE;
+	CAM_MAX_Y = VIRTUAL_ROOM_BOTTOM_EDGE;
+}
 
 #endregion

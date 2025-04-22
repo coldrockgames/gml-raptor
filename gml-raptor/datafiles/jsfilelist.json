@@ -8,10 +8,12 @@
         "locale/de/locale.json", 
         "locale/en/locale.json", 
         "race/demotable.json", 
+        "ui/default_skin.json", 
     ], 
     "directories": [ 
         "locale", 
         "race", 
+        "ui", 
         "locale/de", 
         "locale/en", 
     ] 

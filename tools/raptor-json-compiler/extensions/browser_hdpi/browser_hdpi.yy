@@ -55,8 +55,8 @@
   "optionsFile":"options.json",
   "packageId":"",
   "parent":{
-    "name":"browser_extensions",
-    "path":"folders/__GAME_SETUP__/browser_extensions.yy",
+    "name":"BrowserExtensions",
+    "path":"folders/_gml_raptor_/BrowserExtensions.yy",
   },
   "productId":"",
   "resourceType":"GMExtension",

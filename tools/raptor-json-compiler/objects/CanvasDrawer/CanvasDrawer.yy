@@ -16,8 +16,8 @@
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"_raptorBase","path":"objects/_raptorBase/_raptorBase.yy",},"propertyId":{"name":"log_create_destroy","path":"objects/_raptorBase/_raptorBase.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"False",},
   ],
   "parent":{
-    "name":"Objects",
-    "path":"folders/_gml_raptor_/Objects.yy",
+    "name":"gml-raptor-helpers",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-helpers.yy",
   },
   "parentObjectId":{
     "name":"Saveable",

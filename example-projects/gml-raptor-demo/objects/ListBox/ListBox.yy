@@ -8,8 +8,8 @@
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"RaptorListBox","path":"objects/RaptorListBox/RaptorListBox.yy",},"propertyId":{"name":"list_item_object","path":"objects/RaptorListBox/RaptorListBox.yy",},"resource":{"name":"ListBoxItem","path":"objects/ListBoxItem/ListBoxItem.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"ListBoxItem",},
   ],
   "parent":{
-    "name":"_gml_raptor_ui_",
-    "path":"folders/_gml_raptor_ui_.yy",
+    "name":"gml-raptor-ui",
+    "path":"folders/_gml_raptor_packages_/gml-raptor-ui.yy",
   },
   "parentObjectId":{
     "name":"RaptorListBox",

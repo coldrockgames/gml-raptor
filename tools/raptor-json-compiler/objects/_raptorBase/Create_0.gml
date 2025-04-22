@@ -41,8 +41,10 @@ integrate_skin_data = function(_skindata) {
 		replace_sprite(_skindata.sprite_index,-1,-1,false);
 }
 
-SKIN.apply_skin(self); // apply sprites NOW...
-run_delayed(self, 0, function() { SKIN.apply_skin(self); }); //... and the full skin after all create code is done
+if (!vsget(self, __RAPTOR_PRE_SKIN_APPLY, false)) {
+	SKIN.apply_skin(self); // apply sprites NOW...
+	run_delayed(self, 0, function() { SKIN.apply_skin(self); }); //... and the full skin after all create code is done
+}
 
 #endregion
 
@@ -87,13 +89,13 @@ __can_touch_this = function(_instance) {
 	return true;
 }
 
-/// @func is_topmost()
-/// @desc True, if this control is the topmost (= lowest depth) at the specified position
 __topmost_object_list = ds_list_create();
 __topmost_count = 0;
 __topmost_mindepth = depth;
 __topmost_runner = undefined;
 __topmost_cache = new ExpensiveCache();
+/// @func is_topmost()
+/// @desc True, if this control is the topmost (= lowest depth) at the specified position
 is_topmost = function(_x, _y, _with_ui = true) {
 	if (__topmost_cache.is_valid()) 
 		return __topmost_cache.return_value;
