@@ -28,6 +28,7 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 		set_layer(_layername_or_id, _scan_on_create);
 	
 	__tileinfo_type = _tileinfo_type;
+	__scan_timer	= new StopWatch("TileScanner layer scan");;
 	
 	/// @func	set_layer(_layername_or_id, scan_now = true)
 	/// @desc	Sets or changes the layer used. 
@@ -42,8 +43,11 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 	
 		cell_width  = tilemap_get_tile_width (map_id);
 		cell_height = tilemap_get_tile_height(map_id);
-	
-		tiles = array_create(map_width * map_height, undefined);
+
+		tilecount = map_width * map_height;
+		tiles = array_create(tilecount, undefined);
+		
+		ilog($"TileScanner initialized for layer '{layer_get_name(lay_id)}' with {tilecount} tiles in a {map_width}x{map_height} map of {cell_width}x{cell_height}px fields");
 		
 		if (scan_now)
 			scan_layer();
@@ -52,8 +56,10 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 	/// @func	scan_layer()
 	/// @desc	Returns (and fills) the "tiles" array of this TileScanner
 	static scan_layer = function() {
+		__scan_timer.restart();
 		// purge any existing arrays
-		tiles = array_create(map_width * map_height, undefined);
+		tilecount = map_width * map_height;
+		tiles = array_create(tilecount, undefined);
 		var xp = 0, yp = 0;
 		repeat (map_height) {
 			repeat (map_width) {
@@ -63,6 +69,7 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 			xp = 0;
 			yp++;
 		}
+		__scan_timer.log_micros($"{tilecount} tiles in");
 		return tiles;
 	}
 	
@@ -88,7 +95,8 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 			}
 			xp = 0;
 			yp++;
-		}		
+		}
+		dlog($"TileScanner found {array_length(rv)} modified tiles to save");
 		return rv;
 	}
 	
@@ -96,6 +104,7 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 	/// @desc	Recovers all changed tiles from a savegame.
 	///			ATTENTION! This can only be used with the return value of "get_modified_tiles"!
 	static restore_modified_tiles = function(_modified_tiles) {
+		dlog($"TileScanner restoring {array_length(_modified_tiles)} modified tiles");
 		for (var i = 0, len = array_length(_modified_tiles); i < len; i++) {
 			var modtile = _modified_tiles[@i];
 			var orig = get_tile_at(modtile.position.x, modtile.position.y);

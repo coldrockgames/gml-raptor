@@ -13,21 +13,27 @@ enum tile_orientation {
 	down	= 3, // rotation 270° ccw
 }
 
-/// @func	TileScanner(layername_or_id, scan_on_create = true)
+/// @func	TileScanner(_layername_or_id, _scan_on_create = true, _tileinfo_type = TileInfo)
 /// @desc	Creates a TileScanner for the specified layer.
-///			if scan_on_create is true, the constructor will immediately scan the layer
+///			if _scan_on_create is true, the constructor will immediately scan the layer
 ///			and fill the "tiles" array with data. 
 ///			If you set it to false, tiles is an empty array of undefined's until you invoke "scan_layer()"
-function TileScanner(layername_or_id = undefined, scan_on_create = true) constructor {
+///			You may derive a class from TileInfo() and supply it as final argument.
+///			TileScanner will use this to instantiate the TileInfo members when scanning.
+///			NOTE: Supplying a type that is not a child of TileInfo will crash the game!
+function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tileinfo_type = TileInfo) constructor {
 	construct(TileScanner);
 	
-	if (layername_or_id != undefined)
-		set_layer(layername_or_id, scan_on_create);
+	if (_layername_or_id != undefined)
+		set_layer(_layername_or_id, _scan_on_create);
 	
-	/// @func	set_layer(layername_or_id, scan_now = true)
-	/// @desc	Wrapper init function to have an optional-only construct for savegames
-	static set_layer = function(layername_or_id, scan_now = true) {
-		lay_id = is_string(layername_or_id) ? layer_get_id(layername_or_id) : layername_or_id;
+	__tileinfo_type = _tileinfo_type;
+	
+	/// @func	set_layer(_layername_or_id, scan_now = true)
+	/// @desc	Sets or changes the layer used. 
+	///			NOTE: This will delete all currently stored TileInfos!
+	static set_layer = function(_layername_or_id, scan_now = true) {
+		lay_id = is_string(_layername_or_id) ? layer_get_id(_layername_or_id) : _layername_or_id;
 		map_id = layer_tilemap_get_id(lay_id);
 	
 		// These hold the width and height IN CELLS of the map!
@@ -41,6 +47,23 @@ function TileScanner(layername_or_id = undefined, scan_on_create = true) constru
 		
 		if (scan_now)
 			scan_layer();
+	}
+
+	/// @func	scan_layer()
+	/// @desc	Returns (and fills) the "tiles" array of this TileScanner
+	static scan_layer = function() {
+		// purge any existing arrays
+		tiles = array_create(map_width * map_height, undefined);
+		var xp = 0, yp = 0;
+		repeat (map_height) {
+			repeat (map_width) {
+				tiles[@(yp * map_width + xp)] = new TileInfo().__set_data(tilemap_get(map_id, xp, yp), xp, yp, self);
+				xp++;
+			}
+			xp = 0;
+			yp++;
+		}
+		return tiles;
 	}
 	
 	#region savegame management
@@ -56,7 +79,7 @@ function TileScanner(layername_or_id = undefined, scan_on_create = true) constru
 			repeat (map_width) {
 				var tile = tiles[@(yp * map_width + xp)];
 				if (tile.__modified) {
-					var newtile = new TileInfo().__set_data(tile.tiledata, tile.position.x, tile.position.y, self);
+					var newtile = new __tileinfo_type().__set_data(tile.tiledata, tile.position.x, tile.position.y, self);
 					newtile.scanner = undefined;
 					newtile.__modified = true;
 					array_push(rv, newtile);
@@ -89,11 +112,11 @@ function TileScanner(layername_or_id = undefined, scan_on_create = true) constru
 	
 	#region orientation management (private)
 	
-	/// @func		__tiledata_to_orientation(tiledata)
-	static __tiledata_to_orientation = function(tiledata) {
-		var rotate = tile_get_rotate(tiledata);
-		var flip   = tile_get_flip(tiledata);
-		var mirror = tile_get_mirror(tiledata);
+	/// @func		__tiledata_to_orientation(_tile)
+	static __tiledata_to_orientation = function(_tile) {
+		var rotate = _tile.rotated ;
+		var flip   = _tile.flipped ;
+		var mirror = _tile.mirrored;
 		
 		if ((!rotate && !flip && !mirror) || (!rotate &&  flip && !mirror)) return tile_orientation.right;
 		if (( rotate &&  flip &&  mirror) || ( rotate && !flip &&  mirror)) return tile_orientation.up;
@@ -103,52 +126,35 @@ function TileScanner(layername_or_id = undefined, scan_on_create = true) constru
 		return tile_orientation.right;
 	}
 	
-	/// @func		__orientation_to_tiledata(tiledata, orientation)
-	static __orientation_to_tiledata = function(tiledata, orientation) {
-		switch (orientation) {
+	/// @func		__orientation_to_tiledata(_tile, _orientation)
+	static __orientation_to_tiledata = function(_tile, _orientation) {
+		switch (_orientation) {
 			case tile_orientation.right:
-				tiledata = tile_set_rotate(tiledata, false);
-				tiledata = tile_set_flip  (tiledata, false);
-				tiledata = tile_set_mirror(tiledata, false);
+				_tile.tiledata = tile_set_rotate(_tile.tiledata, false); _tile.rotated  = false;
+				_tile.tiledata = tile_set_flip  (_tile.tiledata, false); _tile.flipped  = false;
+				_tile.tiledata = tile_set_mirror(_tile.tiledata, false); _tile.mirrored = false;
 				break;
 			case tile_orientation.up:
-				tiledata = tile_set_rotate(tiledata, true);
-				tiledata = tile_set_flip  (tiledata, true);
-				tiledata = tile_set_mirror(tiledata, true);
+				_tile.tiledata = tile_set_rotate(_tile.tiledata, true);  _tile.rotated  = true;
+				_tile.tiledata = tile_set_flip  (_tile.tiledata, true);  _tile.flipped  = true;
+				_tile.tiledata = tile_set_mirror(_tile.tiledata, true);  _tile.mirrored = true;
 				break;
 			case tile_orientation.left:
-				tiledata = tile_set_rotate(tiledata, false);
-				tiledata = tile_set_flip  (tiledata, true);
-				tiledata = tile_set_mirror(tiledata, true);			
+				_tile.tiledata = tile_set_rotate(_tile.tiledata, false); _tile.rotated  = false;
+				_tile.tiledata = tile_set_flip  (_tile.tiledata, true);  _tile.flipped  = true;
+				_tile.tiledata = tile_set_mirror(_tile.tiledata, true);  _tile.mirrored = true;			
 				break;
 			case tile_orientation.down:
-				tiledata = tile_set_rotate(tiledata, true);
-				tiledata = tile_set_flip  (tiledata, false);
-				tiledata = tile_set_mirror(tiledata, false);
+				_tile.tiledata = tile_set_rotate(_tile.tiledata, true);  _tile.rotated  = true;
+				_tile.tiledata = tile_set_flip  (_tile.tiledata, false); _tile.flipped  = false;
+				_tile.tiledata = tile_set_mirror(_tile.tiledata, false); _tile.mirrored = false;
 				break;
 		}
-		return tiledata;
+		return _tile.tiledata;
 	}
 	#endregion
 	
 	#region finding tiles
-	/// @func	scan_layer()
-	/// @desc	Returns (and fills) the "tiles" array of this TileScanner
-	static scan_layer = function() {
-		// purge any existing arrays
-		tiles = array_create(map_width * map_height, undefined);
-		var xp = 0, yp = 0;
-		repeat (map_height) {
-			repeat (map_width) {
-				tiles[@(yp * map_width + xp)] = new TileInfo().__set_data(tilemap_get(map_id, xp, yp), xp, yp, self);
-				xp++;
-			}
-			xp = 0;
-			yp++;
-		}
-		return tiles;
-	}
-	
 	/// @func	find_tiles(indices...)
 	/// @desc	scans the layer for tiles. Specify up to 16 tile indices you want to find
 	///			either directly as arguments or specify an array, containing the indices, if
@@ -212,17 +218,17 @@ function TileScanner(layername_or_id = undefined, scan_on_create = true) constru
 	}
 	#endregion
 	
-	#region manipulating areas
+	#region manipulating maps
 
-	/// @func	clear_map() 
-	/// @desc	Clears this layer in the entire room, all tiles get index = 0
-	static clear_map = function() {
+	/// @func	fill_map(_index = 0) 
+	/// @desc	Clears the entire layer, all tiles get the specified _index
+	static fill_map = function(_index = 0) {
 		gml_pragma("forceinline");
-		fill_area(0, 0, 0, map_width, map_height);
+		fill_area(_index, 0, 0, map_width, map_height);
 	}
 	
 	/// @func	fill_area(_index, _left, _top, _width, _height) 
-	/// @desc	Fills an area in the layer with a specified tile index
+	/// @desc	Fills an area in map coordinates in the layer with a specified tile index
 	static fill_area = function(_index, _left, _top, _width, _height) {
 		var tile;
 		for (var yp = _top; yp < _top + _height; yp++) {
@@ -234,13 +240,14 @@ function TileScanner(layername_or_id = undefined, scan_on_create = true) constru
 	}
 
 	/// @func	fill_area_px(_index, _left, _top, _width, _height) 
-	/// @desc	Fills an area (in pixel coordinates) with a specified tile index
+	/// @desc	Fills an area in pixel coordinates in the layer with a specified tile index
+	///			NOTE: ALL coordinates are in px here! Even _width and _height!
 	static fill_area_px = function(_index, _left, _top, _width, _height) {
 		fill_area(_index,
 			floor(_left / cell_width),
 			floor(_top  / cell_height),
-			ceil ((_left + _width) / cell_width),
-			ceil ((_top + _height) / cell_height)
+			ceil (_width / cell_width),
+			ceil (_height / cell_height)
 		);
 	}
 	
@@ -261,7 +268,10 @@ function TileInfo() constructor {
 		scanner		= _scanner;
 		tiledata	= _tiledata;
 		index		= tile_get_index(_tiledata);
-		orientation = scanner.__tiledata_to_orientation(_tiledata);
+		rotated		= tile_get_rotate(tiledata);
+		flipped		= tile_get_flip(tiledata);
+		mirrored	= tile_get_mirror(tiledata);
+		orientation = scanner.__tiledata_to_orientation(self);
 		empty		= (index <= 0);
 		position	= new Coord2(_map_x, _map_y);
 		position_px = new Coord2(_map_x * scanner.cell_width, _map_y * scanner.cell_height);
@@ -310,9 +320,27 @@ function TileInfo() constructor {
 		if (_flip     != undefined) tiledata = tile_set_flip(tiledata, _flip);
 		if (_rotate   != undefined) tiledata = tile_set_rotate(tiledata, _rotate);
 		if (_mirror   != undefined) tiledata = tile_set_mirror(tiledata, _mirror);
-		orientation = scanner.__tiledata_to_orientation(tiledata);
+		orientation = scanner.__tiledata_to_orientation(self);
 		__TILESCANNER_UPDATE_TILE;
 		return self;
+	}
+	
+	/// @func	is_flipped()
+	///	@desc	Returns whether this tile has the "flip" flag set
+	static is_flipped = function() {
+		return flipped;
+	}
+	
+	/// @func	is_mirrored()
+	///	@desc	Returns whether this tile has the "mirror" flag set
+	static is_mirrored = function() {
+		return mirrored;
+	}
+	
+	/// @func	is_rotated()
+	///	@desc	Returns whether this tile has the "rotate" flag set
+	static is_rotated = function() {
+		return rotated;
 	}
 	
 	/// @func set_orientation(_tile_orientation)
@@ -320,7 +348,7 @@ function TileInfo() constructor {
 	static set_orientation = function(_tile_orientation) {
 		__modified = true;
 		orientation = _tile_orientation;
-		tiledata	= scanner.__orientation_to_tiledata(tiledata, _tile_orientation);
+		tiledata	= scanner.__orientation_to_tiledata(self, _tile_orientation);
 		__TILESCANNER_UPDATE_TILE;
 		return self;
 	}

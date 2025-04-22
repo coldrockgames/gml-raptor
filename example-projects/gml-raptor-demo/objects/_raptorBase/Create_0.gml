@@ -89,13 +89,13 @@ __can_touch_this = function(_instance) {
 	return true;
 }
 
-/// @func is_topmost()
-/// @desc True, if this control is the topmost (= lowest depth) at the specified position
 __topmost_object_list = ds_list_create();
 __topmost_count = 0;
 __topmost_mindepth = depth;
 __topmost_runner = undefined;
 __topmost_cache = new ExpensiveCache();
+/// @func is_topmost()
+/// @desc True, if this control is the topmost (= lowest depth) at the specified position
 is_topmost = function(_x, _y, _with_ui = true) {
 	if (__topmost_cache.is_valid()) 
 		return __topmost_cache.return_value;
