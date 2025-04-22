@@ -24,11 +24,11 @@ enum tile_orientation {
 function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tileinfo_type = TileInfo) constructor {
 	construct(TileScanner);
 	
+	__tileinfo_type = _tileinfo_type;
+	__scan_timer	= new StopWatch("TileScanner layer scan");
+	
 	if (_layername_or_id != undefined)
 		set_layer(_layername_or_id, _scan_on_create);
-	
-	__tileinfo_type = _tileinfo_type;
-	__scan_timer	= new StopWatch("TileScanner layer scan");;
 	
 	/// @func	set_layer(_layername_or_id, scan_now = true)
 	/// @desc	Sets or changes the layer used. 
@@ -291,7 +291,7 @@ function TileInfo() constructor {
 	/// @func	is_empty()
 	static is_empty = function() {
 		gml_pragma("forceinline");
-		return index == 0;
+		return index <= 0;
 	}
 	
 	/// @func set_empty()
@@ -315,9 +315,10 @@ function TileInfo() constructor {
 	/// @func set_index(_tile_index)
 	/// @desc Assign a new index to the tile
 	static set_index = function(_tile_index) {
-		__modified = true;
-		index = _tile_index;
-		tiledata = tile_set_index(tiledata, _tile_index);
+		__modified	= true;
+		index		= _tile_index;
+		empty		= (index <= 0);
+		tiledata	= tile_set_index(tiledata, _tile_index);
 		__TILESCANNER_UPDATE_TILE;
 		return self;
 	}
