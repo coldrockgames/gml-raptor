@@ -20,9 +20,7 @@
 	The object pool will invoke those members, if they exist after activation and
 	before deactivation respectively.
 
-	(c)2022- coldrock.games, @grisgram at github
-	Please respect the MIT License for this library: https://opensource.org/licenses/MIT
-	
+	(c)2022 coldrock.games, @grisgram at github
 */
 
 #macro __POOL_SOURCE_NAME				"__object_pool_name"
@@ -32,16 +30,16 @@
 #macro __POOL_DEACTIVATE_NAME			"onPoolDeactivate"
 
 #macro __OBJECT_POOLS					global.__object_pools
-__OBJECT_POOLS = ds_map_create();
+__OBJECT_POOLS = {};
 
 function __get_pool_list(pool_name) {
-	if (!ds_map_exists(__OBJECT_POOLS, pool_name)) {
+	if (!struct_exists(__OBJECT_POOLS, pool_name)) {
 		if (DEBUG_LOG_OBJECT_POOLS)
 			dlog($"Creating new object pool '{pool_name}'");
-		ds_map_add_list(__OBJECT_POOLS, pool_name, ds_list_create());
+		struct_set(__OBJECT_POOLS, pool_name, []);
 	}
 	
-	return __OBJECT_POOLS[? pool_name];
+	return __OBJECT_POOLS[$ pool_name];
 }
 
 /// @func	pool_get_instance(pool_name, object, layer_name_or_depth_if_new, _init_struct = undefined)
@@ -57,9 +55,9 @@ function __get_pool_list(pool_name) {
 /// @returns {instance}
 function pool_get_instance(pool_name, object, layer_name_or_depth_if_new, _struct = undefined) {
 	var pool = __get_pool_list(pool_name);
-	var i = 0; repeat(ds_list_size(pool)) {
-		var rv = pool[| i];
-		if (rv.object_index == object) {
+	var i = 0; repeat(array_length(pool)) {
+		var rv = pool[@i];
+		if (rv != undefined && rv.object_index == object) {
 			if (DEBUG_LOG_OBJECT_POOLS)
 				vlog($"Found instance of '{object_get_name(object)}' in pool '{pool_name}'");
 			instance_activate_object(rv);
@@ -69,7 +67,7 @@ function pool_get_instance(pool_name, object, layer_name_or_depth_if_new, _struc
 				x = xp;
 				y = yp;
 			}
-			ds_list_delete(pool, i);
+			pool[@i] = undefined;
 			__pool_invoke_activate(rv, _struct);
 			return rv;
 		}
@@ -98,7 +96,17 @@ function pool_return_instance(instance = self, _struct = undefined) {
 		__pool_invoke_deactivate(instance, _struct);
 		var pool = __get_pool_list(pool_name);
 		instance_deactivate_object(instance);
-		ds_list_add(pool, instance);
+		var haveone = false;
+		for (var i = 0, len = array_length(pool); i < len; i++) {
+			if (pool[@i] == undefined) {
+				pool[@i] = instance;
+				haveone = true;
+				break;
+			}
+		}
+		
+if (!haveone)
+			array_push(pool, instance);
 		return;
 	}
 	elog($"** ERROR ** Tried to return instance to a pool, but this instance was not aquired from a pool!");
@@ -132,7 +140,7 @@ function pool_assign_instance(pool_name, instance) {
 /// @func		pool_get_size(pool_name)
 /// @desc	Gets current size of the pool
 function pool_get_size(pool_name) {
-	return ds_list_size(__get_pool_list(pool_name));
+	return array_length(__get_pool_list(pool_name));
 }
 
 /// @func					pool_clear(pool_name)
@@ -140,33 +148,36 @@ function pool_get_size(pool_name) {
 /// @param {string} pool_name
 function pool_clear(pool_name) {
 	var pool = __get_pool_list(pool_name);
-	var i = 0; repeat(ds_list_size(pool)) {
-		var inst = pool[| i++];
+	var i = 0; repeat(array_length(pool)) {
+		var inst = pool[@ i++];
 		instance_activate_object(inst);
 		instance_destroy(inst);
 	}
-	ds_list_clear(pool);
+	__OBJECT_POOLS[$ pool_name] = [];
 }
 
 /// @func		pool_dump_all()
 /// @desc	Dumps the names and sizes of all registered pools to the log
 function pool_dump_all() {
+	var sb = new StringBuilder(512);
 	var i = 0;
-	ilog($"[--- OBJECT POOLS DUMP START ---]");
-	var keys = ds_map_keys_to_array(__OBJECT_POOLS);
-	array_sort(keys, true);
-	array_foreach(keys, function(item) {
-		ilog($"{pool_get_size(item)} in {item}");
-	});
-	ilog($"[--- OBJECT POOLS DUMP  END  ---]");
+	sb.append_line($"[--- OBJECT POOLS DUMP START ---]");
+	var names = struct_get_names(__OBJECT_POOLS);
+	for (var i = 0, len = array_length(names); i < len; i++) {
+		var name = names[@i];
+		sb.append_line($"{array_length(__OBJECT_POOLS[$ name])} in pool {name}");
+	}
+	sb.append($"[--- OBJECT POOLS DUMP  END  ---]");
+	var rv = sb.toString();
+	ilog(rv);
+	return rv;
 }
 
 /// @func		pool_clear_all()
 /// @desc	Clear all pools. Use this when leaving the room.
 ///					NOTE: The ROOMCONTROLLER automatically does this for you in the RoomEnd event
 function pool_clear_all() {
-	ds_map_destroy(__OBJECT_POOLS);
-	__OBJECT_POOLS = ds_map_create();
+	__OBJECT_POOLS = {};
 }
 
 function __pool_invoke_activate(inst, _struct) {
