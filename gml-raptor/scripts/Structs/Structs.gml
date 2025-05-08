@@ -181,8 +181,13 @@ function struct_join_into(target, sources) {
 					if (member != undefined && 
 						is_struct(member) && 
 						!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
-						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
-						struct_join_into(self[$ name], member);
+						if (!is_struct(self[$ name])) {
+							wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+							self[$ name] = member;
+						} else {
+							array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
+							struct_join_into_no_rebind(self[$ name], member);
+						}
 					} else
 						self[$ name] = member;
 				}
@@ -229,8 +234,13 @@ function struct_join_into_no_rebind(target, sources) {
 					if (member != undefined && 
 						is_struct(member) && 
 						!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
-						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
-						struct_join_into_no_rebind(self[$ name], member);
+						if (!is_struct(self[$ name])) {
+							wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+							self[$ name] = member;
+						} else {
+							array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
+							struct_join_into_no_rebind(self[$ name], member);
+						}
 					} else
 						self[$ name] = member;
 				}
