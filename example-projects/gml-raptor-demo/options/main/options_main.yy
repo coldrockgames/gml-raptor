@@ -1,6 +1,14 @@
 {
   "$GMMainOptions":"v3",
   "%Name":"Main",
+  "ConfigValues":{
+    "unit_testing":{
+      "option_legacy_other_behaviour":"false",
+      "option_legacy_number_conversion":"false",
+      "option_legacy_json_parsing":"false",
+      "option_audio_error_behaviour":"false",
+    },
+  },
   "name":"Main",
   "option_audio_error_behaviour":true,
   "option_author":"Grisgram",

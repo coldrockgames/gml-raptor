@@ -16,25 +16,27 @@ __reset = function() {
 	spinner_text			= "Connecting to server...";
 
 	async_looper			= onLoadingScreen;
-	async_looper_data		= undefined;
+	async_looper_data		= {};
+	async_looper_starting	= onLoadingScreenStarting;
 	async_looper_finished	= onLoadingScreenFinished;
 	async_wait_timeout		= -1;
 	async_wait_counter		= 0;
 	draw_spinner			= false; // true while waiting for min-time
 	wait_for_async_tasks	= false;
 	wait_for_loading_screen = false;
-	loading_screen_task		= {};
 	loading_screen_frame	= 0;
 
 	trampoline_done			= false;
 
+	game_init_step			= false;
 	first_step				= true;
 }
 __reset();
+game_init_step = true;
 
 __original_first_room = goto_room_after_init; // backup for reinit
 
-/// @func	run_async_loop(_looper = undefined, _finished_callback = undefined, _looper_data = undefined, _target_room_after = undefined, _transition = undefined)
+/// @func	run_async_loop(_started_callback = undefined, _looper = undefined, _finished_callback = undefined, _task_data = undefined, _target_room_after = undefined, _transition = undefined)
 /// @desc	Runs the specified (_looper) async loading loop, like the one at game start (onLoadingScreen).
 ///			If no _looper is specified, this function fires the entire async-startup chain 
 ///			(onLoadingScreen) again, but NOT the onGameStart callback.
@@ -47,19 +49,20 @@ __original_first_room = goto_room_after_init; // backup for reinit
 ///			room. If you specify nothing, the game stays in the current room and the spinner
 ///			is just shown as overlay while loading.
 run_async_loop = function(
-	_looper = undefined, 
-	_finished_callback = undefined, 
-	_looper_data = undefined, 
-	_target_room_after = undefined, 
-	_transition = undefined) {
+	_started_callback	= undefined,
+	_looper				= undefined, 
+	_finished_callback	= undefined, 
+	_task_data			= undefined, 
+	_target_room_after	= undefined, 
+	_transition			= undefined) {
 		
 	__reset();
-	first_step				= false;
 	async_min_wait_time		= 0;
 	draw_spinner			= true;
-	async_looper			= _looper ?? async_looper;
+	async_looper_starting	= _started_callback;
+	async_looper			= _looper ?? EMPTY_FUNC;
 	async_looper_finished	= _finished_callback;
-	async_looper_data		= _looper_data;
+	async_looper_data		= _task_data;
 	visible					= true;
 	
 	if (_target_room_after != undefined || _transition != undefined) {		
@@ -74,6 +77,11 @@ run_async_loop = function(
 		goto_room_after_init = undefined;
 		ilog($"Running GLOBAL ASYNC LOOP in current room");
 	}
+}
+
+__invoke_starting_callback = function() {
+	invoke_if_exists(self, async_looper_starting, async_looper_data);
+	return true; // to make the if... in the step event continue
 }
 
 /// @func show_loading_text(_lg_string)
