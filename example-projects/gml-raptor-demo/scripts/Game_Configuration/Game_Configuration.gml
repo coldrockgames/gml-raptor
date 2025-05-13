@@ -59,10 +59,10 @@
 #macro		   ROOM_AFTER_STARTER	rmMain
 #macro release:ROOM_AFTER_STARTER	rmMain
 
-#macro		   STARTER_ASYNC_MIN_WAIT_TIME	0
+#macro		   STARTER_ASYNC_MIN_WAIT_TIME	1
 #macro release:STARTER_ASYNC_MIN_WAIT_TIME	90
 
-#macro		   STARTER_FIRST_ROOM_FADE_IN	0
+#macro		   STARTER_FIRST_ROOM_FADE_IN	1
 #macro release:STARTER_FIRST_ROOM_FADE_IN	60
 
 /// @func	onGameStart()
@@ -105,41 +105,35 @@ function onGameStart() {
 
 }
 
-/// @func   onLoadingScreen(task, frame)
+/// @func   onLoadingScreenStarting(_task)
+/// @desc   This is invoked once, when the initial loading screen gets displayed for the first time.
+///			You can fill the _task struct with any data you need, it will be forwarded
+///			to the onLoadingScreen and onLoadingScreenFinished functions.
+///			WHAT YOU SHOULD DO HERE:
+///			- LOAD ALL YOUR RACE INSTANCES, THEY ARE ASYNC AND THIS FUNCTION TAKES CARE OF IT
+///			- LOAD ALL YOU ADDITIONAL LOCALE FILES, THEY ARE ALSO ASYNC
+function onLoadingScreenStarting(_task) {
+	LG_add_file_async("raptor_demo");
+}
+
+/// @func   onLoadingScreen(_task, _frame)
 /// @desc   Use this function while the loading screen is visible 
-///		    to perform "async-like" tasks. Store your state in the task
+///		    to perform "async-like" tasks. Store your state in the _task
 ///		    struct, it will be sent to you every frame, as long as you 
 ///		    return true from this function.
 ///			If you return false (or nothing), and there are no more async
 ///			file operations running, the GameStarter considers your
 ///		    startup-loading actions as finished.
 ///		    The frame parameter increases by 1 each time this is invoked and starts with 0.
-///			------------------------
-///			What you SHOULD do here:
-///			- LOAD ALL YOUR RACE INSTANCES, THEY ARE ASYNC AND THIS FUNCTION TAKES CARE OF IT
-///			- LOAD ALL YOU ADDITIONAL LOCALE FILES, THEY ARE ALSO ASYNC
-function onLoadingScreen(task, frame) {
-
-	// Load async start data IN THE FIRST FRAME
-	// Example lines to show that you can load your startup files here
-	// Loading screen only disappears when NO MORE ASYNC operations run
-	// AND this function did not return true.
-	// ------------------------------------------------------------------
-	if (frame == 0) {
-		//SOME_GLOBAL_THING = file_read_struct_plain_async(GLOBAL_THING_FILE_NAME, FILE_CRYPT_KEY);
-		//global.loot_system = new Race(RACE_FILE_NAME);
-		//LG_add_file_async("dialogs");
-		LG_add_file_async("raptor_demo");
-	}
-	
+function onLoadingScreen(_task, _frame) {
 	// If you do other async things here, don't forget to RETURN TRUE until they are
 	// are finished (return code means something like "still busy?", so return true while working)
 	//return true;
 }
 
-/// @func	onLoadingScreenFinished()
+/// @func	onLoadingScreenFinished(_task)
 /// @desc	Invoked, when all async tasks are done and before game proceeds to first room
-function onLoadingScreenFinished() {
+function onLoadingScreenFinished(_task) {
 	// Use this callback to finish all your initialization steps
 	// that were depending/waiting for the async loading screen to finish
 	// When you reach this function, everything from onLoadingScreen is loaded and ready

@@ -149,16 +149,14 @@ function LG_hotswap(new_locale, _finished_callback = undefined, _switch_to_loadi
 	array_copy(filelist, 0, __LG_ASYNC_FILES, 0, array_length(__LG_ASYNC_FILES));
 	LG_init(new_locale);
 	GAMESTARTER.run_async_loop(
-		function(task, frame, data) {
-			if (frame == 0) {
-				dlog($"Reloading {array_length(data.files)} additional async language files");
-				for (var i = 0, len = array_length(data.files); i < len; i++)
-					LG_add_file_async(data.files[@i]);
-			}
-		},
-		function(data) {
-			if (data.need_restart) room_restart();
-			invoke_if_exists(data, "finished");
+		function(_task, _frame) {
+			dlog($"Reloading {array_length(_task.files)} additional async language files");
+			for (var i = 0, len = array_length(_task.files); i < len; i++)
+				LG_add_file_async(_task.files[@i]);
+		},,
+		function(_task) {
+			if (_task.need_restart) room_restart();
+			invoke_if_exists(_task, "finished");
 			ilog("LG_hotswap finished");
 		}, 
 		{ files: filelist, finished: _finished_callback, need_restart: !_switch_to_loading_screen }, 
