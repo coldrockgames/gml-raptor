@@ -52,7 +52,7 @@ global.__debug_check_done	= false;
 function check_debug_mode() {
 	if (DEBUG_MODE_ACTIVE && !global.__debug_check_done) {
 		global.__debug_check_done = true;
-		if (code_is_compiled())
+		if (code_is_compiled() && !CONFIGURATION_UNIT_TESTING)
 			show_message(string_concat(
 				"*************************************************\n",
 				"***                                              \n",

@@ -186,7 +186,7 @@ function struct_join_into(target, sources) {
 							self[$ name] = member;
 						} else {
 							array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
-							struct_join_into_no_rebind(self[$ name], member);
+							struct_join_into(self[$ name], member);
 						}
 					} else
 						self[$ name] = member;
