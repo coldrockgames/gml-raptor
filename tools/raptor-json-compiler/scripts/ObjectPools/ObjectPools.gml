@@ -98,14 +98,14 @@ function pool_return_instance(instance = self, _struct = undefined) {
 		instance_deactivate_object(instance);
 		var haveone = false;
 		for (var i = 0, len = array_length(pool); i < len; i++) {
-			if (pool[@i] == undefined) {
+			if (pool[@i] == undefined || pool[@i] == instance) {
 				pool[@i] = instance;
 				haveone = true;
 				break;
 			}
 		}
 		
-if (!haveone)
+		if (!haveone)
 			array_push(pool, instance);
 		return;
 	}

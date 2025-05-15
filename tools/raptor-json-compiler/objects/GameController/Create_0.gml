@@ -2,19 +2,21 @@
 
 // --- GLOBAL GAME THINGS ---
 event_inherited();
-#macro GAMECONTROLLER			global.__game_controller
-#macro __FAKE_GAMECONTROLLER	if (!variable_global_exists("__game_controller")) GAMECONTROLLER=SnapFromJSON("{\"image_index\":0}");
+#macro GAMECONTROLLER				global.__game_controller
+#macro __FAKE_GAMECONTROLLER		if (!variable_global_exists("__game_controller")) GAMECONTROLLER=SnapFromJSON("{\"image_index\":0}");
 GAMECONTROLLER = self;
 
-#macro BROADCASTER				global.__broadcaster
-#macro ENSURE_BROADCASTER		if (!variable_global_exists("__broadcaster")) BROADCASTER = new Sender();
+#macro BROADCASTER					global.__broadcaster
+#macro ENSURE_BROADCASTER			if (!variable_global_exists("__broadcaster")) BROADCASTER = new Sender();
 ENSURE_BROADCASTER;
 
 // --- ASYNC OPERATION MANAGEMENT ---
-#macro ASYNC_OPERATION_RUNNING	(array_length(struct_get_names(__RAPTOR_ASYNC_CALLBACKS)) > 0)
-#macro ASYNC_OPERATION_POLL_INT	30
-#macro __RAPTOR_ASYNC_CALLBACKS	global.__raptor_async_callbacks
-__RAPTOR_ASYNC_CALLBACKS = {};
+#macro ASYNC_OPERATION_POLL_INT		30
+#macro ASYNC_OPERATION_RUNNING		global.__raptor_async_operation_running
+#macro __RAPTOR_ASYNC_CALLBACKS		global.__raptor_async_callbacks
+
+__RAPTOR_ASYNC_CALLBACKS	= {};
+ASYNC_OPERATION_RUNNING		= false;
 
 /// @func __add_async_file_callback(_async_id, _callback)
 __add_async_file_callback = function(_owner, _async_id, _callback) {
@@ -23,6 +25,7 @@ __add_async_file_callback = function(_owner, _async_id, _callback) {
 		owner:		_owner,
 		callback:	_callback,
 	};
+	ASYNC_OPERATION_RUNNING = true;
 }
 
 __invoke_async_file_callback = function(_async_id, _result) {
@@ -34,6 +37,7 @@ __invoke_async_file_callback = function(_async_id, _result) {
 			with(cb.owner)
 				c(_result);
 			struct_remove(__RAPTOR_ASYNC_CALLBACKS, cbn);
+			ASYNC_OPERATION_RUNNING = (array_length(struct_get_names(__RAPTOR_ASYNC_CALLBACKS)) > 0);
 		}
 	CATCH ENDTRY
 }

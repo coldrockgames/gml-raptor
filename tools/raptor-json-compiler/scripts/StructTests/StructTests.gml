@@ -65,6 +65,22 @@ function unit_test_Structs() {
 
 	}
 
+	ut.tests.struct_join_into_type_mismatch_ok = function(test, data) {
+		var s1 = {
+			m: "m1",
+		};
+		var s2 = {
+			m: {},
+		};
+		
+		struct_join_into(s1, s2);
+		
+		test.assert_true(struct_exists(s1, "m"), "s1");
+		test.assert_true(struct_exists(s2, "m"), "s2");
+
+		test.assert_true(is_struct(s1.m), "is_struct");
+	}
+
 	ut.tests.vsgetx_ok = function(test, data) {
 		var root = new test.TestRoot();	
 

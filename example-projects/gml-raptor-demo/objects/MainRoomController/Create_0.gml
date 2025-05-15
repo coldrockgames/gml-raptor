@@ -1,6 +1,10 @@
 /// @desc onTransitFinished override
 event_inherited();
 
+// Invoked, when the transition to this room is finished and
+// the scene is visible.
+// The _data argument contains the data that has been sent
+// when the transition was instantiated in the previous room.
 onTransitFinished = function(_data) {
 }
 

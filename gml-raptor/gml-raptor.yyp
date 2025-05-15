@@ -151,7 +151,6 @@
       },"CopyToMask":0,"filePath":"datafiles/race","name":"demotable.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"raptor_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"raptor_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scribble_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"scribble_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"default_skin.json","CopyToMask":-1,"filePath":"datafiles/ui","name":"default_skin.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"version.json","CopyToMask":-1,"filePath":"datafiles","name":"version.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,
