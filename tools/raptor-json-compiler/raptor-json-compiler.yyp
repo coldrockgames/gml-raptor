@@ -2,7 +2,7 @@
   "$GMProject":"v1",
   "%Name":"raptor-json-compiler",
   "AudioGroups":[
-    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[
@@ -92,40 +92,13 @@
   ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{
-        "beta":{
-          "CopyToMask":"0",
-        },
-      },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"json_compiler_game_settings.json","ConfigValues":{
-        "release":{
-          "CopyToMask":"0",
-        },
-      },"CopyToMask":-1,"filePath":"datafiles","name":"json_compiler_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"json_compiler_game_settings.jx","ConfigValues":{
-        "beta":{
-          "CopyToMask":"-1",
-        },
-        "release":{
-          "CopyToMask":"-1",
-        },
-      },"CopyToMask":0,"filePath":"datafiles","name":"json_compiler_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
-        "release":{
-          "CopyToMask":"0",
-        },
-      },"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{"beta":{"CopyToMask":"0",},},"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"json_compiler_game_settings.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles","name":"json_compiler_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"json_compiler_game_settings.jx","ConfigValues":{"beta":{"CopyToMask":"-1",},"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles","name":"json_compiler_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"locale.jx","CopyToMask":0,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
-        "release":{
-          "CopyToMask":"0",
-        },
-      },"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
-        "release":{
-          "CopyToMask":"-1",
-        },
-      },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"raptor_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"raptor_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scribble_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"scribble_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"version.json","CopyToMask":-1,"filePath":"datafiles","name":"version.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -337,7 +310,6 @@
     {"id":{"name":"FilesTests","path":"scripts/FilesTests/FilesTests.yy",},},
     {"id":{"name":"Game_Configuration","path":"scripts/Game_Configuration/Game_Configuration.yy",},},
     {"id":{"name":"Game_Exception_Handler","path":"scripts/Game_Exception_Handler/Game_Exception_Handler.yy",},},
-    {"id":{"name":"Game_ParticleTypes","path":"scripts/Game_ParticleTypes/Game_ParticleTypes.yy",},},
     {"id":{"name":"Game_Settings","path":"scripts/Game_Settings/Game_Settings.yy",},},
     {"id":{"name":"gmcallback_imgloadbar","path":"scripts/gmcallback_imgloadbar/gmcallback_imgloadbar.yy",},},
     {"id":{"name":"gui_runtime_config","path":"scripts/gui_runtime_config/gui_runtime_config.yy",},},
@@ -368,6 +340,7 @@
     {"id":{"name":"ObjectPools","path":"scripts/ObjectPools/ObjectPools.yy",},},
     {"id":{"name":"outline_shader_init_globals","path":"scripts/outline_shader_init_globals/outline_shader_init_globals.yy",},},
     {"id":{"name":"OutlineDrawer","path":"scripts/OutlineDrawer/OutlineDrawer.yy",},},
+    {"id":{"name":"Particle_Configuration","path":"scripts/Particle_Configuration/Particle_Configuration.yy",},},
     {"id":{"name":"ParticleManager","path":"scripts/ParticleManager/ParticleManager.yy",},},
     {"id":{"name":"PopupManager","path":"scripts/PopupManager/PopupManager.yy",},},
     {"id":{"name":"PropertyBinder","path":"scripts/PropertyBinder/PropertyBinder.yy",},},
@@ -602,13 +575,7 @@
   ],
   "templateType":"game",
   "TextureGroups":[
-    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
-        "release":{
-          "compressFormat":"bz2",
-          "groupParent":"null",
-          "loadType":"default",
-        },
-      },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{"release":{"compressFormat":"bz2","groupParent":"null","loadType":"default",},},"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"ui","autocrop":true,"border":2,"compressFormat":"bz2","customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"ui","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
   ],
 }

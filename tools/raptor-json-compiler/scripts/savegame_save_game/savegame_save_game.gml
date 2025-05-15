@@ -29,30 +29,30 @@ function savegame_save_game_async(_filename, _cryptkey = "", _data_only = undefi
 	
 	// First things first: The Engine data
 	var engine = {};
-	struct_set(engine,		__SAVEGAME_ENGINE_VERSION	, SAVEGAME_FILE_VERSION);
-	struct_set(engine,		__SAVEGAME_DATA_FILE		, _data_only != undefined);
-	struct_set(savegame,	__SAVEGAME_ENGINE_HEADER	, engine);
+	vsgetx(engine,		__SAVEGAME_ENGINE_VERSION	, SAVEGAME_FILE_VERSION);
+	vsgetx(engine,		__SAVEGAME_DATA_FILE		, _data_only != undefined);
+	vsgetx(savegame,	__SAVEGAME_ENGINE_HEADER	, engine);
 
 	if (_data_only != undefined) {
 		// Save structs only
-		struct_set(savegame, __SAVEGAME_STRUCT_HEADER, _data_only);
+		vsgetx(savegame, __SAVEGAME_STRUCT_HEADER, _data_only);
 	} else {
 		var instances = {};
-		struct_set(savegame, __SAVEGAME_OBJECT_HEADER, instances);
+		vsgetx(savegame, __SAVEGAME_OBJECT_HEADER, instances);
 		// Save everything (classic savegame)
 		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_GAME_SAVING);
 	
 		if (vsget(GAMECONTROLLER, __SAVEGAME_ONSAVING_NAME)) with(GAMECONTROLLER) __SAVEGAME_ONSAVING_FUNCTION();
 		if (vsget(ROOMCONTROLLER, __SAVEGAME_ONSAVING_NAME)) with(ROOMCONTROLLER) __SAVEGAME_ONSAVING_FUNCTION();
 	
-		struct_set(engine,		__SAVEGAME_ENGINE_SEED		, random_get_seed());
-		struct_set(engine,		__SAVEGAME_ENGINE_ROOM_NAME	, room_get_name(room));
-		struct_set(engine,		__SAVEGAME_ENGINE_COUNTUP_ID, global.__unique_count_up_id);
+		vsgetx(engine,		__SAVEGAME_ENGINE_SEED		, random_get_seed());
+		vsgetx(engine,		__SAVEGAME_ENGINE_ROOM_NAME	, room_get_name(room));
+		vsgetx(engine,		__SAVEGAME_ENGINE_COUNTUP_ID, global.__unique_count_up_id);
 		
-		struct_set(savegame,	__SAVEGAME_STRUCT_HEADER	, {});
+		vsgetx(savegame,	__SAVEGAME_STRUCT_HEADER	, {});
 	
 		// save global data
-		struct_set(savegame,	__SAVEGAME_GLOBAL_DATA_HEADER, GLOBALDATA);
+		vsgetx(savegame,	__SAVEGAME_GLOBAL_DATA_HEADER, GLOBALDATA);
 
 		var cnt = 0;
 		with (Saveable) {
@@ -93,7 +93,7 @@ function savegame_save_game_async(_filename, _cryptkey = "", _data_only = undefi
 				else
 					instdata[$ __SAVEGAME_DATA_HEADER] = {};
 				
-				struct_set(instances,instname,instdata);
+				vsgetx(instances,instname,instdata);
 				cnt++;
 			}
 		}

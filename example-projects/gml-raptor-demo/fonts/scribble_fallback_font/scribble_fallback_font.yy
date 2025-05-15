@@ -139,10 +139,7 @@
   "sdfSpread":8,
   "size":11.0,
   "styleName":"Regular",
-  "textureGroupId":{
-    "name":"ui",
-    "path":"texturegroups/ui",
-  },
+  "textureGroupId":null,
   "TTFName":"",
   "usesSDF":false,
 }

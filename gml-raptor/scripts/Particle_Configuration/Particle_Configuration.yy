@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Game_ParticleTypes",
+  "%Name":"Particle_Configuration",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Game_ParticleTypes",
+  "name":"Particle_Configuration",
   "parent":{
     "name":"__GAME_SETUP__",
     "path":"folders/__GAME_SETUP__.yy",

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v1",
   "%Name":"sprDefaultScrollbarKnob",
   "bboxMode":0,
   "bbox_bottom":23,
