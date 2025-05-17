@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"v1",
+  "$GMSprite":"",
   "%Name":"sprDefaultSliderRailV",
   "bboxMode":0,
   "bbox_bottom":46,
