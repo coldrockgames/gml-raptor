@@ -109,21 +109,21 @@ function directory_list_directories(_folder = "", _recursive = false) {
 	return directory_list_files(_folder, "*", _recursive, fa_directory);
 }
 
-/// @function	directory_list_data_files(_folder = "", _recursive = false)
+/// @function	directory_list_data_files(_folder = "", _recursive = false, _ext = DATA_FILE_EXTENSION)
 /// @desc		Lists all files with the current DATA_FILE_EXTENSION from the given directory
-function directory_list_data_files(_folder = "", _recursive = false) {
-	return directory_list_files(_folder, string_concat("*", DATA_FILE_EXTENSION), _recursive, fa_none);
+function directory_list_data_files(_folder = "", _recursive = false, _ext = DATA_FILE_EXTENSION) {
+	return directory_list_files(_folder, string_concat("*", _ext), _recursive, fa_none);
 }
 
-/// @func	directory_read_data_tree_async(_folder, _file_task_callback = undefined)
+/// @func	directory_read_data_tree_async(_folder, _file_task_callback = undefined, _ext = DATA_FILE_EXTENSION)
 /// @desc	Reads an entire tree of data files (DATA_FILE_EXTENSION) into a single
 ///			struct. Duplicate names are merged, not replaced, so you can freely split
 ///			your larger data volumes into multiple files containing the same root object (like LG)
 ///			The _file_task_callback is invoked for every single file load that is enqueued, so you
 ///			may attach your own on_finished callbacks or whatever you need for each file.
-function directory_read_data_tree_async(_folder, _file_task_callback = undefined) {
+function directory_read_data_tree_async(_folder, _file_task_callback = undefined, _ext = DATA_FILE_EXTENSION) {
 	var rv = {};
-	var gamefiles = directory_list_data_files(_folder, true);
+	var gamefiles = directory_list_data_files(_folder, true, _ext);
 	for (var i = 0, len = array_length(gamefiles); i < len; i++) {
 		var fn = gamefiles[@i];
 		var membername = file_get_filename(fn, false);
@@ -152,15 +152,15 @@ function directory_read_data_tree_async(_folder, _file_task_callback = undefined
 	return rv;
 }
 
-/// @func	directory_read_data_tree(_folder, _file_task_callback = undefined)
+/// @func	directory_read_data_tree(_folder, _ext = DATA_FILE_EXTENSION)
 /// @desc	Reads an entire tree of data files (DATA_FILE_EXTENSION) into a single
 ///			struct. Duplicate names are merged, not replaced, so you can freely split
 ///			your larger data volumes into multiple files containing the same root object (like LG)
 ///			NOTE: This is a SYNC operation, your game freezes while loading!
 ///			If you are loading huge amounts of data, consider using directory_read_data_tree_async instead. 
-function directory_read_data_tree(_folder) {
+function directory_read_data_tree(_folder, _ext = DATA_FILE_EXTENSION) {
 	var rv = {};
-	var gamefiles = directory_list_data_files(_folder, true);
+	var gamefiles = directory_list_data_files(_folder, true, _ext);
 	for (var i = 0, len = array_length(gamefiles); i < len; i++) {
 		var fn = gamefiles[@i];
 		var membername = file_get_filename(fn, false);

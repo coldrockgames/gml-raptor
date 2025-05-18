@@ -53,6 +53,88 @@ __ui_root_control = instance_create(0, 0, layer, RaptorUiRootPanel);
 UI_ROOT = __ui_root_control.control_tree;
 
 #region PARTICLE SYSTEMS
+__create_particle = function(_name, _item, _event = "") {
+	if (_event != "")
+		dlog($"Creating '{_event}' event sub-particle '{_name}'");
+		
+	var ps = _item._raptor._partsys_index >= 0 ? PARTSYS[@ _item._raptor._partsys_index] : PARTSYS;
+	var em = ps.emitter_get(_item._raptor._emitter_name, _name);
+	var emw = _item._emitter._width  / 2;
+	var emh = _item._emitter._height / 2;
+	ps.emitter_set_range(_item._raptor._emitter_name, 
+		-emw, emw, 
+		-emh, emh, 
+		_item._emitter._shape, 
+		_item._emitter._distribution
+	);
+	var pt = ps.particle_type_get(_name);
+
+	part_type_alpha3	 (pt, _item._alpha._min, _item._alpha._mid, _item._alpha._max);
+	part_type_blend		 (pt, _item._color._additive);
+	part_type_direction	 (pt, _item._direction._min, _item._direction._max, _item._direction._increase, _item._direction._wiggle);
+	part_type_gravity	 (pt, _item._gravity._amount, _item._gravity._direction);
+	part_type_life		 (pt, _item._lifetime._min, _item._lifetime._max);
+	part_type_orientation(pt, _item._orientation._min, _item._orientation._max, _item._orientation._increase, _item._orientation._wiggle, _item._orientation.is_relative_angle);
+	part_type_scale		 (pt, _item._scale._x, _item._scale._y);
+	part_type_size		 (pt, _item._size._min, _item._size._max, _item._size._increase, _item._size._wiggle)
+	part_type_speed		 (pt, _item._speed._min, _item._speed._max, _item._speed._increase, _item._speed._wiggle)
+	switch(_item._color._type) {
+		case 1: part_type_color1(pt, _item._color._min);										break;
+		case 0: part_type_color2(pt, _item._color._min, _item._color._mid);						break;
+		case 2: part_type_color3(pt, _item._color._min, _item._color._mid, _item._color._max);	break;
+	}
+		
+	switch(_item._shape._type) {
+		case 14: // sprite
+			// load sprite from data
+			var img_buffer = buffer_base64_decode(_item._shape._sprite._data);
+			// save buffer to temp file
+			var filename = string_concat(working_directory, "_tmpsprite", SUID, ".tmp");
+			buffer_save(img_buffer, filename);
+			buffer_delete(img_buffer);
+			// now load the sprite
+			_item._shape._sprite._id = sprite_add(filename, _item._shape._sprite._frame_count, _item._shape._sprite._remove_back, _item._shape._sprite._smooth, _item._shape._sprite._x_origin, _item._shape._sprite._y_origin);
+			part_type_sprite(pt, _item._shape._sprite._id, _item._shape._sprite._animated, _item._shape._sprite._stretched, _item._shape._sprite._random);
+			file_delete(filename);
+			break;
+		default:
+			part_type_shape(pt, _item._shape._type);
+			break;
+	}
+
+	if (_item._events.on_step._name != "") {
+		var inner = __create_particle(_item._events.on_step._name, _item._events.on_step._particle, "on_step");
+		part_type_step(pt, _item._events.on_step._particle._emitter._count, inner);
+	}
+		
+	if (_item._events.on_death._name != "") {
+		var inner = __create_particle(_item._events.on_death._name, _item._events.on_death._particle, "on_death");
+		part_type_death(pt, _item._events.on_death._particle._emitter._count, inner);
+	}
+
+	return pt;
+
+}
+
+__initialize_particles = function(_node) {
+	var stru = PARTICLES[$ _node];
+	if (stru != undefined) {
+		var names = struct_get_names(stru);
+		var len = array_length(names);
+		if (len > 0) {
+			dlog($"Creating {len} particle(s) for node '{_node}'");
+			var name, item;
+			for (var i = 0; i < len; i++) {
+				name = names[@i];
+				__create_particle(name, stru[$ name]);
+			}
+		}
+		return;
+	}
+	
+	dlog($"No particles for node '{_node}'");
+}
+
 // Set up particle systems
 #macro PARTSYS					global.__room_particle_system
 if (particle_layer_names == undefined || (is_string(particle_layer_names) && string_is_empty(particle_layer_names))) {
@@ -67,11 +149,20 @@ if (particle_layer_names == undefined || (is_string(particle_layer_names) && str
 	} else
 		PARTSYS = undefined;
 	
-	if (PARTSYS != undefined)
+	if (PARTSYS != undefined) {
+		if (PARTICLES_SCAN_ON_STARTUP) {
+			dlog("Creating particles for room");
+			__initialize_particles(
+				string_ends_with(PARTICLES_GLOBAL_FOLDER, "/") ? 
+				string_skip_end(PARTICLES_GLOBAL_FOLDER, 1) : 
+				PARTICLES_GLOBAL_FOLDER
+			);
+			__initialize_particles(room_get_name(room));
+			dlog("Particle creation finished");
+		}
+		
 		setup_particle_types();
-
-	
-
+	}
 }
 
 #endregion

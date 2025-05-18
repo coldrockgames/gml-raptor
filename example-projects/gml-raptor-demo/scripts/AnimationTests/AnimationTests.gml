@@ -8,7 +8,8 @@ function anim_test_rotate_checked_changed() {
 		if (checked) start_rotating(); else stop_rotating();
 }
 
-function anim_test_start_click() {		
+function anim_test_start_click() {
+	//PARTSYS.burst_at(600,1000,"emRocket", 8); return;
 	with(AnimTestObject)
 		start_running();
 }

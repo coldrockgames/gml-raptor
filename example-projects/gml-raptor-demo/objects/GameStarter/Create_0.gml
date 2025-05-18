@@ -85,7 +85,7 @@ __invoke_starting_callback = function() {
 	if (PARTICLES_SCAN_ON_STARTUP && game_init_step) {
 		ENSURE_PARTICLES;
 		ilog($"ParticleLoader is auto-loading particles from '{PARTICLES_ROOT_FOLDER}'");
-		PARTICLES = directory_read_data_tree_async(PARTICLES_ROOT_FOLDER);
+		PARTICLES = directory_read_data_tree_async(PARTICLES_ROOT_FOLDER, undefined, FILE_EXTENSIONS.particle_file);
 	}
 	
 	invoke_if_exists(self, async_looper_starting, async_looper_data);

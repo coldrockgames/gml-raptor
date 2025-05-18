@@ -185,6 +185,7 @@
         },
       },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"raptor_demo.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"ptRap.particle","CopyToMask":-1,"filePath":"datafiles/particles/global","name":"ptRap.particle","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"ptRocket.particle","CopyToMask":-1,"filePath":"datafiles/particles/rmDevPlayground","name":"ptRocket.particle","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
