@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"ParticleLoader",
+  "%Name":"file_extensions",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"ParticleLoader",
+  "name":"file_extensions",
   "parent":{
-    "name":"Tools",
-    "path":"folders/_gml_raptor_/Tools.yy",
+    "name":"_gml_raptor_",
+    "path":"folders/_gml_raptor_.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

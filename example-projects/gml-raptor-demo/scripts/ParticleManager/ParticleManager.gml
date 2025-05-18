@@ -10,6 +10,10 @@
 
 #macro __DEFAULT_EMITTER_OBJECT	ParticleEmitter
 
+#macro PARTICLES			global.__raptor_particles
+#macro ENSURE_PARTICLES		if (!variable_global_exists("__raptor_particles")) PARTICLES = {};
+ENSURE_PARTICLES;
+
 /// @func	ParticleManager(particle_layer_name)
 /// @desc	Helps in organizing particles for a level
 /// @param {string} particle_layer_name

@@ -52,6 +52,7 @@ onGameLoadFailed = function(_exception) {
 __ui_root_control = instance_create(0, 0, layer, RaptorUiRootPanel);
 UI_ROOT = __ui_root_control.control_tree;
 
+#region PARTICLE SYSTEMS
 // Set up particle systems
 #macro PARTSYS					global.__room_particle_system
 if (particle_layer_names == undefined || (is_string(particle_layer_names) && string_is_empty(particle_layer_names))) {
@@ -69,7 +70,11 @@ if (particle_layer_names == undefined || (is_string(particle_layer_names) && str
 	if (PARTSYS != undefined)
 		setup_particle_types();
 
+	
+
 }
+
+#endregion
 
 // Resizes the app surface to the dimensions of this room's main viewport
 if (adapt_app_surface && view_get_visible(0)) {

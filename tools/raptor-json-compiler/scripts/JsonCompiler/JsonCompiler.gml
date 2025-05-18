@@ -37,21 +37,40 @@ function get_commandline_arguments() {
 
 function __find_macro(content, macro) {
 	if (string_contains(content, macro)) {
-		var pos = string_pos_ext(macro, content, 1);
-		var posend = string_pos_ext("\n", content, pos);
+		var pos		= string_pos_ext(macro, content, 1);
+		var posend	= string_pos_ext("\n", content, pos);
 		
 		var line = string_copy(content, pos, posend - pos);
+		if (string_ends_with(line, "\\\n") || string_ends_with(line, "\\\r") || string_ends_with(line, "\\")) {
+			posend	= string_pos_ext("}", content, pos);
+			line	= string_split_ext(string_copy(content, pos, posend - pos), ["\r", "\n"], true);			
+		}
 		return __grep_macro_value(line, macro);
 	}
 	return undefined;
 }
 
 function __grep_macro_value(line, macro) {
-	return
-		string_trim(
-			string_replace_all(
-				string_replace(line, macro, ""), "\"", "")
-		);			
+	if (is_array(line)) {
+		array_shift(line);
+		for (var i = 0, len = array_length(line); i < len; i++) {
+			line[@i] = string_trim(
+				string_split(
+					string_replace_all(
+						string_replace_all(
+							string_replace_all(line[@i], 
+							"\\", ""),
+						",", ""), 
+					"\"", ""), 
+				":")[@1]);
+		}
+		return line;
+	} else
+		return
+			string_trim(
+				string_replace_all(
+					string_replace(line, macro, ""), "\"", "")
+			);			
 }
 
 function compile_jsons(folder) {
@@ -94,21 +113,23 @@ function compile_jsons(folder) {
 
 function read_project() {
 
-	var content = file_read_text_file_absolute($"{global.run_in}scripts\\Game_Configuration\\Game_Configuration.gml");
+	var content1 = file_read_text_file_absolute($"{global.run_in}scripts\\Game_Configuration\\Game_Configuration.gml");
+	var	content2 = file_read_text_file_absolute($"{global.run_in}scripts\\file_extensions\\file_extensions.gml");
 
-	if (content == undefined) {
-		show_message("Error loading Game_Configuration script.\nIs this really a raptor project?");
+	if (content1 == undefined || content2 == undefined) {
+		show_message("Error loading Game_Configuration and file_extensions scripts.\nIs this really a raptor project?");
 		return;
 	}
 	
+	var content = string_concat(content1, "\n", content2);
 	var keyok = false;
 	while (!keyok) {
 		var forkey = ((string_is_empty(global.config) || global.config == "Default") ? "" : $"{global.config}:");
 
 		var macro_default_key	= "#macro FILE_CRYPT_KEY";
-		var macro_default_ext	= "#macro DATA_FILE_EXTENSION";
+		var macro_default_ext	= "#macro __RUNTIME_FILE_EXTENSIONS";
 		var macro_config_key	= $"#macro {forkey}FILE_CRYPT_KEY";
-		var macro_config_ext	= $"#macro {forkey}DATA_FILE_EXTENSION";
+		var macro_config_ext	= $"#macro {forkey}__RUNTIME_FILE_EXTENSIONS";
 
 		global.default_ext	= __find_macro(content, macro_default_ext);
 		global.default_key	= __find_macro(content, macro_default_key);
@@ -122,13 +143,29 @@ function read_project() {
 	}
 	
 	if (global.default_ext != undefined && global.config_ext != undefined && global.config_key != undefined) {
-		if (global.default_ext != global.config_ext) {
+		if (!is_array(global.default_ext)) global.default_ext = [ global.default_ext ];
+		if (!is_array(global.config_ext))  global.config_ext  = [ global.config_ext ];
+		
+		var def = global.default_ext;
+		var cfg = global.config_ext;
+		
+		if (array_length(def) == array_length(cfg)) {
 			ilog($"Input key is  '{global.default_key}'");
 			ilog($"Output key is '{global.config_key}'");
-			compile_jsons(string_concat(global.run_in, "datafiles"));
-		}
+			
+			for (var i = 0, len = array_length(def); i < len; i++) {
+				global.default_ext	= def[@i];
+				global.config_ext	= cfg[@i];
+				ilog($"Processing extension '{global.default_ext}' -> '{global.config_ext}'");
+				if (global.default_ext != global.config_ext)
+					compile_jsons(string_concat(global.run_in, "datafiles"));
+				else
+					ilog($"{global.config_ext}: No encryption necessary");
+			}
+		} else
+			show_message("Error analyzing extensions in file_extensions script.\nIs this really a raptor project?");
 	} else
-		show_message("Error finding crypt key and extensions in Game_Configuration script.\nIs this really a raptor project?");
+		show_message("Error finding crypt key and extensions in Game_Configuration and file_extensions scripts.\nIs this really a raptor project?");
 }
 
 ENSURE_LOGGER;

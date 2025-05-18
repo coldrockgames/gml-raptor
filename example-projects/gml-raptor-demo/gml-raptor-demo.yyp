@@ -184,6 +184,7 @@
           "CopyToMask":"-1",
         },
       },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"raptor_demo.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"ptRap.particle","CopyToMask":-1,"filePath":"datafiles/particles/global","name":"ptRap.particle","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
@@ -449,6 +450,7 @@
     {"id":{"name":"draw_text_scribble","path":"scripts/draw_text_scribble/draw_text_scribble.yy",},},
     {"id":{"name":"Edges","path":"scripts/Edges/Edges.yy",},},
     {"id":{"name":"ExpensiveCache","path":"scripts/ExpensiveCache/ExpensiveCache.yy",},},
+    {"id":{"name":"file_extensions","path":"scripts/file_extensions/file_extensions.yy",},},
     {"id":{"name":"FileAsyncWorker","path":"scripts/FileAsyncWorker/FileAsyncWorker.yy",},},
     {"id":{"name":"FileHelpers","path":"scripts/FileHelpers/FileHelpers.yy",},},
     {"id":{"name":"FilesAsync","path":"scripts/FilesAsync/FilesAsync.yy",},},
@@ -487,7 +489,6 @@
     {"id":{"name":"outline_shader_init_globals","path":"scripts/outline_shader_init_globals/outline_shader_init_globals.yy",},},
     {"id":{"name":"OutlineDrawer","path":"scripts/OutlineDrawer/OutlineDrawer.yy",},},
     {"id":{"name":"Particle_Configuration","path":"scripts/Particle_Configuration/Particle_Configuration.yy",},},
-    {"id":{"name":"ParticleLoader","path":"scripts/ParticleLoader/ParticleLoader.yy",},},
     {"id":{"name":"ParticleManager","path":"scripts/ParticleManager/ParticleManager.yy",},},
     {"id":{"name":"PopupManager","path":"scripts/PopupManager/PopupManager.yy",},},
     {"id":{"name":"PropertyBinder","path":"scripts/PropertyBinder/PropertyBinder.yy",},},

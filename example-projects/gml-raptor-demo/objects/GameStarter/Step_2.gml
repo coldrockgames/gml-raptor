@@ -35,6 +35,10 @@ if (!wait_for_async_tasks && !trampoline_done) {
 	visible = false; // turn off the draw event to save this now unneccesary funct
 	draw_spinner = false;
 	trampoline_done = true;
+	
+	if (PARTICLES_SCAN_ON_STARTUP)
+		ilog($"ParticleLoader loaded {array_length(struct_get_names(PARTICLES))} particle(s)");
+
 	if (goto_room_after_init != undefined) {
 		vlog($"GameStarter trampoline to next room");
 		pool_clear_all();

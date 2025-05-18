@@ -212,9 +212,10 @@ Delete "$TEMP\vcredist_x86_2015.exe"
 SetOutPath "$INSTDIR"
 SectionEnd
 
+Var AddToPathCheckbox
+
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts"
-Var AddToPathCheckbox
 
     ; Erstelle eine Checkbox mit der Frage, ob der Installationspfad zur PATH-Systemumgebungsvariable hinzugefügt werden soll
     ${If} ${RunningX64}
