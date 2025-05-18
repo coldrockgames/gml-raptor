@@ -2,12 +2,11 @@
     "files": [ 
         "raptor_license.txt", 
         "scribble_license.txt", 
-        "gml_raptor_game_settings.json", 
-        "jsfilelist.json", 
-        "version.json", 
-        "locale/de/locale.json", 
-        "locale/en/locale.json", 
-        "race/demotable.json", 
+        "gml_raptor_game_settings.jx", 
+        "jsfilelist.jx", 
+        "locale/de/locale.jx", 
+        "locale/en/locale.jx", 
+        "race/demotable.jx", 
     ], 
     "directories": [ 
         "locale", 

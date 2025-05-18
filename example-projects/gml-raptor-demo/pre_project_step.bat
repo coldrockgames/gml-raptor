@@ -4,8 +4,10 @@ REM --- If you changed the macros for the extension in your game,
 REM --- You need to also supply the correct values here
 SET RAPTOR_DEBUG_JSON_EXTENSION=.json
 SET RAPTOR_DEBUG_SCRIPTOR_EXTENSION=.scriptor
+SET RAPTOR_DEBUG_PARTICLE_EXTENSION=.particle
 SET RAPTOR_RELEASE_JSON_EXTENSION=.jx
 SET RAPTOR_RELEASE_SCRIPTOR_EXTENSION=.scx
+SET RAPTOR_RELEASE_PARTICLE_EXTENSION=.ptx
 
 REM --- If you did not use the installer for the raptor-json-compiler, you have to set your
 REM --- path to it manually here - DO NOT USE ANY "QUOTES"!
@@ -45,10 +47,13 @@ GOTO CONFIG_CHECK
 :DO_FILE_LIST
 SET JEXT=%RAPTOR_DEBUG_JSON_EXTENSION%
 SET SEXT=%RAPTOR_DEBUG_SCRIPTOR_EXTENSION%
+SET PEXT=%RAPTOR_DEBUG_PARTICLE_EXTENSION%
 IF [%YYconfig%]==[beta] SET JEXT=%RAPTOR_RELEASE_JSON_EXTENSION%
 IF [%YYconfig%]==[beta] SET SEXT=%RAPTOR_RELEASE_SCRIPTOR_EXTENSION%
+IF [%YYconfig%]==[beta] SET PEXT=%RAPTOR_RELEASE_PARTICLE_EXTENSION%
 IF [%YYconfig%]==[release] SET JEXT=%RAPTOR_RELEASE_JSON_EXTENSION%
 IF [%YYconfig%]==[release] SET SEXT=%RAPTOR_RELEASE_SCRIPTOR_EXTENSION%
+IF [%YYconfig%]==[release] SET PEXT=%RAPTOR_RELEASE_PARTICLE_EXTENSION%
 
 SET FLIST=%YYprojectDir%\datafiles\jsfilelist.json
 ECHO { >%FLIST%
@@ -56,6 +61,7 @@ ECHO     "files": [ >>%FLIST%
 for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*.txt"')   do @echo "%%i", >>"%FLIST%"
 for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%JEXT%"') do @echo "%%i", >>"%FLIST%"
 for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%SEXT%"') do @echo "%%i", >>"%FLIST%"
+for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%PEXT%"') do @echo "%%i", >>"%FLIST%"
 ECHO     ], >>%FLIST%
 ECHO     "directories": [ >>%FLIST%
 for /f "delims=" %%i in ('dir /s /b /ad /on "%YYprojectDir%\datafiles\*.*"') do @echo "%%i", >>"%FLIST%"

@@ -358,6 +358,7 @@
     {"id":{"name":"draw_text_scribble","path":"scripts/draw_text_scribble/draw_text_scribble.yy",},},
     {"id":{"name":"Edges","path":"scripts/Edges/Edges.yy",},},
     {"id":{"name":"ExpensiveCache","path":"scripts/ExpensiveCache/ExpensiveCache.yy",},},
+    {"id":{"name":"file_extensions","path":"scripts/file_extensions/file_extensions.yy",},},
     {"id":{"name":"FileAsyncWorker","path":"scripts/FileAsyncWorker/FileAsyncWorker.yy",},},
     {"id":{"name":"FileHelpers","path":"scripts/FileHelpers/FileHelpers.yy",},},
     {"id":{"name":"FilesAsync","path":"scripts/FilesAsync/FilesAsync.yy",},},
