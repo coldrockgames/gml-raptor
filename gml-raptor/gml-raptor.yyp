@@ -2,7 +2,7 @@
   "$GMProject":"v1",
   "%Name":"gml-raptor",
   "AudioGroups":[
-    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[
@@ -94,17 +94,61 @@
   ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles","name":"gml_raptor_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.jx","ConfigValues":{"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles","name":"gml_raptor_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{"beta":{"CopyToMask":"0",},},"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"jsfilelist.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"jsfilelist.jx","ConfigValues":{"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles","name":"jsfilelist.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{"release":{"CopyToMask":"0",},},"CopyToMask":-1,"filePath":"datafiles/race","name":"demotable.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"demotable.jx","ConfigValues":{"release":{"CopyToMask":"-1",},},"CopyToMask":0,"filePath":"datafiles/race","name":"demotable.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles","name":"gml_raptor_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles","name":"gml_raptor_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{
+        "beta":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles","name":"jsfilelist.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles/locale/de","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"locale.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles/locale/en","name":"locale.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"demotable.json","ConfigValues":{
+        "release":{
+          "CopyToMask":"0",
+        },
+      },"CopyToMask":-1,"filePath":"datafiles/race","name":"demotable.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"demotable.jx","ConfigValues":{
+        "release":{
+          "CopyToMask":"-1",
+        },
+      },"CopyToMask":0,"filePath":"datafiles/race","name":"demotable.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"raptor_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"raptor_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scribble_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"scribble_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"version.json","CopyToMask":-1,"filePath":"datafiles","name":"version.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -588,7 +632,29 @@
   ],
   "templateType":null,
   "TextureGroups":[
-    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{"release":{"compressFormat":"bz2","groupParent":"null","loadType":"default",},"unit_testing":{"compressFormat":"bz2","groupParent":"null","loadType":"default",},},"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
-    {"$GMTextureGroup":"","%Name":"ui","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{"beta":{"compressFormat":"bz2","groupParent":"null","loadType":"default",},"unit_testing":{"compressFormat":"bz2","groupParent":"null","loadType":"default",},},"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"ui","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
+        "release":{
+          "compressFormat":"bz2",
+          "groupParent":"null",
+          "loadType":"default",
+        },
+        "unit_testing":{
+          "compressFormat":"bz2",
+          "groupParent":"null",
+          "loadType":"default",
+        },
+      },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMTextureGroup":"","%Name":"ui","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
+        "beta":{
+          "compressFormat":"bz2",
+          "groupParent":"null",
+          "loadType":"default",
+        },
+        "unit_testing":{
+          "compressFormat":"bz2",
+          "groupParent":"null",
+          "loadType":"default",
+        },
+      },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"ui","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
   ],
 }
