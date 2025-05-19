@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"v1",
+  "$GMSprite":"",
   "%Name":"sprDefaultMouseCursorSizing",
   "bboxMode":0,
   "bbox_bottom":31,
