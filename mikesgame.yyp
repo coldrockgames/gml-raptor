@@ -1,6 +1,6 @@
 {
   "$GMProject":"v1",
-  "%Name":"gml-raptor",
+  "%Name":"mikesgame",
   "AudioGroups":[
     {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
@@ -87,6 +87,7 @@
     {"$GMFolder":"","%Name":"VDF","folderPath":"folders/_third_party_packages_/SNAP/VDF.yy","name":"VDF","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"XML","folderPath":"folders/_third_party_packages_/SNAP/XML.yy","name":"XML","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"YAML","folderPath":"folders/_third_party_packages_/SNAP/YAML.yy","name":"YAML","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"mike","folderPath":"folders/mike.yy","name":"mike","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_raptorHtmlTemplateRoom","folderPath":"folders/Rooms/_raptorHtmlTemplateRoom.yy","name":"_raptorHtmlTemplateRoom","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_raptorTemplateRoom","folderPath":"folders/Rooms/_raptorTemplateRoom.yy","name":"_raptorTemplateRoom","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -158,7 +159,7 @@
   "MetaData":{
     "IDEVersion":"2024.13.1.193",
   },
-  "name":"gml-raptor",
+  "name":"mikesgame",
   "resources":[
     {"id":{"name":"__raptorAcControlColorAnim","path":"animcurves/__raptorAcControlColorAnim/__raptorAcControlColorAnim.yy",},},
     {"id":{"name":"__raptorAcControlDraw","path":"animcurves/__raptorAcControlDraw/__raptorAcControlDraw.yy",},},
@@ -212,6 +213,7 @@
     {"id":{"name":"MessageBoxTextButton","path":"objects/MessageBoxTextButton/MessageBoxTextButton.yy",},},
     {"id":{"name":"MessageBoxWindow","path":"objects/MessageBoxWindow/MessageBoxWindow.yy",},},
     {"id":{"name":"MessageBoxXButton","path":"objects/MessageBoxXButton/MessageBoxXButton.yy",},},
+    {"id":{"name":"MikesObject","path":"objects/MikesObject/MikesObject.yy",},},
     {"id":{"name":"MouseCursor","path":"objects/MouseCursor/MouseCursor.yy",},},
     {"id":{"name":"MouseCursorCompanion","path":"objects/MouseCursorCompanion/MouseCursorCompanion.yy",},},
     {"id":{"name":"OutlineObject","path":"objects/OutlineObject/OutlineObject.yy",},},
