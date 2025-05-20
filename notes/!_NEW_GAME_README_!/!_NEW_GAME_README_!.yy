@@ -1,0 +1,11 @@
+{
+  "$GMNotes":"",
+  "%Name":"!_NEW_GAME_README_!",
+  "name":"!_NEW_GAME_README_!",
+  "parent":{
+    "name":"__GAME_SETUP__",
+    "path":"folders/__GAME_SETUP__.yy",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}
