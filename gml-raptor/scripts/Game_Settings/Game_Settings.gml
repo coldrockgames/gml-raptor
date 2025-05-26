@@ -22,6 +22,7 @@ function GameSettings() : VersionedDataStruct() constructor {
 	borderless_fullscreen	= FULLSCREEN_IS_BORDERLESS;
 	audio					= AUDIOSETTINGS;
 	use_system_cursor		= false;
+	locale					= LG_CURRENT_LOCALE;
 	
 	if (HIGHSCORES != undefined) 
 		highscoredata = HIGHSCORES.data;
@@ -43,18 +44,24 @@ function load_settings() {
 	if (USE_HIGHSCORES && HIGHSCORES != undefined && struct_exists(GAMESETTINGS, "highscoredata"))
 		HIGHSCORES.assign_data(GAMESETTINGS.highscoredata);
 	AUDIOSETTINGS = GAMESETTINGS.audio;
+	LG_init(vsget(GAMESETTINGS, "locale"));
+	
 	// --- Custom / additional actions after loading settings ---
 	
 	// ----------------------------------------------------------
+	
 	dlog($"Settings loaded");
 }
 
 /// @function save_settings(_sync = false)
 function save_settings(_sync = false) {
 	dlog($"Saving settings...");
+	
 	// --- Custom / additional actions when saving settings ---
 	
 	// --------------------------------------------------------
+	
+	GAMESETTINGS.locale = LG_CURRENT_LOCALE;	
 	if (HIGHSCORES != undefined)
 		GAMESETTINGS.highscoredata = HIGHSCORES.data;
 	if (_sync) {

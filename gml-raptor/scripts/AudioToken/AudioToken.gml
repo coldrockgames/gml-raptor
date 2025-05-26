@@ -51,7 +51,7 @@ function __AudioToken(_channel_func, _sound_asset, _gain, _loop, _pitch, _offset
 	
 	static __cleanup_finished_plays = function() {
 		for (var i = 0, len = array_length(__sound_id); i < len; i++)
-			if (!audio_is_playing(__sound_id[@i])) array_push(__removers, i);
+			if (__sound_id[@i] == undefined || !audio_is_playing(__sound_id[@i])) array_push(__removers, i);			
 			
 		while (array_length(__removers) > 0) 
 			array_delete(__sound_id, array_pop(__removers), 1);
