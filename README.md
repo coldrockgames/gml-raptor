@@ -8,7 +8,13 @@
 ## Raptor Project Setup
 `gml-raptor` is not "just a library". It is a complete framework for professional game development. This means, you start a "raptor-project", you do not "just include raptor into your game".
 
-To make the setup of a raptor project easier, 
+You have several choices, when setting up a raptor project:
+
+* Use the GameMaker project template that comes with the release of raptor (the classic way)
+
+* Create a repository on github and select `gml-raptor` as repository template. This will give you a perfectly set up project directly in your new repo
+
+* Create a `fork` of the raptor repository. This is similar to creating from the repository template, but it also allows you to simply _merge raptor updates_ by updating your fork! (recommended way)
 
 
 ### CREDITS

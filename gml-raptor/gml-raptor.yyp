@@ -94,16 +94,16 @@
   ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.json","ConfigValues":{
+    {"$GMIncludedFile":"","%Name":"gml-raptor_game_settings.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
         },
-      },"CopyToMask":-1,"filePath":"datafiles","name":"gml_raptor_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"gml_raptor_game_settings.jx","ConfigValues":{
+      },"CopyToMask":-1,"filePath":"datafiles","name":"gml-raptor_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"gml-raptor_game_settings.jx","ConfigValues":{
         "release":{
           "CopyToMask":"-1",
         },
-      },"CopyToMask":0,"filePath":"datafiles","name":"gml_raptor_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+      },"CopyToMask":0,"filePath":"datafiles","name":"gml-raptor_game_settings.jx","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{
         "beta":{
           "CopyToMask":"0",
