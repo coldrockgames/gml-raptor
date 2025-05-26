@@ -22,7 +22,7 @@
 // in HTML, especially for itch.io games, you need a UNIQUE filename over all your products,
 // as the html-file-engine uses local storage, which only has one folder with all files from
 // all your products in it.
-#macro GAME_FILE_PREFIX					"gml_raptor"
+#macro GAME_FILE_PREFIX					"gml-raptor"
 
 // Replace the production crypt key with a good salty key of your own!
 #macro FILE_CRYPT_KEY					""
