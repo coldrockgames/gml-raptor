@@ -10,12 +10,12 @@
 /// @desc	This is the sister-function to savegame_save_struct_async
 ///			The "data" member of the .on_finished(...) callback is the struct loaded
 function savegame_load_struct_async(_filename, cryptkey) {
-	return savegame_load_game_async(_filename,cryptkey);
+	return savegame_load_game_async(_filename, cryptkey, undefined, true);
 }
 
 /// @func	savegame_load_game_async(_filename, cryptkey = "", _room_transition = undefined)
 /// @desc	Loads a previously saved game state (see savegame_save_game_async).
-function savegame_load_game_async(_filename, cryptkey = "", _room_transition = undefined) {
+function savegame_load_game_async(_filename, cryptkey = "", _room_transition = undefined, _load_data_only = false) {
 	
 	if (!string_is_empty(SAVEGAME_FOLDER) && !string_starts_with(_filename, SAVEGAME_FOLDER)) 
 		_filename = __ensure_savegame_folder_name() + _filename;
@@ -25,6 +25,7 @@ function savegame_load_game_async(_filename, cryptkey = "", _room_transition = u
 	var reader = file_read_struct_async(_filename, cryptkey)
 	.set_transaction_mode(true)
 	.__raptor_data("trans", _room_transition)
+	.__raptor_data("load_data_only", _load_data_only)
 	.__raptor_data("filename", _filename)
 	.__raptor_finished(function(savegame, _buffer, _data) {
 		if (savegame == undefined) {
@@ -85,9 +86,10 @@ function savegame_load_game_async(_filename, cryptkey = "", _room_transition = u
 
 		// load engine data
 		var engine = refstack.recover(__SAVEGAME_ENGINE_HEADER);
-		var data_only = vsget(savegame.engine, __SAVEGAME_DATA_FILE, false);
+		var data_only = _data.load_data_only || vsget(savegame.engine, __SAVEGAME_DATA_FILE, false);
+		
 		if (data_only)
-			ilog($"This is a data mode file");
+			ilog($"Loading save game data only");
 		else
 			BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_GAME_LOADING);
 			
@@ -122,7 +124,7 @@ function savegame_load_game_async(_filename, cryptkey = "", _room_transition = u
 				ROOMCONTROLLER.transit(_data.trans);
 			} else 
 				room_goto(asset_get_index(room_name));
-		
+
 			return true;
 		} else {
 			ilog(data_only ? $"Continuing data file load..." : $"Continuing game load in current room...");
@@ -223,7 +225,7 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 		}
 	}
 
-	var names = struct_get_names(instance_id_map);
+	var names = struct_get_names(instance_id_map);
 	for (var i = 0, len = array_length(names); i < len; i++) {
 		var n = names[@i];
 		with (n) __savegame_restore_pointers(data, restorestack, instance_id_map);
@@ -234,12 +236,10 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 	struct_remove(savegame, __SAVEGAME_REFSTACK_HEADER);
 	refstack = {};
 	savegame = __file_reconstruct_root(savegame, restorestack);
-	var structs = undefined;
+	var structs = vsget(savegame, __SAVEGAME_STRUCT_HEADER);
 	
 	// Now replace the global pointers with the restored ones
-	if (data_only)
-		structs		= vsget(savegame, __SAVEGAME_STRUCT_HEADER);
-	else
+	if (!data_only)
 		GLOBALDATA	= vsget(savegame, __SAVEGAME_GLOBAL_DATA_HEADER);
 		
 	var instancenames = struct_get_names(instance_id_map);
@@ -271,7 +271,6 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 	}
 	
 	SAVEGAME_LOAD_IN_PROGRESS = false;
-//	reader.invoke_finished(structs);
 
 	if (!data_only) {
 		// invoke the post event
