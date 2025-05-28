@@ -18,9 +18,13 @@ You have several choices, when setting up a raptor project:
 * Create a `fork` of the raptor repository. This is similar to creating from the repository template, but it also allows you to simply _merge raptor updates_ by updating your fork! (recommended way)
 
 To assist you with creating the initial settings, we designed the _Raptor Project Setup Utility_, which resides in the root folder of the repository:
-![image](https://github.com/user-attachments/assets/5cedf194-687f-4185-b971-f24da9268665)
+<p align="center"><img src="https://github.com/user-attachments/assets/5cedf194-687f-4185-b971-f24da9268665" style="display:block; margin:auto; width:438px"></p>
 
-After creating or forking raptor, just start it and configure your project. Github is smart enough, to even record file renames in its history, so your fork can still be updated, even if you renamed the project and its containing folder. This is the recommended way to create a raptor project: Fork raptor and use the setup utility.
+After creating or forking raptor, just start it and configure your project. Github is smart enough, to even record file renames in its history, so your fork can still be updated, even if you renamed the project and its containing folder. 
+
+It will rename the project and folder, create locale files, adapt encryption settings, even does the setup of the index.html file for you, if you are planning a browser game. You may start the utility _any time, even midway through development_, to add a locale or change some of the settings.
+
+This is the recommended way to create a raptor project: Fork raptor and use the setup utility.
 
 ### CREDITS
 ### Translation help and proof reading
