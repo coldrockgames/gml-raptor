@@ -6,7 +6,8 @@
 |`gml-raptor` is a ready-to-use project template for [GameMaker Studio 2.3+](https://gamemaker.io) with a comprehensive [wiki documentation](https://github.com/Grisgram/gml-raptor/wiki) that provides lots of classes and functions that will speed up your game development!<br/>[The Releases page](https://github.com/Grisgram/gml-raptor/releases) contains the latest version in `.yyz` format (project template) and ready-to-import local packages in `.yymps` format.|
 
 ## Raptor Project Setup
-`gml-raptor` is not "just a library". It is a complete framework for professional game development. This means, you start a "raptor-project", you do not "just include raptor into your game".
+`gml-raptor` is not "just a library". It is a complete framework for professional game development.\
+This means, you start a "raptor-project", you do not "just include raptor into your game".
 
 You have several choices, when setting up a raptor project:
 
@@ -16,6 +17,10 @@ You have several choices, when setting up a raptor project:
 
 * Create a `fork` of the raptor repository. This is similar to creating from the repository template, but it also allows you to simply _merge raptor updates_ by updating your fork! (recommended way)
 
+To assist you with creating the initial settings, we designed the _Raptor Project Setup Utility_, which resides in the root folder of the repository:
+![image](https://github.com/user-attachments/assets/5cedf194-687f-4185-b971-f24da9268665)
+
+After creating or forking raptor, just start it and configure your project. Github is smart enough, to even record file renames in its history, so your fork can still be updated, even if you renamed the project and its containing folder. This is the recommended way to create a raptor project: Fork raptor and use the setup utility.
 
 ### CREDITS
 ### Translation help and proof reading
