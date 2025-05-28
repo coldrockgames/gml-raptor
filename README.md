@@ -22,6 +22,9 @@ You have several choices, when setting up a raptor project:
 To assist you with creating the initial settings, we designed the _Raptor Project Setup Utility_, which resides in the root folder of the repository:
 <p align="center"><img src="https://github.com/user-attachments/assets/5cedf194-687f-4185-b971-f24da9268665" style="display:block; margin:auto; width:438px"></p>
 
+> [!NOTE]
+> The Setup Utility is available for _Windows only_.
+
 After creating or forking raptor, just start it and configure your project. Github is smart enough, to even record file renames in its history, so your fork can still be updated, even if you renamed the project and its containing folder. 
 
 It will rename the project and folder, create locale files, adapt encryption settings, even does the setup of the index.html file for you, if you are planning a browser game. You may start the utility _any time, even midway through development_, to add a locale or change some of the settings.
