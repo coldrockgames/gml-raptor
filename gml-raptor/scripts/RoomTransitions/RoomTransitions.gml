@@ -33,8 +33,8 @@ function __RoomTransition(_target_room, _need_fx_layer, _data = undefined) : Dat
 
 	draw_x			= 0;
 	draw_y			= 0;
-	draw_width		= CAM_WIDTH ;
-	draw_height		= CAM_HEIGHT;
+	draw_width		= VIEW_WIDTH ;
+	draw_height		= VIEW_HEIGHT;
 
 	static __create_fx_layer = function() {
 		fx_layer = (need_fx_layer ? layer_create(ROOMCONTROLLER.depth + 1) : undefined);
@@ -157,8 +157,8 @@ function BlendTransition(_target_room, _blend_frames, _data = undefined) : __Roo
 		if (first_in) {
 			first_in = false;
 			// we need to draw to the NEW camera!
-			draw_width		= CAM_WIDTH ;
-			draw_height		= CAM_HEIGHT;
+			draw_width		= VIEW_WIDTH ;
+			draw_height		= VIEW_HEIGHT;
 		}
 		
 		running = clamp(1 - (frame_counter / blend_frames), 0, 1);
@@ -200,8 +200,8 @@ function SlideTransition(_target_room, _slide_frames, _animcurve, _data = undefi
 		if (first_in) {
 			first_in = false;
 			// we need to draw to the NEW camera!
-			draw_width		= CAM_WIDTH ;
-			draw_height		= CAM_HEIGHT;
+			draw_width		= VIEW_WIDTH ;
+			draw_height		= VIEW_HEIGHT;
 			// 1 frame delay to have gms set up all surfaces in the new room
 			// just draw the screenshot from previous room for 1 more frame
 			source_canvas.DrawStretchedExt(0, 0, draw_width, draw_height, c_white, 1);
