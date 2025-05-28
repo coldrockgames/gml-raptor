@@ -5,7 +5,8 @@
 [The Releases page](https://github.com/Grisgram/gml-raptor/releases) contains the latest version in `.yyz` format (project template) and ready-to-import local packages in `.yymps` format.\
 This repository is also marked as _template repository_, so you may set it as source template when creating a new repository here on Github.
 
-`gml-raptor` is huge and so it comes with a learning curve. Feel free to experiment with guidance of our wiki. You are invited to join our [raptor courses](https://www.coldrock.games/www/courses.php), which will help you from the first line of code to the very end, the release of your game. Our courses cover most of the secrets of raptor and you will be excited, how much this framework can do for you!
+`gml-raptor` is huge and so it comes with a learning curve. Feel free to experiment with guidance of our wiki.\
+You are invited to join our [raptor courses](https://www.coldrock.games/www/courses.php), which will help you from the first line of code to the very end, the release of your game. Our courses cover most of the secrets of raptor and you will be excited, how much this framework can do for you!
 
 ## Raptor Project Setup
 `gml-raptor` is not "just a library". It is a complete framework for professional game development.\
