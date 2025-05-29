@@ -204,5 +204,26 @@ function unit_test_SaveGame() {
 		});		
 	}
 
+	ut.tests.savegame_struct_circular_instances_ok = function(test, _data) {
+		var ini = new DataBuilder();
+		ini.data.uid = SUID;
+		with (ini) data.me = self;
+		
+		test.start_async();
+		savegame_save_struct_async("unit_test" + DATA_FILE_EXTENSION, ini)
+		.set_data("obj", ini)
+		.on_finished(function(_data) {
+			var _uid = _data.obj.data.uid;
+			GLOBALDATA.testdata = undefined;
+			
+			savegame_load_struct_async("unit_test" + DATA_FILE_EXTENSION)
+			.set_data("uid", _uid)
+			.on_finished(function(_filedata, _data) {
+				global.test.assert_equals(_filedata.data.uid, _data.uid, "recursion");
+				global.test.finish_async();
+			});			
+		});		
+	}
+
 	ut.run();
 }

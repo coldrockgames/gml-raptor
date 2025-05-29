@@ -31,7 +31,7 @@ function UiThemeManager() constructor {
 		if (_activate_now || was_active)
 			activate_theme(_theme.name);
 	}
-		
+
 	/// @func refresh_theme()
 	/// @desc Invoked from RoomController in RoomStart event to transport the
 	///				 active theme from room to room
@@ -42,12 +42,14 @@ function UiThemeManager() constructor {
 	
 	/// @func activate_theme(_theme_name)
 	static activate_theme = function(_theme_name) {
-		var th = vsget(_themes, _theme_name);
-		if (th != undefined) {
-			active_theme = th;
-			__copy_theme_to_global_colors(th);
-			__copy_THEME_to_scribble_colors();
-			ilog($"UiThemeManager activated theme '{th.name}'");
+		var theme = vsget(_themes, _theme_name);
+		if (theme != undefined) {
+			active_theme = theme;
+			__copy_theme_to_global_colors(theme);
+			__copy_theme_to_scribble_colors();
+			struct_join_into(SCRIBBLE_COLORS, vsget(theme, "scribble_colors"));
+			SCRIBBLE_REFRESH;
+			ilog($"UiThemeManager activated theme '{theme.name}'");
 		} else {
 			elog($"** ERROR ** UiThemeManager could not activate theme '{_theme_name}' (THEME-NOT-FOUND)");
 		}
@@ -89,7 +91,7 @@ function UiThemeManager() constructor {
 		THEME_WINDOW_FOCUS			= _theme.window_focus	;
 	}
 	
-	static __copy_THEME_to_scribble_colors = function() {
+	static __copy_theme_to_scribble_colors = function() {
 		SCRIBBLE_COLORS.ci_white				= THEME_WHITE	;
 		SCRIBBLE_COLORS.ci_black				= THEME_BLACK	;
 		SCRIBBLE_COLORS.ci_main					= THEME_MAIN	;
@@ -105,8 +107,6 @@ function UiThemeManager() constructor {
 		SCRIBBLE_COLORS.ci_control_text			= THEME_CONTROL_TEXT	;
 		SCRIBBLE_COLORS.ci_window_back			= THEME_WINDOW_BACK		;
 		SCRIBBLE_COLORS.ci_window_focus			= THEME_WINDOW_FOCUS	;
-		
-		SCRIBBLE_REFRESH;
 	}
 	
 }

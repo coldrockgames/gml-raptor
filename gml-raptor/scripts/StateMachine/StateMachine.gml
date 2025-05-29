@@ -376,8 +376,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 	toString = function() {
 		var me = name_of(owner) ?? "";
 		return $"{me}: state='{get_active_state_name()}'; locked='{locking_animation}'; paused={__objectpool_paused};";
-	}
-	
+	}	
 }
 
 /// @func	State(_name, _on_enter = undefined, _on_step, _on_leave = undefined)

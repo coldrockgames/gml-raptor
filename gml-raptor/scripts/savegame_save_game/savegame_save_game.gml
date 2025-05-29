@@ -6,13 +6,13 @@
 	(c)2022- coldrock.games, @grisgram at github
 */
 
-/// @func	savegame_save_struct_async(_filename, _cryptkey, _data)
+/// @func	savegame_save_struct_async(_filename, _data, _cryptkey = "")
 /// @desc	This is an alias function, utilizing the undocumented third argument to
 ///			savegame_save_game, which will change the working style of save_game,
 ///			to persist only the supplied struct, but no instances, no globaldata, no room info, etc
 ///			Use this to "just save a struct" which you want to be restored exactly as you left it,
 ///			with all the comfort of constructors being called and references being restored when loaded
-function savegame_save_struct_async(_filename, _cryptkey, _data) {
+function savegame_save_struct_async(_filename, _data, _cryptkey = "") {
 	return savegame_save_game_async(_filename, _cryptkey, _data);
 }
 
@@ -31,12 +31,10 @@ function savegame_save_game_async(_filename, _cryptkey = "", _data_only = undefi
 	var engine = {};
 	vsgetx(engine,		__SAVEGAME_ENGINE_VERSION	, SAVEGAME_FILE_VERSION);
 	vsgetx(engine,		__SAVEGAME_DATA_FILE		, _data_only != undefined);
+	vsgetx(savegame,	__SAVEGAME_STRUCT_HEADER	, _data_only ?? {});
 	vsgetx(savegame,	__SAVEGAME_ENGINE_HEADER	, engine);
 
-	if (_data_only != undefined) {
-		// Save structs only
-		vsgetx(savegame, __SAVEGAME_STRUCT_HEADER, _data_only);
-	} else {
+	if (_data_only == undefined) {
 		var instances = {};
 		vsgetx(savegame, __SAVEGAME_OBJECT_HEADER, instances);
 		// Save everything (classic savegame)
@@ -48,9 +46,7 @@ function savegame_save_game_async(_filename, _cryptkey = "", _data_only = undefi
 		vsgetx(engine,		__SAVEGAME_ENGINE_SEED		, random_get_seed());
 		vsgetx(engine,		__SAVEGAME_ENGINE_ROOM_NAME	, room_get_name(room));
 		vsgetx(engine,		__SAVEGAME_ENGINE_COUNTUP_ID, global.__unique_count_up_id);
-		
-		vsgetx(savegame,	__SAVEGAME_STRUCT_HEADER	, {});
-	
+			
 		// save global data
 		vsgetx(savegame,	__SAVEGAME_GLOBAL_DATA_HEADER, GLOBALDATA);
 

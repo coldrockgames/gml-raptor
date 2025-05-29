@@ -15,49 +15,49 @@ function UiSkin(_name = "default") constructor {
 	
 	name = _name;
 	
-	asset_skin = {};
+	skin = {};
 		
-	asset_skin[$ "CheckBox"]			= { sprite_index: sprDefaultCheckbox }
-	asset_skin[$ "InputBox"]			= { sprite_index: sprDefaultInputBox }
-	asset_skin[$ "Label"]				= { sprite_index: sprDefaultLabel	 }
-	asset_skin[$ "MouseCursor"]			= { 
- 											sprite_index: sprDefaultMouseCursor,
-											mouse_cursor_sprite: sprDefaultMouseCursor,
- 											mouse_cursor_sprite_sizing: sprDefaultMouseCursorSizing
- 										  }
-	asset_skin[$ "Panel"]				= { sprite_index: spr1pxTrans			}
-	asset_skin[$ "RadioButton"]			= { sprite_index: sprDefaultRadioButton	}
-	asset_skin[$ "Slider"]				= { 
-											sprite_index: sprDefaultSliderRailH,
-											rail_sprite_horizontal: sprDefaultSliderRailH,
-											rail_sprite_vertical: sprDefaultSliderRailV,
-											knob_sprite: sprDefaultSliderKnob
-										  }
-	asset_skin[$ "Scrollbar"]			= { 
-											sprite_index: sprDefaultScrollbarRailH,
-											rail_sprite_horizontal: sprDefaultScrollbarRailH,
-											rail_sprite_vertical: sprDefaultScrollbarRailV,
-											knob_sprite: sprDefaultScrollbarKnob
-										  }
-	asset_skin[$ "TextButton"]			= { sprite_index: sprDefaultButton	}
-	asset_skin[$ "ImageButton"]			= { sprite_index: sprDefaultButton	}
-	asset_skin[$ "Tooltip"]				= { sprite_index: sprDefaultTooltip	}
-	asset_skin[$ "Window"]				= { 
-											sprite_index: sprDefaultWindow,
-											window_x_button_object: WindowXButton,
-											titlebar_height: 34
-										  }
-	asset_skin[$ "WindowXButton"]		= { sprite_index: sprDefaultXButton	}
-	asset_skin[$ "MessageBoxWindow"]	= { 
-											sprite_index: sprDefaultWindow,
-											window_x_button_object: MessageBoxXButton,
-											titlebar_height: 34
-										  }
-	asset_skin[$ "MessageBoxXButton"]	= { sprite_to_use: sprDefaultXButton }
+	skin[$ "CheckBox"]			= { sprite_index: sprDefaultCheckbox }
+	skin[$ "InputBox"]			= { sprite_index: sprDefaultInputBox }
+	skin[$ "Label"]				= { sprite_index: sprDefaultLabel	 }
+	skin[$ "MouseCursor"]		= { 
+ 									sprite_index: sprDefaultMouseCursor,
+									mouse_cursor_sprite: sprDefaultMouseCursor,
+ 									mouse_cursor_sprite_sizing: sprDefaultMouseCursorSizing
+ 								  }
+	skin[$ "Panel"]				= { sprite_index: spr1pxTrans			}
+	skin[$ "RadioButton"]		= { sprite_index: sprDefaultRadioButton	}
+	skin[$ "Slider"]			= { 
+									sprite_index: sprDefaultSliderRailH,
+									rail_sprite_horizontal: sprDefaultSliderRailH,
+									rail_sprite_vertical: sprDefaultSliderRailV,
+									knob_sprite: sprDefaultSliderKnob
+								  }
+	skin[$ "Scrollbar"]			= { 
+									sprite_index: sprDefaultScrollbarRailH,
+									rail_sprite_horizontal: sprDefaultScrollbarRailH,
+									rail_sprite_vertical: sprDefaultScrollbarRailV,
+									knob_sprite: sprDefaultScrollbarKnob
+								  }
+	skin[$ "TextButton"]		= { sprite_index: sprDefaultButton	}
+	skin[$ "ImageButton"]		= { sprite_index: sprDefaultButton	}
+	skin[$ "Tooltip"]			= { sprite_index: sprDefaultTooltip	}
+	skin[$ "Window"]			= { 
+									sprite_index: sprDefaultWindow,
+									window_x_button_object: WindowXButton,
+									titlebar_height: 34
+								  }
+	skin[$ "WindowXButton"]		= { sprite_index: sprDefaultXButton	}
+	skin[$ "MessageBoxWindow"]	= { 
+									sprite_index: sprDefaultWindow,
+									window_x_button_object: MessageBoxXButton,
+									titlebar_height: 34
+								  }
+	skin[$ "MessageBoxXButton"]	= { sprite_to_use: sprDefaultXButton }
 	
 	/// @func delete_map()
 	static delete_map = function() {
-		asset_skin = {};
+		skin = {};
 		__tree_cache = {};
 	}
 
@@ -80,8 +80,8 @@ function UiSkin(_name = "default") constructor {
 		array_reverse_ext(tree);
 		for (var i = 0, len = array_length(tree); i < len; i++) {
 			item = tree[@i];
-			if (struct_exists(asset_skin, item)) {
-				struct_join_into(rv, asset_skin[$ item]);
+			if (struct_exists(skin, item)) {
+				struct_join_into(rv, skin[$ item]);
 				haveone |= (array_length(struct_get_names(rv)) > 0);
 			}
 		}
@@ -111,10 +111,10 @@ function UiSkin(_name = "default") constructor {
 	static inherit_skin = function(_skin_name) {
 		var src = UI_SKINS.get_skin(_skin_name);
 		if (src != undefined) {
-			var names = struct_get_names(src.asset_skin);
+			var names = struct_get_names(src.skin);
 			for (var i = 0, len = array_length(names); i < len; i++) {
 				var key = names[@i];
-				asset_skin[$ key] = src.asset_skin[$ key];
+				skin[$ key] = src.skin[$ key];
 			}
 		} else
 			elog($"** ERROR ** UiSkin could not inherit skin '{_skin_name}' into '{name}' (SKIN-NOT-FOUND)");

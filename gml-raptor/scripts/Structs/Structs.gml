@@ -277,6 +277,7 @@ function deep_copy(_struct_or_array) {
 		__STRUCT_JOIN_CIRCULAR_CACHE.next = __STRUCT_JOIN_CIRCULAR_CACHE.rv;
 		
 	__STRUCT_JOIN_CIRCULAR_LEVEL++;
+	
 	var target = __STRUCT_JOIN_CIRCULAR_CACHE.next;
 	if (is_struct(_struct_or_array)) {
         static_set(target, static_get(_struct_or_array));
@@ -324,7 +325,7 @@ function deep_copy(_struct_or_array) {
 	__STRUCT_JOIN_CIRCULAR_LEVEL--;
 	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
 		__STRUCT_JOIN_CIRCULAR_CACHE = {};
-		
+	
 	return target;
 }
 

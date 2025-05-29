@@ -55,23 +55,23 @@ function UiTheme(_name = "default") constructor {
 
 	name = _name;
 	
-	main			= CI_GLOBAL_MAIN;
-	bright			= CI_GLOBAL_BRIGHT;
-	dark			= CI_GLOBAL_DARK;
-	accent			= CI_GLOBAL_ACCENT;
-					
-	white			= CI_GLOBAL_WHITE;
-	black			= CI_GLOBAL_BLACK;
-	shadow			= CI_GLOBAL_SHADOW;
-	shadow_alpha	= CI_GLOBAL_SHADOW_ALPHA;
-	outline			= CI_GLOBAL_OUTLINE;
+	main			= CI_GLOBAL_MAIN			;
+	bright			= CI_GLOBAL_BRIGHT			;
+	dark			= CI_GLOBAL_DARK			;
+	accent			= CI_GLOBAL_ACCENT			;
 
-	control_back	= CI_GLOBAL_CONTROL_BACK;
-	control_dark	= CI_GLOBAL_CONTROL_DARK;
-	control_bright	= CI_GLOBAL_CONTROL_BRIGHT;
-	control_text	= CI_GLOBAL_CONTROL_TEXT;
-	window_back		= CI_GLOBAL_WINDOW_BACK;
-	window_focus	= CI_GLOBAL_WINDOW_FOCUS;
+	white			= CI_GLOBAL_WHITE			;
+	black			= CI_GLOBAL_BLACK			;
+	shadow			= CI_GLOBAL_SHADOW			;
+	shadow_alpha	= CI_GLOBAL_SHADOW_ALPHA	;
+	outline			= CI_GLOBAL_OUTLINE			;
+
+	control_back	= CI_GLOBAL_CONTROL_BACK	;
+	control_dark	= CI_GLOBAL_CONTROL_DARK	;
+	control_bright	= CI_GLOBAL_CONTROL_BRIGHT	;
+	control_text	= CI_GLOBAL_CONTROL_TEXT	;
+	window_back		= CI_GLOBAL_WINDOW_BACK		;
+	window_focus	= CI_GLOBAL_WINDOW_FOCUS	;
 
 	/// @func set_colors(_main, _bright, _dark, _accent)
 	static set_colors = function(_main, _bright, _dark, _accent) {
@@ -83,11 +83,11 @@ function UiTheme(_name = "default") constructor {
 	
 	/// @func set_grayscales(_white, _black, _outline, _shadow, _shadow_alpha)
 	static set_grayscales = function(_white, _black, _outline, _shadow, _shadow_alpha) {
-		white		 = _white;
-		black		 = _black;
-		outline		 = _outline;
-		shadow		 = _shadow;
-		shadow_alpha = _shadow_alpha;
+		white			= _white;
+		black			= _black;
+		outline			= _outline;
+		shadow			= _shadow;
+		shadow_alpha	= _shadow_alpha;
 	}
 
 	/// @func set_control_colors(_control_back, _dark, _bright, _text, _window_back, _window_focus)

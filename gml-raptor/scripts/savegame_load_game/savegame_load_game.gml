@@ -9,7 +9,7 @@
 /// @func	savegame_load_struct_async(_filename, cryptkey)
 /// @desc	This is the sister-function to savegame_save_struct_async
 ///			The "data" member of the .on_finished(...) callback is the struct loaded
-function savegame_load_struct_async(_filename, cryptkey) {
+function savegame_load_struct_async(_filename, cryptkey = "") {
 	return savegame_load_game_async(_filename, cryptkey, undefined, true);
 }
 
@@ -105,7 +105,7 @@ function savegame_load_game_async(_filename, cryptkey = "", _room_transition = u
 		// restore room
 		var me = self;
 		var current_room_name = room_get_name(room);
-		var room_name = vsgetx(engine, __SAVEGAME_ENGINE_ROOM_NAME, current_room_name);
+		var room_name = vsget(engine, __SAVEGAME_ENGINE_ROOM_NAME, current_room_name);
 		if (!data_only && room_name != current_room_name) {
 			__SAVEGAME_CONTINUE_LOAD_STATE = {
 				_savegame: savegame,
@@ -236,7 +236,6 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 	struct_remove(savegame, __SAVEGAME_REFSTACK_HEADER);
 	refstack = {};
 	savegame = __file_reconstruct_root(savegame, restorestack);
-	var structs = vsget(savegame, __SAVEGAME_STRUCT_HEADER);
 	
 	// Now replace the global pointers with the restored ones
 	if (!data_only)
@@ -272,6 +271,7 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 	
 	SAVEGAME_LOAD_IN_PROGRESS = false;
 
+	var rv = true;
 	if (!data_only) {
 		// invoke the post event
 		for (var i = 0; i < array_length(instancenames); i++) {
@@ -285,12 +285,14 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 		if (vsget(ROOMCONTROLLER, __SAVEGAME_ONLOADED_NAME)) with(ROOMCONTROLLER) __SAVEGAME_ONLOADED_FUNCTION();
 		if (vsget(GAMECONTROLLER, __SAVEGAME_ONLOADED_NAME)) with(GAMECONTROLLER) __SAVEGAME_ONLOADED_FUNCTION();	
 		
-		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_GAME_LOADED, { success: true });
-	} else
-		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_DATA_GAME_LOADED, { success: true });
-	
-	reader.invoke_finished(structs);
+		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_GAME_LOADED);
+		reader.invoke_finished(); // full restore just tells you "savegame load ok"
+	} else {
+		rv = vsget(savegame, __SAVEGAME_STRUCT_HEADER, {});
+		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_DATA_GAME_LOADED, { data: rv });
+		reader.invoke_finished(rv); // data mode restore delivers the loaded structs data
+	}
 	ilog($"[----- LOADING GAME FINISHED -----]");
 
-	return structs;
+	return rv;
 }

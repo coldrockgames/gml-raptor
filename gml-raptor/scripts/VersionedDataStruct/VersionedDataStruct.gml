@@ -30,7 +30,7 @@ function VersionedDataStruct() constructor {
 		var rv = struct_get_names(self);
 		var i = 0;
 		while (i < array_length(rv)) {
-			if (is_any_of(rv[@i], __CONSTRUCTOR_NAME, __PARENT_CONSTRUCTOR_NAME, "on_game_loaded"))
+			if (is_any_of(rv[@i], __CONSTRUCTOR_NAME, __PARENT_CONSTRUCTOR_NAME, __SAVEGAME_IGNORE, "on_game_loaded"))
 				array_delete(rv, i, 1);
 			else 
 				i++;
