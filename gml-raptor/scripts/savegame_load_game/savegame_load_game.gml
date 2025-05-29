@@ -286,7 +286,7 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 		if (vsget(GAMECONTROLLER, __SAVEGAME_ONLOADED_NAME)) with(GAMECONTROLLER) __SAVEGAME_ONLOADED_FUNCTION();	
 		
 		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_GAME_LOADED);
-		reader.invoke_finished(); // full restore just tells you "savegame load ok"
+		reader.invoke_finished();
 	} else {
 		rv = vsget(savegame, __SAVEGAME_STRUCT_HEADER, {});
 		BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_DATA_GAME_LOADED, { data: rv });
