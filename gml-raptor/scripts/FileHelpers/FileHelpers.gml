@@ -26,6 +26,7 @@ function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = fals
 			var look_in = $"{(string_starts_with(root, @"\\") || string_starts_with(root, "//") || string_contains(root, ":") ? "" : working_directory)}{root}";
 			
 			if (p.rec) {
+				// Scan directory tree (platform-aware)
 				var dirs = [];
 				if (os_type == os_windows) {
 					var f = file_find_first($"{look_in}*", fa_directory);
@@ -45,19 +46,30 @@ function directory_list_files(_folder = "", _wildcard = "*.*", _recursive = fals
 					}
 					file_find_close();
 					for (var i = 0, len = array_length(dirs); i < len; i++) {
-						if (directory_exists(dirs[@i])) 
+						if (directory_exists(dirs[@i]))
 							p.reader(dirs[@i], p);
 					}
 				}
 			}
 			
-			var f = file_find_first($"{look_in}{p.mask}", p.attr);
-			while (f != "") {
-				if (p.attr == fa_none || file_attributes($"{look_in}{f}", p.attr))
-					array_push(p.rv, $"{root}{f}");
-				f = file_find_next();
+			// Scan files (platform-aware)
+			if (os_type == os_windows) {
+				var f = file_find_first($"{look_in}{p.mask}", p.attr);
+				while (f != "") {
+					if (p.attr == fa_none || file_attributes($"{look_in}{f}", p.attr))
+						array_push(p.rv, $"{root}{f}");
+					f = file_find_next();
+				}
+				file_find_close();
+			} else {
+				var f = file_find_first($"{look_in}{p.mask}", p.attr);
+				while (f != "") {
+					if (p.attr != fa_directory || directory_exists($"{root}{f}"))
+						array_push(p.rv, $"{root}{f}");
+					f = file_find_next();
+				}
+				file_find_close();
 			}
-			file_find_close();		
 		}
 	}
 	
