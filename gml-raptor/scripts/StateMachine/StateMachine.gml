@@ -198,6 +198,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 						with(owner) vlog($"{MY_NAME}: State change '{other.active_state.name}'->'{name}' aborted by leave callback!");
 					return self;
 				}
+				__skin_leave();
 			}
 		
 			var prev_state = active_state != undefined ? active_state		: undefined;
@@ -222,6 +223,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 							vlog($"{MY_NAME}: Entering state '{other.active_state.name}'{(enter_override != undefined ? " (with enter-override)" : "")}");
 					
 					__state_frame = 0;
+					__skin_enter();
 					rv = active_state.enter(prev_name, enter_override);
 					with(owner)	
 						on_state_changed(name, prev_name);
@@ -240,6 +242,14 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 			}
 		}
 		return self;
+	}
+	
+	static __skin_leave = function() {
+		SKIN.apply_skin(owner, owner.skin_flavor, string_concat("<<", active_state.name));
+	}
+	
+	static __skin_enter = function() {
+		SKIN.apply_skin(owner, owner.skin_flavor, string_concat(">>", active_state.name));
 	}
 	
 	/// @func	set_state_enabled(name_or_wildcard, enabled)

@@ -184,12 +184,16 @@ function __continue_load_savegame(savegame, refstack, engine, data_only, loaded_
 			var ldepth  = vsget(inst, __SAVEGAME_OBJ_PROP_DEPTH, 0);
 			var xpos	= vsget(inst, __SAVEGAME_OBJ_PROP_X, 0);
 			var ypos	= vsget(inst, __SAVEGAME_OBJ_PROP_Y, 0);
+			var init	= { skin_flavor: vsget(inst, __SAVEGAME_OBJ_PROP_SKIN_FLAVOR) };
 		
 			var asset_idx = asset_get_index(obj);
 		
-			var created = (lname != -1 && !is_null(lname)) ? 
-				instance_create_layer(xpos,ypos,lname,asset_idx) : 
-				instance_create_depth(xpos,ypos,ldepth,asset_idx);
+			var created = instance_create(
+				xpos, ypos, 
+				lname != -1 && !is_null(lname) ? lname : ldepth, 
+				asset_idx, 
+				init
+			);
 		
 			array_push(created_instances, created);
 		

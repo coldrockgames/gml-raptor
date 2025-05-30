@@ -42,8 +42,8 @@ integrate_skin_data = function(_skindata) {
 }
 
 if (!vsget(self, __RAPTOR_PRE_SKIN_APPLY, false)) {
-	SKIN.apply_skin(self); // apply sprites NOW...
-	run_delayed(self, 0, function() { SKIN.apply_skin(self); }); //... and the full skin after all create code is done
+	SKIN.apply_skin(self, skin_flavor); // apply sprites NOW...
+	run_delayed(self, 0, function() { SKIN.apply_skin(self, skin_flavor); }); //... and the full skin after all create code is done
 }
 
 #endregion

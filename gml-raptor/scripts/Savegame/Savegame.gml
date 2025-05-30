@@ -43,6 +43,7 @@ ENSURE_RAPTOR_SAVEGAMEDATA;
 #macro __SAVEGAME_OBJECT_HEADER			"instances"
 #macro __SAVEGAME_STRUCT_HEADER			"structs"
 										
+#macro __SAVEGAME_OBJ_PROP_SKIN_FLAVOR	"skin_flavor"
 #macro __SAVEGAME_OBJ_PROP_OBJ			"obj"
 #macro __SAVEGAME_OBJ_PROP_ID			"__raptor_savegame_ref_id"
 #macro __SAVEGAME_OBJ_PROP_X			"x"

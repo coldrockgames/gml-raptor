@@ -7,6 +7,11 @@
 	NOTE: Unlike Themes, does NOT require a room_restart to become active!
 */
 
+#macro __RAPTOR_SKIN_STATE_SIGN					"$"
+#macro __RAPTOR_SKIN_STATE_WILDCARD				"$*"
+#macro __RAPTOR_SKIN_FLAVOR_DELIMITER			"."
+#macro __RAPTOR_SKIN_FLAVOR_CONCATE_DELIMITER	","
+
 function UiSkin(_name = "default") constructor {
 	construct(UiSkin);
 	ENSURE_THEMES;
@@ -61,39 +66,123 @@ function UiSkin(_name = "default") constructor {
 		__tree_cache = {};
 	}
 
-	/// @func	get_inherited_skindata(_instance)
-	static get_inherited_skindata = function(_inst_or_type) {
+	/// @func	get_inherited_skindata(_instance, _skin_flavor = undefined)
+	static get_inherited_skindata = function(_inst_or_type, _skin_flavor = undefined, _skin_state = undefined) {
 		var typename = 
 			is_object_instance(_inst_or_type) ? 
 			name_of(_inst_or_type, false) : 
-			typename_of(_inst_or_type)
+			object_get_name(_inst_or_type)
 		;
 		
-		if (struct_exists(__tree_cache, typename))
-			return __tree_cache[$ typename];
-			
+		var hasstate	= _skin_state  != undefined;
+		var hasflavor	= _skin_flavor != undefined;
+		
+		if (!hasstate) {
+			if (hasflavor) {	
+				_skin_flavor = string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, _skin_flavor);
+				if (struct_exists(__tree_cache, _skin_flavor)) 
+					return __tree_cache[$ _skin_flavor];
+			} else if (struct_exists(__tree_cache, typename))
+				return __tree_cache[$ typename];
+		} else {
+			_skin_state	= string_concat(__RAPTOR_SKIN_STATE_SIGN, _skin_state);
+			if (hasflavor) {	
+				_skin_flavor = string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, _skin_flavor);
+				var skin_state = string_concat(_skin_flavor, _skin_state);
+				if (struct_exists(__tree_cache, skin_state)) 
+					return __tree_cache[$ skin_state];
+			} else {
+				var skin_state = string_concat(typename, _skin_state);
+				if (struct_exists(__tree_cache, skin_state))
+					return __tree_cache[$ skin_state];
+			}
+		}
+
 		var rv = {};
 		var item;
-		var haveone = false;
+		var hasone = false;
 		
 		var tree = object_tree(_inst_or_type);
 		array_reverse_ext(tree);
 		for (var i = 0, len = array_length(tree); i < len; i++) {
-			item = tree[@i];
+			item = !hasstate ? tree[@i] : string_concat(tree[@i], _skin_state);
 			if (struct_exists(skin, item)) {
 				struct_join_into(rv, skin[$ item]);
-				haveone |= (array_length(struct_get_names(rv)) > 0);
+				hasone |= (array_length(struct_get_names(rv)) > 0);
 			}
 		}
 
-		if (!haveone) rv = undefined;
+		if (!hasone) rv = undefined;
+		if (hasstate) typename = string_concat(typename, _skin_state);
 		__tree_cache[$ typename] = rv;
+		
+		if (hasflavor) {
+			var sub_rv = __get_skin_flavor(_skin_flavor, _skin_state);
+			if (hasstate) _skin_flavor = string_concat(_skin_flavor, _skin_state);
+			if (sub_rv != undefined) {
+				rv = hasone ? struct_join(deep_copy(rv), sub_rv) : sub_rv;
+				__tree_cache[$ _skin_flavor] = rv;
+			} else
+				__tree_cache[$ _skin_flavor] = undefined;
+		}	
+		
+		return rv;
+	}
+	
+	/// @func __get_skin_flavor(_skin_flavor)
+	static __get_skin_flavor = function(_skin_flavor, _skin_state = undefined) {
+		
+		static get_flavor = function(typename, flavor, state = undefined) { 
+			return deep_copy(
+				struct_get(skin, 
+					string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, flavor, state ?? "")
+				)
+			);
+			//var skname = string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, flavor, state ?? "");
+			//ilog($"--- Tree scan  '{skname}': {struct_exists(__tree_cache, skname)}");
+			//__tree_cache[$ skname] ??= struct_get(skin, skname);
+			////__tree_cache[$ skname] ??= deep_copy(struct_get(skin, skname));
+			//ilog($"--- Tree AFTER '{skname}': {struct_exists(__tree_cache, skname)}");
+			//return __tree_cache[$ skname];
+		}
+				
+		var hasstate		= _skin_state != undefined;
+		
+		if (hasstate && !string_match(_skin_state, __RAPTOR_SKIN_STATE_WILDCARD))
+			_skin_state		= string_concat(__RAPTOR_SKIN_STATE_SIGN, _skin_state);
+
+		var parts			= string_split(_skin_flavor, __RAPTOR_SKIN_FLAVOR_DELIMITER,, 1);
+		var typename		= parts[0];
+		var flavors			= string_split(parts[1], __RAPTOR_SKIN_FLAVOR_CONCATE_DELIMITER);
+		var flavor			= undefined;
+		var flavor_child	= undefined;
+		var flavor_parent	= undefined;
+		var rv				= {};
+		
+		for (var i = 0, len = array_length(flavors); i < len; ++i) {
+			flavor = string_trim(flavors[@i]);
+			flavor_child = string_concat(
+				__RAPTOR_SKIN_FLAVOR_DELIMITER, 
+				array_last(string_split(flavor, __RAPTOR_SKIN_FLAVOR_DELIMITER))
+			);
+			flavor_parent = string_skip_end(flavor, string_length(flavor_child));
+			if (flavor_parent != "")
+				struct_join_into(
+					rv, 
+					__get_skin_flavor(
+						string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, flavor_parent), _skin_state), 
+					get_flavor(typename, flavor, _skin_state),
+				);
+			else 
+				struct_join_into(rv, get_flavor(typename, flavor, _skin_state));
+		}
+		
 		return rv;
 	}
 
-	/// @func apply_skin(_instance)
-	static apply_skin = function(_instance) {
-		var skindata = get_inherited_skindata(_instance);
+	/// @func apply_skin(_instance, _skin_flavor = undefined)
+	static apply_skin = function(_instance, _skin_flavor = undefined, _skin_state = undefined) {
+		var skindata = get_inherited_skindata(_instance, _skin_flavor, _skin_state);
 		if (skindata == undefined) 
 			return;
 			
