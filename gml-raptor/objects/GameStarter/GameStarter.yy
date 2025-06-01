@@ -14,8 +14,8 @@
   "name":"GameStarter",
   "overriddenProperties":[],
   "parent":{
-    "name":"startup",
-    "path":"folders/__GAME_SETUP__/startup.yy",
+    "name":"_startup_",
+    "path":"folders/_gml_raptor_/_startup_.yy",
   },
   "parentObjectId":{
     "name":"_raptorBase",

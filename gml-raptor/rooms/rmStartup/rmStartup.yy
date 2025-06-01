@@ -8,14 +8,14 @@
   "instanceCreationOrder":[
     {"name":"gameStarter","path":"rooms/rmStartup/rmStartup.yy",},
     {"name":"gameController","path":"rooms/rmStartup/rmStartup.yy",},
-    {"name":"startupRoomController","path":"rooms/rmStartup/rmStartup.yy",},
+    {"name":"startupController","path":"rooms/rmStartup/rmStartup.yy",},
   ],
   "isDnd":false,
   "layers":[
     {"$GMRInstanceLayer":"","%Name":"persistent_instances","depth":0,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"$GMRInstance":"v2","%Name":"gameStarter","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"gameStarter","objectId":{"name":"GameStarter","path":"objects/GameStarter/GameStarter.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":96.0,"y":-32.0,},
         {"$GMRInstance":"v2","%Name":"gameController","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"gameController","objectId":{"name":"PersistentGameController","path":"objects/PersistentGameController/PersistentGameController.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":128.0,"y":-32.0,},
-        {"$GMRInstance":"v2","%Name":"startupRoomController","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"startupRoomController","objectId":{"name":"RoomController","path":"objects/RoomController/RoomController.yy",},"properties":[
+        {"$GMRInstance":"v2","%Name":"startupController","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"startupController","objectId":{"name":"RoomController","path":"objects/RoomController/RoomController.yy",},"properties":[
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"RoomController","path":"objects/RoomController/RoomController.yy",},"propertyId":{"name":"record_in_transit_chain","path":"objects/RoomController/RoomController.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"False",},
           ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":160.0,"y":-32.0,},
       ],"layers":[],"name":"persistent_instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
@@ -23,8 +23,8 @@
   ],
   "name":"rmStartup",
   "parent":{
-    "name":"startup",
-    "path":"folders/__GAME_SETUP__/startup.yy",
+    "name":"_startup_",
+    "path":"folders/_gml_raptor_/_startup_.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

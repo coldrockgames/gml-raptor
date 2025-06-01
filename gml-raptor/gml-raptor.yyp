@@ -17,7 +17,7 @@
   "Folders":[
     {"$GMFolder":"","%Name":"__GAME_SETUP__","folderPath":"folders/__GAME_SETUP__.yy","name":"__GAME_SETUP__","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_game_version","folderPath":"folders/__GAME_SETUP__/_game_version.yy","name":"_game_version","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"startup","folderPath":"folders/__GAME_SETUP__/startup.yy","name":"startup","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"_startup_","folderPath":"folders/_gml_raptor_/_startup_.yy","name":"_startup_","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_gml_raptor_","folderPath":"folders/_gml_raptor_.yy","name":"_gml_raptor_","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_generic_animcurves_","folderPath":"folders/_gml_raptor_/_generic_animcurves_.yy","name":"_generic_animcurves_","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_generic_objects_","folderPath":"folders/_gml_raptor_/_generic_objects_.yy","name":"_generic_objects_","resourceType":"GMFolder","resourceVersion":"2.0",},
