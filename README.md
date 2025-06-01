@@ -1,23 +1,6 @@
 <p align="center"><img src="https://github.com/coldrockgames/gml-raptor/blob/dev/_assets_/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
 <h1 align="center">Release 2506</h1>
 
---- 
-
-### ⚠️ CAUTION / ACHTUNG
-
-> **⚠️ ATTENTION: Repository Renamed!**
->
-> This repository has been renamed to **`gml-raptor-free`** to reflect its status as the public, open-source version of the GML Raptor framework.  
-> The original `gml-raptor` repository is now private and serves as the internal base for ongoing development.
->
-> If you have cloned or forked this repository previously, please update your remote URL to:
->
-> ```bash
-> git remote set-url origin https://github.com/coldrockgames/gml-raptor-free.git
-> ```
->
-> For more information, please refer to the [Migration Guide](MIGRATION.md)
-
 ---
 
 `gml-raptor` is a ready-to-use project template for [GameMaker Studio](https://gamemaker.io) with a comprehensive [wiki documentation](https://github.com/Grisgram/gml-raptor/wiki) that provides lots of classes and functions that will speed up your game development!\
