@@ -11,7 +11,7 @@ function unit_test_Files() {
 
 	#region SYNC access
 	ut.tests.file_text_plain_ok = function(test, data) {
-		var testfile = "unit_test/test_enc.jx";
+		var testfile = "unit_test/test_enc.json";
 		var testkey = "";
 		var testcontent = "This\nFile\nContains\n4 lines";
 		
@@ -23,7 +23,7 @@ function unit_test_Files() {
 	}
 	
 	ut.tests.file_text_plain_lines_ok = function(test, data) {
-		var testfile = "unit_test/test_enc.jx";
+		var testfile = "unit_test/test_enc.json";
 		var testkey = "";
 		var testcontent = ["This","File","Contains","4 lines"];
 		
@@ -36,7 +36,7 @@ function unit_test_Files() {
 	}
 
 	ut.tests.file_struct_plain_ok = function(test, data) {
-		var testfile = "unit_test/test_enc.jx";
+		var testfile = "unit_test/test_enc.json";
 		var testkey = "";
 		var testcontent = {
 			"first": "This",

@@ -218,6 +218,54 @@ function unit_test_Structs() {
 		test.assert_equals(9, res[0].f2(), "c2 f2r");
 	}
 
+	ut.tests.struct_move_single_ok = function(test, data) {
+		var t1 = {
+			foo: "bar",
+			universe: 42,
+			leet: 1337,
+		};
+		
+		var t2 = struct_move(t1, {}, "foo");
+		test.assert_equals("bar", t2.foo, "foo");
+		test.assert_null(vsget(t1, "foo"), "null");
+		
+		struct_move(t1, t2, "universe", "leet");
+		test.assert_zero(array_length(struct_get_names(t1)), "empty");
+		test.assert_equals(42, t2.universe, "universe");
+		test.assert_equals(1337, t2.leet, "leet");
+	}
+
+	ut.tests.struct_move_array_ok = function(test, data) {
+		var t1 = {
+			foo: "bar",
+			universe: 42,
+			leet: 1337,
+		};
+		
+		var t2 = struct_move(t1, {}, ["foo", "leet"]);
+		test.assert_equals("bar", t2.foo, "foo");
+		test.assert_equals(1337, t2.leet, "leet");
+		test.assert_null(vsget(t1, "foo"), "null");
+		test.assert_null(vsget(t1, "leet"), "null");
+	}
+
+	ut.tests.struct_move_method_ok = function(test, data) {
+		var t1 = {
+			name: "t1",
+			me: function() { 
+				return self.name; 
+			}
+		};
+		
+		test.assert_equals("t1", t1.me(), "t1me");
+		
+		var t2 = struct_move(t1, {}, "me");
+		t2.name = "t2";
+		
+		test.assert_equals("t2", t2.me(), "t2me");
+		test.assert_null(vsget(t1, "me"), "null");		
+	}
+
 	ut.run();
 }
 

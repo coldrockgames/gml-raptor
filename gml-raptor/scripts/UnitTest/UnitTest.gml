@@ -131,7 +131,8 @@ function UnitTest(name = "UnitTest", _test_data = {}) constructor {
 
 	/// @func __log(_type, _line)
 	static __log = function(_type, _line) {
-		if (string_starts_with(_line, "FAIL")) elog(_line); else ilog(_line);
+		if (string_starts_with(_line, "FAIL")) elog(_line); 
+		else if (!UNIT_TEST_REPORT_FAILED_ONLY) ilog(_line);
 		switch (_type) {
 			case 0: with(UnitTestResultsViewer) report_log_line(_line); break;
 			case 1: with(UnitTestResultsViewer) report_suite_line(_line); break;

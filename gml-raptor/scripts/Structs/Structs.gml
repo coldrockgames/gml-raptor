@@ -138,6 +138,38 @@ function struct_get_unique_key(struct, basename, prefix = "") {
 	return newname;
 }
 
+/// @func	struct_move(_source, _target, _members...)
+/// @desc	Moves members from the _source struct to the _target struct.
+///			member existance is checked before move, only existing will be created in _target.
+///			If the first _member argument is an array, it is considered, that this array contains
+///			the names of the members to move.
+function struct_move(_source, _target) {
+	if (argument_count < 2)
+		return;
+	
+	static move = function(_source, _target, _member) {
+		var mem = struct_get(_source, _member);
+		if (struct_exists(_source, _member)) {
+			if (is_method(mem))
+				_target[$ _member] = method(_target, mem);
+			else
+				struct_set(_target, _member, mem);
+			struct_remove(_source, _member);
+		}
+	}
+	
+	if (is_array(argument[@2])) {
+		var arr = argument[@2];
+		for (var i = 0, len = array_length(arr); i < len; i++) 
+			move(_source, _target, arr[@i]);
+	} else {
+		for (var i = 2; i < argument_count; i++) 
+			move(_source, _target, argument[@i]);
+	}
+
+	return _target;
+}
+
 /// @func	struct_join(structs...)
 /// @desc	Joins two or more structs together into a new struct.
 ///			NOTE: This is NOT a deep copy! If any struct contains other struct

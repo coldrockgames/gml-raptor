@@ -6,10 +6,11 @@ report_log_line = function(line) {
 	if (!detail_mode) return;
 	line = string_replace_all(line, "[", "[[");
 	if (string_starts_with(line, "<--")) line = $"[ci_accent]{line}[/]";
-	if (string_starts_with(line, " OK ")) line = $"[c_green] OK [/]{string_skip_start(line, 4)}";
+	if (string_starts_with(line, " OK ")) line = UNIT_TEST_REPORT_FAILED_ONLY ? "" : $"[c_green] OK [/]{string_skip_start(line, 4)}";
 	if (string_starts_with(line, "FAIL")) line = $"[c_red]FAIL[/]{string_skip_start(line, 4)}";
 	
-	text += $"{line}\n";
+	if (line != "")
+		text += $"{line}\n";
 }
 
 /// @func report_suite_line(line)
