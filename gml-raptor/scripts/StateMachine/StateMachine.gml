@@ -26,20 +26,21 @@ STATEMACHINES		= new ListPool("STATEMACHINES");
 /// @func	StateMachine(_owner, ...)
 /// @desc	Create a new state machine with a list of states
 function StateMachine(_owner) : BindableDataBuilder() constructor {
-	owner				= _owner;
-	__states			= [];
-	active_state		= undefined;
-	on_destroy			= undefined;
-	__allow_re_enter	= false;
-	__state_frame		= 0;
-	__objectpool_paused = false;
-	__step_rv			= undefined; // step method return value for performance
-	
-	locking_animation	= undefined;
-	lock_state_buffered	= false;
-	lock_end_state		= undefined;
-	lock_end_enter		= undefined;
-	lock_end_leave		= undefined;
+	owner					= _owner;
+	__states				= [];
+	active_state			= undefined;
+	on_destroy				= undefined;
+	__allow_re_enter		= false;
+	__require_event_state	= false;
+	__state_frame			= 0;
+	__objectpool_paused		= false;
+	__step_rv				= undefined; // step method return value for performance
+
+	locking_animation		= undefined;
+	lock_state_buffered		= false;
+	lock_end_state			= undefined;
+	lock_end_enter			= undefined;
+	lock_end_leave			= undefined;
 	
 	__listpool_processible = false;
 	
@@ -206,7 +207,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 			
 			// We create the skin/flavor, no matter whether this state even exists
 			// So we can flavor states without having to create empty state definitions.
-			__skin_enter();
+			if (!__require_event_state) __skin_enter();
 
 			active_state = undefined;
 			for (var i = 0, len = array_length(__states); i < len; i++) {
@@ -227,7 +228,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 							vlog($"{MY_NAME}: Entering state '{other.active_state.name}'{(enter_override != undefined ? " (with enter-override)" : "")}");
 					
 					__state_frame = 0;
-					//__skin_enter();
+					if (__require_event_state) __skin_enter();
 					rv = active_state.enter(prev_name, enter_override);
 					with(owner)	
 						on_state_changed(name, prev_name);
@@ -366,6 +367,16 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 	static set_allow_re_enter_state = function(allow) {
 		__allow_re_enter = allow;
 		return self;
+	}
+
+	/// @func	set_require_event_state_exists(_require)
+	/// @desc	By default, a state must not exist in this StateMachine to
+	///			automatically set an event-skin-flavor.
+	///			If you set this to true, you must create all states, even if empty,
+	///			to make the StateMachine activate a new skin flavor, when an event
+	///			arrives
+	static set_require_event_state_exists = function(_require) {
+		__require_event_state = _require;
 	}
 	
 	/// @func	set_on_destroy(func)
