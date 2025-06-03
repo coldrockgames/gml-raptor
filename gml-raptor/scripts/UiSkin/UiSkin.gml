@@ -138,12 +138,6 @@ function UiSkin(_name = "default") constructor {
 					string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, flavor, state ?? "")
 				)
 			);
-			//var skname = string_concat(typename, __RAPTOR_SKIN_FLAVOR_DELIMITER, flavor, state ?? "");
-			//ilog($"--- Tree scan  '{skname}': {struct_exists(__tree_cache, skname)}");
-			//__tree_cache[$ skname] ??= struct_get(skin, skname);
-			////__tree_cache[$ skname] ??= deep_copy(struct_get(skin, skname));
-			//ilog($"--- Tree AFTER '{skname}': {struct_exists(__tree_cache, skname)}");
-			//return __tree_cache[$ skname];
 		}
 				
 		var hasstate		= _skin_state != undefined;

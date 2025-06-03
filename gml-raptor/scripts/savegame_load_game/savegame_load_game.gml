@@ -10,12 +10,12 @@
 /// @desc	This is the sister-function to savegame_save_struct_async
 ///			The "data" member of the .on_finished(...) callback is the struct loaded
 function savegame_load_struct_async(_filename, cryptkey = "") {
-	return savegame_load_game_async(_filename, cryptkey, undefined, true);
+	return savegame_load_game_async(_filename, cryptkey, undefined);
 }
 
 /// @func	savegame_load_game_async(_filename, cryptkey = "", _room_transition = undefined)
 /// @desc	Loads a previously saved game state (see savegame_save_game_async).
-function savegame_load_game_async(_filename, cryptkey = "", _room_transition = undefined, _load_data_only = false) {
+function savegame_load_game_async(_filename, cryptkey = "", _room_transition = undefined) {
 	
 	if (!string_is_empty(SAVEGAME_FOLDER) && !string_starts_with(_filename, SAVEGAME_FOLDER)) 
 		_filename = __ensure_savegame_folder_name() + _filename;
@@ -25,7 +25,6 @@ function savegame_load_game_async(_filename, cryptkey = "", _room_transition = u
 	var reader = file_read_struct_async(_filename, cryptkey)
 	.set_transaction_mode(true)
 	.__raptor_data("trans", _room_transition)
-	.__raptor_data("load_data_only", _load_data_only)
 	.__raptor_data("filename", _filename)
 	.__raptor_finished(function(savegame, _buffer, _data) {
 		if (savegame == undefined) {
@@ -86,10 +85,10 @@ function savegame_load_game_async(_filename, cryptkey = "", _room_transition = u
 
 		// load engine data
 		var engine = refstack.recover(__SAVEGAME_ENGINE_HEADER);
-		var data_only = _data.load_data_only || vsget(savegame.engine, __SAVEGAME_DATA_FILE, false);
+		var data_only = vsget(savegame.engine, __SAVEGAME_DATA_FILE, false);
 		
 		if (data_only)
-			ilog($"Loading save game data only");
+			ilog($"This is a data mode file");
 		else
 			BROADCASTER.send(GAMECONTROLLER, __RAPTOR_BROADCAST_GAME_LOADING);
 			
