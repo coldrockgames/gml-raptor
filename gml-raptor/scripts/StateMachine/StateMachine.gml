@@ -203,6 +203,10 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 		
 			var prev_state = active_state != undefined ? active_state		: undefined;
 			var prev_name  = active_state != undefined ? active_state.name	: undefined;
+			
+			// We create the skin/flavor, no matter whether this state even exists
+			// So we can flavor states without having to create empty state definitions.
+			__skin_enter();
 
 			active_state = undefined;
 			for (var i = 0, len = array_length(__states); i < len; i++) {
@@ -223,7 +227,7 @@ function StateMachine(_owner) : BindableDataBuilder() constructor {
 							vlog($"{MY_NAME}: Entering state '{other.active_state.name}'{(enter_override != undefined ? " (with enter-override)" : "")}");
 					
 					__state_frame = 0;
-					__skin_enter();
+					//__skin_enter();
 					rv = active_state.enter(prev_name, enter_override);
 					with(owner)	
 						on_state_changed(name, prev_name);
