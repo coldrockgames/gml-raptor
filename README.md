@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/coldrockgames/gml-raptor/blob/dev/_assets_/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
+<p align="center"><img src="https://github.com/coldrockgames/.github/blob/main/public_images/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
 <h1 align="center">Release 2506</h1>
 
 ---
