@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SnapToXML",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SnapToXML",
+  "parent":{
+    "name":"XML",
+    "path":"folders/_gml_raptor_/_third_party_packages_/SNAP/XML.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

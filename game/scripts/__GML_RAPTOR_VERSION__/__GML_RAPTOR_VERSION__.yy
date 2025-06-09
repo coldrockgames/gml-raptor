@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__GML_RAPTOR_VERSION__",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__GML_RAPTOR_VERSION__",
+  "parent":{
+    "name":"Core",
+    "path":"folders/_gml_raptor_/Core.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

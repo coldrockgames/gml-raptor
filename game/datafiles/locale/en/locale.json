@@ -1,0 +1,52 @@
+{
+  "legal": {
+    "game_name": "enter-game-name-here",
+    "company": "Coldrock Games",
+	"company_website": "https://www.coldrock.games",
+    "copyright": "Copyright (c) [? legal/company]",
+    "locale_author": "Michael Barthold aka Grisgram",
+    "developer": "[? legal/company]",
+    "game_channel_beta": "Beta",
+    "game_channel_prod": "Production",
+    "game_channel_dev": "Development"
+  },
+  "startup_server": {
+	  "connecting": "Connecting to Server...",
+	  "connection_success": "[?states/connected]",
+	  "connection_failed": "[?states/disconnected]",
+  },
+  "credits": {
+    "title": "Credits",
+	"text": "",
+  },
+  "global_words": {
+    "buttons": {
+      "ok": "OK",
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "yes": "Yes",
+      "no": "No",
+      "save": "Save",
+      "retry": "Retry",
+      "ignore": "Ignore",
+      "undo": "Undo",
+      "back": "Back",
+      "continue": "Continue"
+    },
+    "keyboard": {
+      "shift": "Shift",
+      "ctrl": "Ctrl",
+      "alt": "Alt"
+    },
+    "states": {
+      "disconnected": "Disconnected",
+      "inactive": "Inactive",
+      "connected": "Connected",
+      "active": "Active",
+      "unlocked": "Unlocked",
+      "locked": "Locked",
+      "closed": "Closed",
+      "open": "Open"
+    },
+  },
+}

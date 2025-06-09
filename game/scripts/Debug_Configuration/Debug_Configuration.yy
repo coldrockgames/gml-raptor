@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Debug_Configuration",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Debug_Configuration",
+  "parent":{
+    "name":"__GAME_SETUP__",
+    "path":"folders/__GAME_SETUP__.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"AnimCurves",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AnimCurves",
+  "parent":{
+    "name":"Animations",
+    "path":"folders/_gml_raptor_/Core/Animations.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

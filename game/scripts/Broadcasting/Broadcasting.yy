@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Broadcasting",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Broadcasting",
+  "parent":{
+    "name":"Tools",
+    "path":"folders/_gml_raptor_/Core/Tools.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

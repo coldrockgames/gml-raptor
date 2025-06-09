@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scribble_super_glyph_delete",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scribble_super_glyph_delete",
+  "parent":{
+    "name":"Superfonts",
+    "path":"folders/_gml_raptor_/_third_party_packages_/Scribble/Superfonts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"HighScoreTable",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"HighScoreTable",
+  "parent":{
+    "name":"Highscorer",
+    "path":"folders/_gml_raptor_/Helpers/Highscorer.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

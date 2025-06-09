@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"AudioToken",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AudioToken",
+  "parent":{
+    "name":"Audio",
+    "path":"folders/_gml_raptor_/Core/Audio.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

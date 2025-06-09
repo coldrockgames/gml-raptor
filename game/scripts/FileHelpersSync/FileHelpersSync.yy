@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"FileHelpersSync",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FileHelpersSync",
+  "parent":{
+    "name":"Files",
+    "path":"folders/_gml_raptor_/Core/Files.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
