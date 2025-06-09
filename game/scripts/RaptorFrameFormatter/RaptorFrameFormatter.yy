@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"RaptorFrameFormatter",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RaptorFrameFormatter",
+  "parent":{
+    "name":"Logger",
+    "path":"folders/_gml_raptor_/Core/Logger.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

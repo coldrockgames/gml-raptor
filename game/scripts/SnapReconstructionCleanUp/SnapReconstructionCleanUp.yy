@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SnapReconstructionCleanUp",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SnapReconstructionCleanUp",
+  "parent":{
+    "name":"Reconstruction",
+    "path":"folders/_gml_raptor_/_third_party_packages_/SNAP/Reconstruction.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

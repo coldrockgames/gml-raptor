@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"gmcallback_imgloadbar",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gmcallback_imgloadbar",
+  "parent":{
+    "name":"_loading_bar_files",
+    "path":"folders/_gml_raptor_/Core/BrowserExtensions/_loading_bar_files.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

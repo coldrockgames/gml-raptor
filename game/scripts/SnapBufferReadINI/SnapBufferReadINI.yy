@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SnapBufferReadINI",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SnapBufferReadINI",
+  "parent":{
+    "name":"INI",
+    "path":"folders/_gml_raptor_/_third_party_packages_/SNAP/INI.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

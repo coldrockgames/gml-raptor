@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"JujuPlusPlus",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"JujuPlusPlus",
+  "parent":{
+    "name":"Tools",
+    "path":"folders/_gml_raptor_/Core/Tools.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

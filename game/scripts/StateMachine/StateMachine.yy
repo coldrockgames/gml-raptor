@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"StateMachine",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"StateMachine",
+  "parent":{
+    "name":"Animations",
+    "path":"folders/_gml_raptor_/Core/Animations.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"UiSkin",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UiSkin",
+  "parent":{
+    "name":"SkinsAndThemes",
+    "path":"folders/_gml_raptor_/Core/SkinsAndThemes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
