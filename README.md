@@ -1,5 +1,5 @@
 <p align="center"><img src="https://github.com/coldrockgames/.github/blob/main/public_images/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
-<h1 align="center">Release 2506</h1>
+<h1 align="center">🦖 Raptor Release 2506 🦖</h1>
 
 ---
 
@@ -23,14 +23,14 @@ You have several choices, when setting up a raptor project:
 * Create a `fork` of the raptor repository. This is similar to creating from the repository template, but it also allows you to simply _merge raptor updates_ by updating your fork! **Be aware, that forking on Github does not allow you to change the visibility of a repository!** This means, forking from the public `gml-raptor` repository, will make your repository also public and you can't change it. Recommended for open source games or game jams.
 
 To assist you with creating the initial settings, we designed the _Raptor Project Setup Utility_, which resides in the root folder of the repository:
-<p align="center"><img src="https://github.com/user-attachments/assets/5cedf194-687f-4185-b971-f24da9268665" style="display:block; margin:auto; width:438px"></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/714f98a5-8b76-490f-abf9-aac4ad4ca066" style="display:block; margin:auto; width:438px"></p>
 
 > [!NOTE]
 > The Setup Utility is available for _Windows only_.
 
-After creating or forking raptor, just start it and configure your project. Github is smart enough, to even record file renames in its history, so your fork can still be updated, even if you renamed the project and its containing folder. 
+After creating or forking raptor, just start it and configure your project.
 
-It will rename the project and folder, create locale files, adapt encryption settings, even does the setup of the index.html file for you, if you are planning a browser game. You may start the utility _any time, even midway through development_, to add a locale or change some of the settings.
+It will rename the project, create locale files, adapt encryption settings (if you are using raptor-pro), even does the setup of the `index.html` file for you, if you are planning a browser game. You may start the utility _any time, even midway through development_, to add a locale or change some of the settings.
 
 
 ### CREDITS
@@ -46,5 +46,5 @@ Credits for external libraries go to
 ### CONTACT
 Beside the communication channel here, you can reach me as @Grisgram on the [GameMakerKitchen Discord](https://discord.gg/8krYCqr) or through the contacts form on our website [coldrock.games](https://www.coldrock.games).
 
-(c)2022 [coldrock.games](https://www.coldrock.games)
+(c) [coldrock.games](https://www.coldrock.games)
 
