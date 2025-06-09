@@ -1,8 +1,6 @@
 <p align="center"><img src="https://github.com/coldrockgames/.github/blob/main/public_images/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
 <h1 align="center">🦖 Raptor Release 2506 🦖</h1>
 
----
-
 `gml-raptor` is a ready-to-use project template for [GameMaker Studio](https://gamemaker.io) with a comprehensive [wiki documentation](https://github.com/Grisgram/gml-raptor/wiki) that provides lots of classes and functions that will speed up your game development!\
 [The Releases page](https://github.com/Grisgram/gml-raptor/releases) contains the latest version in `.yyz` format (project template) and ready-to-import local packages in `.yymps` format.\
 This repository is also marked as _template repository_, so you may set it as source template when creating a new repository here on Github.
