@@ -1,5 +1,5 @@
 <p align="center"><img src="https://github.com/coldrockgames/.github/blob/main/public_images/gml-raptor-anim-trans.gif" style="display:block; margin:auto; width:438px"></p>
-<h1 align="center">🦖 Raptor Release 2506 🦖</h1>
+<h1 align="center">🦖 Raptor Release 2506.1 🦖</h1>
 
 > [!NOTE]
 > Big changes for `raptor`
