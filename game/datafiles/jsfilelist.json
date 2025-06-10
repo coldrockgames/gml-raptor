@@ -7,11 +7,9 @@
         "version.json", 
         "locale/de/locale.json", 
         "locale/en/locale.json", 
-        "race/demotable.json", 
     ], 
     "directories": [ 
         "locale", 
-        "race", 
         "locale/de", 
         "locale/en", 
     ] 
