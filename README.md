@@ -32,8 +32,12 @@ You have several choices, when setting up a raptor project:
 
 * Create a `fork` of the raptor repository. This is similar to creating from the repository template, but it also allows you to simply _merge raptor updates_ by updating your fork! **Be aware, that forking on Github does not allow you to change the visibility of a repository!** This means, forking from the public `gml-raptor` repository, will make your repository also public and you can't change it. Recommended for open source games or game jams.
 
-To assist you with creating the initial settings, we designed the _Raptor Project Setup Utility_, which resides in the root folder of the repository:
-<p align="center"><img src="https://github.com/user-attachments/assets/c4e95f01-e24f-45ff-9aaf-3904f93b730e" style="display:block; margin:auto; width:438px"></p>
+### Did you fork? Important: Set your upstream!
+After cloning the repository, **as your first action**, run the `RaptorSetup` Utility, if you are on Windows or execute the `ux-set-upstream.sh` script, when on Linux or MacOS.!\
+In the Setup Utility, make sure, you select `gml-raptor` as the _Upstream_ for your fork.
+<p align="center"><img src="https://github.com/user-attachments/assets/6b284bb4-742c-49c5-aa1d-8254a91dc7d3" style="display:block; margin:auto; width:600px"></p>
+
+This will configure your fork to have the `gml-raptor` repository as upstream, thus allowing you to update your fork anytime.
 
 > [!NOTE]
 > The Setup Utility is available for _Windows only_.
