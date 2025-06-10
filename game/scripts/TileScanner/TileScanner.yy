@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"TileScanner",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"TileScanner",
+  "parent":{
+    "name":"Tools",
+    "path":"folders/_gml_raptor_/Core/Tools.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

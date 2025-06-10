@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"debug_mode_constants",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"debug_mode_constants",
+  "parent":{
+    "name":"Debug",
+    "path":"folders/_gml_raptor_/Core/Debug.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CommandLine_Configuration",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CommandLine_Configuration",
+  "parent":{
+    "name":"CommandLineArgs",
+    "path":"folders/_gml_raptor_/Core/CommandLineArgs.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

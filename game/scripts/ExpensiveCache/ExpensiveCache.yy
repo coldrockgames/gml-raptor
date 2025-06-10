@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ExpensiveCache",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ExpensiveCache",
+  "parent":{
+    "name":"Tools",
+    "path":"folders/_gml_raptor_/Core/Tools.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

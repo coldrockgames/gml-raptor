@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"_view_and_self_macros",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"_view_and_self_macros",
+  "parent":{
+    "name":"Core",
+    "path":"folders/_gml_raptor_/Core.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

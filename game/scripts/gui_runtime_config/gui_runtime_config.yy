@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"gui_runtime_config",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gui_runtime_config",
+  "parent":{
+    "name":"Core",
+    "path":"folders/_gml_raptor_/Core.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

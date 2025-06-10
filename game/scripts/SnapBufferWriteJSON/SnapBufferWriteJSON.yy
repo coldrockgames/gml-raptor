@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SnapBufferWriteJSON",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SnapBufferWriteJSON",
+  "parent":{
+    "name":"JSON",
+    "path":"folders/_gml_raptor_/_third_party_packages_/SNAP/JSON.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
