@@ -11,7 +11,7 @@ git fetch upstream
 echo "-"
 echo "- Merging $FORKSOURCE/main into current branch..."
 echo "-"
-git merge upstream/main
+git merge --no-edit upstream/main
 
 echo "-"
 echo "- Merge completed. Look for conflicts and resolve them before you continue!"

@@ -10,7 +10,7 @@ git fetch upstream
 ECHO - 
 ECHO - Merging %FORKSOURCE%/dev into current branch...
 ECHO - 
-git merge upstream/dev
+git merge --no-edit upstream/dev
 
 ECHO -
 ECHO - Merge completed. Look for conflicts and resolve them before you continue!
