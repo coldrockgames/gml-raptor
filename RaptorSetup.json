@@ -1,3 +1,11 @@
 {
-  "CurrentProjectName": "gml-raptor"
+  "IsPro": false,
+  "CurrentProjectName": "gml-raptor",
+  "ForkRoot": "gml-raptor",
+  "Colors_BGR": {
+    "SetupNodeColor": "80FF00",
+    "RaptorNodeColor": "FF8080",
+    "ThirdPartyNodeColor": "80C0FF",
+    "ColdrockNodeColor": "FF8000"
+  }
 }
