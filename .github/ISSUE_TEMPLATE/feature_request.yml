@@ -1,0 +1,21 @@
+name: "🛠 Feature Request"
+description: "A customer feature request"
+title: "🛠 [Feature]: "
+labels: []
+assignees: []
+
+body:
+  - type: textarea
+    id: story_content
+    attributes:
+      label: "🛠 The Story"
+      description: "Describe, what you would like to see"
+      placeholder: "I miss the ability to..."
+
+  - type: textarea
+    id: concept_art
+    attributes:
+      label: "🎨 Concept Art"
+      description: "Sketch or describe as text how it should feel/look/work."
+
+  - 

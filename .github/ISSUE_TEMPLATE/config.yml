@@ -1,0 +1,19 @@
+blank_issues_enabled: false
+contact_links: []
+    
+issue_templates:
+  - name: "🐞 Bug Report"
+    description: "Something is broken or behaves unexpectedly."
+    file: bug_report.yml
+
+  - name: "📘 Story"
+    description: "Describe a developer-facing user story or task."
+    file: story.yml
+
+  - name: "✒ Lore"
+    description: "Write a beautiful new piece of game lore."
+    file: lore.yml
+
+  - name: "🏢 Company Task"
+    description: "General company-level task, goal or reminder."
+    file: company_task.yml

@@ -1,0 +1,63 @@
+name: "🐞 Bug Report"
+description: "Create a detailed bug report."
+title: "🐞 [Bug]: "
+labels: []
+assignees: []
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "📝 Describe the bug"
+      description: "What went wrong? Please provide a clear and concise description and what you expected."
+      placeholder: "Something unexpected happened when..."
+    validations:
+      required: true
+
+  - type: input
+    id: bug_version
+    attributes:
+      label: "Affected Version"
+      description: "In which version did the bug occur?"
+      placeholder: "e.g. 1.5.0-beta2"
+    
+  - type: dropdown
+    id: occurrence_frequency
+    attributes:
+      label: "How often does this occur?"
+      options:
+        - Always
+        - Sometimes
+        - Can't reproduce right now
+    validations:
+      required: true
+      
+  - type: textarea
+    id: steps
+    attributes:
+      label: "⚙ How To Reproduce"
+      description: "List the steps to reproduce the bug."
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "📸 Screenshots"
+      description: "If applicable, add screenshots to help explain your problem."
+      placeholder: "Drag & drop screenshots here or paste them in."
+  
+  - type: checkboxes
+    id: os
+    attributes:
+      label: "🖥️ Operating System(s)"
+      description: "Where did the bug occur?"
+      options:
+        - label: "Windows 10"
+        - label: "Windows 11"
+        - label: "Android"
+        - label: "iOS"
+        - label: "Browser/HTML"
