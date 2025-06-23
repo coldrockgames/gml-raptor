@@ -753,6 +753,19 @@ function animation_get_all(owner = self) {
 	return __listpool_get_all_owner_objects(ANIMATIONS, owner);
 }
 
+/// @func animation_get(owner, name)
+/// @desc Gets an animation by name.
+/// @returns {Animation} undefined if missing
+function animation_get(owner, name) {
+	var lst = ANIMATIONS.list;
+	for (var i = 0, len = array_length(lst); i < len; i++) {
+		var item = lst[@i];
+		if (eq(item.owner, owner) && name == item.name)
+			return item;
+	}
+	return undefined;
+}
+
 /// @func		animation_finish_all(owner = self)
 /// @desc	Finish all registered animations for the specified owner.
 ///					NOTE: Set the owner to <undefined> to finish ALL existing animations!

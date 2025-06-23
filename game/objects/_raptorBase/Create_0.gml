@@ -3,7 +3,13 @@
 if (log_create_destroy)
 	vlog($"{MY_NAME} created.");
 
-binder = new PropertyBinder(self);
+__binder = new PropertyBinder(self);
+/// @func binder()
+/// @desc Gets the PropertyBinder for the values of this animation
+binder = function() {
+	gml_pragma("forceinline");
+	return __binder;
+}
 
 /// @func onPoolActivate(_data)
 /// @desc Invoked, when this is recovered from a pool.

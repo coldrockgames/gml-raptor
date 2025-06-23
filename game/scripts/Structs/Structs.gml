@@ -195,41 +195,56 @@ function struct_join_into(target, sources) {
 	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
 		__STRUCT_JOIN_CIRCULAR_CACHE = [];
 	
+	var from		= undefined;
+	var from_cstr	= undefined;
+	var target_cstr	= undefined;
 	__STRUCT_JOIN_CIRCULAR_LEVEL++;
 	for (var i = 1; i < argument_count; i++) {
-		var from = argument[i];
+		from = argument[i];
 		if (from == undefined) continue;
-		
-		var names = struct_get_names(from);
-		for (var j = 0; j < array_length(names); j++) {
-			var name = names[@j];
-			var member = from[$ name];
-			with (target) {
-				if (is_method(member))
-					self[$ name] = method(self, member);
-				else {
-					vsgetx(self, name, member);
-					if (member != undefined && 
-						is_struct(member) && 
-						!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
-						if (!is_struct(self[$ name])) {
-							wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
-							self[$ name] = member;
-						} else {
-							array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
-							struct_join_into(self[$ name], member);
-						}
-					} else
-						self[$ name] = member;
-				}
-			}
+		target_cstr = struct_get(target, __CONSTRUCTOR_NAME);
+		from_cstr	= struct_get(from, __CONSTRUCTOR_NAME);
+		if (target_cstr != from_cstr && from_cstr != undefined) {
+			static_set(target, static_get(from));
+			if (target_cstr != undefined)
+				wlog($"** WARNING ** Static struct mismatch encountered while joining '{from_cstr}' into '{target_cstr}'");
 		}
+		__struct_join_into(target, from);
 	}
 	__STRUCT_JOIN_CIRCULAR_LEVEL--;
 	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
 		__STRUCT_JOIN_CIRCULAR_CACHE = [];
 		
 	return target;
+}
+
+function __struct_join_into(target, from) {
+	var names	= struct_get_names(from);
+	var name	= undefined;
+	var member	= undefined;
+	for (var j = 0; j < array_length(names); j++) {
+		name = names[@j];
+		member = from[$ name];
+		with (target) {
+			if (is_method(member))
+				self[$ name] = method(self, member);
+			else {
+				vsgetx(self, name, member);
+				if (member != undefined && 
+					is_struct(member) && 
+					!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
+					if (!is_struct(self[$ name])) {
+						wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+						self[$ name] = member;
+					} else {
+						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
+						struct_join_into(self[$ name], member);
+					}
+				} else
+					self[$ name] = member;
+			}
+		}
+	}
 }
 
 /// @func	struct_join_no_rebind(structs...)
@@ -248,41 +263,56 @@ function struct_join_into_no_rebind(target, sources) {
 	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
 		__STRUCT_JOIN_CIRCULAR_CACHE = [];
 	
+	var from		= undefined;
+	var from_cstr	= undefined;
+	var target_cstr	= undefined;
 	__STRUCT_JOIN_CIRCULAR_LEVEL++;
 	for (var i = 1; i < argument_count; i++) {
-		var from = argument[i];
+		from = argument[i];
 		if (from == undefined) continue;
-		
-		var names = struct_get_names(from);
-		for (var j = 0; j < array_length(names); j++) {
-			var name = names[@j];
-			var member = from[$ name];
-			with (target) {
-				if (is_method(member))
-					self[$ name] = member;
-				else {
-					vsgetx(self, name, member);
-					if (member != undefined && 
-						is_struct(member) && 
-						!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
-						if (!is_struct(self[$ name])) {
-							wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
-							self[$ name] = member;
-						} else {
-							array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
-							struct_join_into_no_rebind(self[$ name], member);
-						}
-					} else
-						self[$ name] = member;
-				}
-			}
+		target_cstr = struct_get(target, __CONSTRUCTOR_NAME);
+		from_cstr	= struct_get(from, __CONSTRUCTOR_NAME);
+		if (target_cstr != from_cstr && from_cstr != undefined) {
+			static_set(target, static_get(from));
+			if (target_cstr != undefined)
+				wlog($"** WARNING ** Static struct mismatch encountered while joining '{from_cstr}' into '{target_cstr}'");
 		}
+		__struct_join_into_no_rebind(target, from);
 	}
 	__STRUCT_JOIN_CIRCULAR_LEVEL--;
 	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
 		__STRUCT_JOIN_CIRCULAR_CACHE = [];
 		
 	return target;
+}
+
+function __struct_join_into_no_rebind(target, from) {
+	var names	= struct_get_names(from);
+	var name	= undefined;
+	var member	= undefined;
+	for (var j = 0; j < array_length(names); j++) {
+		name = names[@j];
+		member = from[$ name];
+		with (target) {
+			if (is_method(member))
+				self[$ name] = member;
+			else {
+				vsgetx(self, name, member);
+				if (member != undefined && 
+					is_struct(member) && 
+					!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
+					if (!is_struct(self[$ name])) {
+						wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+						self[$ name] = member;
+					} else {
+						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
+						struct_join_into_no_rebind(self[$ name], member);
+					}
+				} else
+					self[$ name] = member;
+			}
+		}
+	}
 }
 
 /// @func	deep_copy(_struct_or_array)
@@ -382,6 +412,23 @@ function vsget(_struct, _key, _default_if_missing = undefined) {
 	return (_struct != undefined && struct_exists(_struct, _key)) ? _struct[$ _key] : _default_if_missing;
 }
 
+
+/// @func	struct_get_names_ex(_struct, _ordered = true)
+/// @desc	Same as the native struct_get_names, but delivers the array ordered by name
+///			by default.
+function struct_get_names_ex(_struct, _ordered = true) {
+	gml_pragma("forceinline");
+	var rv = struct_get_names(_struct);
+	if (_ordered) array_sort(rv, true);
+	return rv;
+}
+
+/// @func	struct_is_empty(_struct)
+/// @desc	Convenience shortcut function to ask a struct whether it has members
+function struct_is_empty(_struct) {
+	gml_pragma("forceinline");
+	return array_length(struct_get_names(_struct)) == 0;
+}
 
 #region virtual and override
 

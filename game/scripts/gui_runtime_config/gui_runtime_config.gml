@@ -14,7 +14,7 @@ enum adopt_properties {
 	full	= 2,
 }
 
-#macro GUI_RUNTIME_CONFIG		global.gui_configuration
+#macro GUI_RUNTIME_CONFIG		global.__gui_configuration
 
 #macro __TEXT_NAV_TAB_LOCK		global.__gui_nav_tab_lock
 __TEXT_NAV_TAB_LOCK = 0;

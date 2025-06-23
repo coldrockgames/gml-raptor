@@ -21,10 +21,12 @@ SET VJSN=%~dp0\datafiles\version.json
 
 ECHO Updating build number...
 IF NOT EXIST %VTXT% GOTO SKIP
-IF [%AUTOBUILD%]==[0] GOTO SKIP_NO_AUTO
 
 for /f "delims== tokens=1,2" %%G in (%VTXT%) do set %%G=%%H
+IF [%AUTOBUILD%]==[0] GOTO SKIP_NO_AUTO
 SET /A BUILD=BUILD+1
+:SKIP_NO_AUTO
+ECHO Automatic build numbers are disabled.
 (ECHO { "version": "%MAJOR%.%MINOR%.%BUILD%", "major": %MAJOR%, "minor": %MINOR%, "build": %BUILD%}) >%VJSN%
 (ECHO MAJOR=%MAJOR%&ECHO MINOR=%MINOR%&ECHO BUILD=%BUILD%) >%VTXT%
 
@@ -37,10 +39,6 @@ SET OPT=%~dp0\options
 frep %OPT%\html5\options_html5.yy """option_html5_version""" "  ""option_html5_version"":""%MAJOR%.%MINOR%.%BUILD%.0""," -l
 frep %OPT%\windows\options_windows.yy """option_windows_version""" "  ""option_windows_version"":""%MAJOR%.%MINOR%.%BUILD%.0""," -l
 frep %OPT%\android\options_android.yy """option_android_version""" "  ""option_android_version"":""%MAJOR%.%MINOR%.%BUILD%.0""," -l
-GOTO COMPILE
-
-:SKIP_NO_AUTO
-ECHO Automatic build numbers are disabled.
 GOTO COMPILE
 
 :SKIP

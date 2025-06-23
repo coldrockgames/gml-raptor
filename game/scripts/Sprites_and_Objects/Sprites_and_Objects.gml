@@ -9,7 +9,7 @@
 ///			on a named layer or supply an integer to create it on a specified depth
 function instance_create(xp, yp, layer_name_or_depth, object, struct = undefined) {
 	layer_name_or_depth = if_null(layer_name_or_depth, 0);
-	var skin = SKIN.get_inherited_skindata(object);
+	var skin = SKIN.__get_inherited_skindata(object);
 	if (skin != undefined) {
 		struct = struct_join_into(struct ?? {}, skin);
 		struct_set(struct, __RAPTOR_PRE_SKIN_APPLY, true);
@@ -134,25 +134,39 @@ function is_mouse_over(_instance, _is_gui = false) {
 }
 
 global.__topmost_instance_finder_list = ds_list_create();
-/// @func	get_topmost_instance_at(_x, _y, _obj_type = all)
+/// @func	get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined)
 /// @desc	Gets the topmost object at the specified coordinates
-function get_topmost_instance_at(_x, _y, _obj_type = all) {
+///			In addition, you may specify an array of types and/or instances, which shall be ignored
+function get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined) {
 	ds_list_clear(global.__topmost_instance_finder_list);
 	var cnt = instance_position_list(_x, _y, _obj_type, global.__topmost_instance_finder_list, false);
 	if (cnt > 0) {
 		var mindepth = ds_list_find_value(global.__topmost_instance_finder_list, 0);
 		var newdepth = undefined;
 		var i = 1;
+		var tree;
+		var tree_found;
 		repeat(ds_list_size(global.__topmost_instance_finder_list) - 1) {
+			tree_found = false;
 			newdepth = ds_list_find_value(global.__topmost_instance_finder_list, i);
-			if (newdepth.depth < mindepth.depth) mindepth = newdepth;
+			if (_ignore_types != undefined) {
+				tree = object_tree(newdepth, false);
+				for (var j = 0, jen = array_length(tree); j < jen; j++) {
+					if (array_contains(_ignore_types, tree[@j])) {
+						tree_found = true;
+						break;
+					}
+				}
+			}
+			if (!tree_found &&
+				(_ignore_instances == undefined || !array_contains(_ignore_instances, newdepth.id)) && 
+				newdepth.depth < mindepth.depth) mindepth = newdepth;
 			i++;
 		}
 		return mindepth;
 	}
 	return undefined;
 }
-
 
 /// @func	replace_sprite(replace_with, target_width = -1, target_height = -1, keep_empty = true, keep_size = true, keep_location = true)
 /// @desc	Replaces the current sprite with the specified one.

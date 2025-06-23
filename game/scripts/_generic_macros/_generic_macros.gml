@@ -45,6 +45,8 @@
 // An empty function can be used in various places, like as a disabling override on enter/leave states in the statemachine
 #macro EMPTY_FUNC		function(){}
 
+#macro ARGS_TO_ARRAY	var args = array_create(argument_count); for (var __i = 0; __i < argument_count; __i++) args[__i] = argument[__i];
+
 // A simple counting-up unique id system
 global.__unique_count_up_id	= 0;
 #macro UID		(++global.__unique_count_up_id)

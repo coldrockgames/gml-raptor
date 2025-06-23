@@ -4,7 +4,7 @@
 	if none exists.
 */
 
-#macro GAMESETTINGS		global._game_settings
+#macro GAMESETTINGS		global.__game_settings
 // load_settings gets called on game start before onGameStarting callback is invoked
 // So, when your code in inGameStarting runs, this is already available
 GAMESETTINGS = undefined;  

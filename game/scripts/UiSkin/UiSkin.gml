@@ -22,9 +22,37 @@ function UiSkin(_name = "default") constructor {
 		skin = {};
 		__tree_cache = {};
 	}
-
-	/// @func	get_inherited_skindata(_instance)
-	static get_inherited_skindata = function(_inst_or_type) {
+	
+	/// @func skin_exists(_inst_or_type)
+	static skin_exists = function(_inst_or_type) {
+		var typename = 
+			is_object_instance(_inst_or_type) ? 
+			name_of(_inst_or_type, false) : 
+			object_get_name(_inst_or_type)
+		;
+		return struct_exists(skin, typename);
+	}
+	
+	/// @func apply_skin(_instance)
+	static apply_skin = function(_instance) {
+		if (!instance_exists(_instance)) 
+			return;
+		
+		var skindata = __get_inherited_skindata(_instance);
+		if (skindata == undefined) 
+			return;
+			
+		with(_instance) {
+			// ATTENTION! if != false does NOT mean if true!! (undefined is also != false!)
+			if (onSkinChanging(skindata) != false) {
+				integrate_skin_data(skindata);
+				onSkinChanged(skindata);
+			}
+		}
+	}
+	
+	/// @func	__get_inherited_skindata(_instance)
+	static __get_inherited_skindata = function(_inst_or_type) {
 		var typename = 
 			is_object_instance(_inst_or_type) ? 
 			name_of(_inst_or_type, false) : 
@@ -43,7 +71,7 @@ function UiSkin(_name = "default") constructor {
 		for (var i = 0, len = array_length(tree); i < len; i++) {
 			item = tree[@i];
 			if (struct_exists(skin, item)) {
-				struct_join_into(rv, skin[$ item]);
+				struct_join_into(rv, deep_copy(skin[$ item]));
 				hasone |= (array_length(struct_get_names(rv)) > 0);
 			}
 		}
@@ -52,21 +80,6 @@ function UiSkin(_name = "default") constructor {
 		__tree_cache[$ typename] = rv;
 		
 		return rv;
-	}
-	
-	/// @func apply_skin(_instance)
-	static apply_skin = function(_instance) {
-		var skindata = get_inherited_skindata(_instance);
-		if (skindata == undefined) 
-			return;
-			
-		with(_instance) {
-			// ATTENTION! if != false does NOT mean if true!! (undefined is also != false!)
-			if (onSkinChanging(skindata) != false) {
-				integrate_skin_data(skindata);
-				onSkinChanged(skindata);
-			}
-		}
 	}
 
 	/// @func inherit_skin(_skin_name)

@@ -1,5 +1,5 @@
 /*
-    The binder is instantiated in every _raptorBase as "binder".
+    The binder is instantiated in every _raptorBase as "binder()".
 	You can bind *any* property or value of the instance to *any* source, even struct sources, not only instances!
 	A binder can bind any number of properties, you do NOT need multiple instances per object.
 	If the data-types do not match (like binding "text" to the x-position of some object),
@@ -43,8 +43,8 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 			_on_value_changed);
 		
 		__bindings[$ bnd.key] = bnd;
-		if (vsget(_source_instance, "binder") != undefined)
-			_source_instance.binder.__source_bindings[$ bnd.key] = bnd;
+		if (vsget(_source_instance, "__binder") != undefined)
+			_source_instance.__binder.__source_bindings[$ bnd.key] = bnd;
 		return self;
 	}
 	
@@ -63,8 +63,8 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 			_on_value_changed);
 		
 		__source_bindings[$ bnd.key] = bnd;
-		if (vsget(_target_instance, "binder") != undefined && !is_method(_target_instance.binder))
-			_target_instance.binder.__bindings[$ bnd.key] = bnd;
+		if (vsget(_target_instance, "__binder") != undefined && !is_method(_target_instance.__binder))
+			_target_instance.__binder.__bindings[$ bnd.key] = bnd;
 		return self;
 	}
 	
@@ -85,20 +85,22 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 			var pre = (i == 0 ? "push" : "pull");
 			var bnd = vsget(__bindings, key);
 			if (bnd != undefined) {
-				if (vsget(bnd.source_instance, "binder") != undefined && !is_method(bnd.source_instance.binder)) {
+				if (vsget(bnd.source_instance, "__binder") != undefined && 
+					!is_method(bnd.source_instance.__binder)) {
 					if (DEBUG_LOG_BINDINGS)
 						dlog($"Removing remote source-binding from {name_of(bnd.source_instance)}.{_my_property}");
-					variable_struct_remove(bnd.source_instance.binder.__source_bindings, key);
+					variable_struct_remove(bnd.source_instance.__binder.__source_bindings, key);
 				}
 				variable_struct_remove(__bindings, key);
 				with(bnd) unbind();
 			}
 			var src = vsget(__source_bindings, key);
 			if (src != undefined) {
-				if (vsget(src.target_instance, "binder") != undefined && !is_method(src.target_instance.binder)) {
+				if (vsget(src.target_instance, "__binder") != undefined && 
+					!is_method(src.target_instance.__binder)) {
 					if (DEBUG_LOG_BINDINGS)
 						dlog($"Removing local source-binding from {name_of(src.target_instance)}.{_my_property}");
-					variable_struct_remove(src.target_instance.binder.__source_bindings, key);
+					variable_struct_remove(src.target_instance.__binder.__source_bindings, key);
 				}
 				variable_struct_remove(__source_bindings, key);
 				with(src) unbind();
@@ -115,13 +117,13 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 			var key = names[@i];
 			var src = __source_bindings[$ key];
 			if (vsget(src, "target_instance") != undefined &&
-				vsget(src.target_instance, "binder") != undefined && 
-				!is_method(src.target_instance.binder)) {
+				vsget(src.target_instance, "__binder") != undefined && 
+				!is_method(src.target_instance.__binder)) {
 				with(src.target_instance)
-					if (vsget(binder.__bindings, key) != undefined)
-						binder.unbind(binder.__bindings[$ key].target_property, key);
-					else if (vsget(binder.__source_bindings, key) != undefined)
-						binder.unbind(binder.__source_bindings[$ key].target_property, key);
+					if (vsget(__binder.__bindings, key) != undefined)
+						__binder.unbind(__binder.__bindings[$ key].target_property, key);
+					else if (vsget(__binder.__source_bindings, key) != undefined)
+						__binder.unbind(__binder.__source_bindings[$ key].target_property, key);
 			} else
 				with(src) unbind(); // struct push binding
 			variable_struct_remove(__source_bindings, key);
