@@ -4,7 +4,6 @@
 	(c)coldrock.games
 */
 
-
 // this locale MUST exist or the LG system will crash the game.
 #macro LG_DEFAULT_LANGUAGE				"en"
 
