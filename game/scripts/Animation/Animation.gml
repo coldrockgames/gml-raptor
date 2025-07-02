@@ -878,7 +878,7 @@ function is_in_animation(owner = self, name = undefined) {
 	var lst = ANIMATIONS.list;
 	for (var i = 0, len = array_length(lst); i < len; i++) {
 		var item = lst[@i];
-		if (item.owner.id == owner.id && (name == undefined || name == item.name))
+		if (item.animcurve != undefined && item.owner.id == owner.id && (name == undefined || name == item.name))
 			return true;
 	}
 

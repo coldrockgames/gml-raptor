@@ -88,7 +88,6 @@
           "CopyToMask":"0",
         },
       },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"jsfilelist.json","CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
