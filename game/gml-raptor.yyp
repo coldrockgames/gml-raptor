@@ -72,7 +72,7 @@
     {"$GMFolder":"","%Name":"Helpers","folderPath":"folders/_gml_raptor_/Helpers.yy","name":"Helpers","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"AnimatedFlag","folderPath":"folders/_gml_raptor_/Helpers/AnimatedFlag.yy","name":"AnimatedFlag","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Highscorer","folderPath":"folders/_gml_raptor_/Helpers/Highscorer.yy","name":"Highscorer","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"SkinsAndThemes","folderPath":"folders/_gml_raptor_/SkinsAndThemes.yy","name":"SkinsAndThemes","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"SkinsAndThemes","folderPath":"folders/__GAME_SETUP__/SkinsAndThemes.yy","name":"SkinsAndThemes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"main","folderPath":"folders/Rooms/main.yy","name":"main","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
@@ -88,6 +88,7 @@
           "CopyToMask":"0",
         },
       },"CopyToMask":0,"filePath":"datafiles","name":"index.html","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"jsfilelist.json","CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
         "release":{
           "CopyToMask":"0",
@@ -450,6 +451,10 @@
           "groupParent":"null",
           "loadType":"default",
         },
-      },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"ui","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
+        "release":{
+          "compressFormat":"bz2",
+          "loadType":"default",
+        },
+      },"customOptions":"","directory":"","groupParent":{"name":"Default","path":"texturegroups/Default",},"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"ui","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
   ],
 }

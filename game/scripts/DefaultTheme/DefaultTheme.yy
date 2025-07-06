@@ -6,7 +6,7 @@
   "name":"DefaultTheme",
   "parent":{
     "name":"SkinsAndThemes",
-    "path":"folders/_gml_raptor_/SkinsAndThemes.yy",
+    "path":"folders/__GAME_SETUP__/SkinsAndThemes.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

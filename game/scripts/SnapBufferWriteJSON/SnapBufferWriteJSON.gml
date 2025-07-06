@@ -54,9 +54,11 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
                 var _i = 0;
                 repeat(_count)
                 {
-                    buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
-                    buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
+					if (!is_method(_array[_i])) {
+	                    buffer_write(_buffer, buffer_text, _indent);
+	                    __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
+	                    buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
+					}
                     ++_i;
                 }
                 
@@ -74,8 +76,10 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
                 var _i = 0;
                 repeat(_count)
                 {
-                    __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
-                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
+					if (!is_method(_array[_i])) {
+	                    __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
+	                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
+					}
                     ++_i;
                 }
                 
@@ -84,12 +88,13 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
             }
         }
     }
-    else if (is_method(_value)) //Implicitly also a struct so we have to check this first
-    {
-        buffer_write(_buffer, buffer_u8,   0x22); // Double quote
-        buffer_write(_buffer, buffer_text, string(_value));
-        buffer_write(_buffer, buffer_u8,   0x22); // Double quote
-    }
+	// No juju, just no. most senseless thing i've ever seen... 
+    //else if (is_method(_value)) //Implicitly also a struct so we have to check this first
+    //{
+    //    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+    //    buffer_write(_buffer, buffer_text, string(_value));
+    //    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+    //}
     else if (is_struct(_value))
     {
         var _struct = _value;
@@ -115,17 +120,18 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
                 repeat(_count)
                 {
                     var _name = _names[_i];
-                    if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
+					if (!is_method(_struct[$ _name])) {
+	                    if (!is_string(_name)) show_debug_message("SNAP:\nKeys must be strings\n ", true);
                     
-                    buffer_write(_buffer, buffer_text, _indent);
-                    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
-                    buffer_write(_buffer, buffer_text, string(_name));
-                    buffer_write(_buffer, buffer_u32,  0x203A2022); // <" : >
+	                    buffer_write(_buffer, buffer_text, _indent);
+	                    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+	                    buffer_write(_buffer, buffer_text, string(_name));
+	                    buffer_write(_buffer, buffer_u32,  0x203A2022); // <" : >
                     
-                    __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
+	                    __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
                     
-                    buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
-                    
+	                    buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
+					}
                     ++_i;
                 }
                 
@@ -144,16 +150,17 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
                 repeat(_count)
                 {
                     var _name = _names[_i];
-                    if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
+					if (!is_method(_struct[$ _name])) {
+	                    if (!is_string(_name)) show_debug_message("SNAP:\nKeys must be strings\n ", true);
                     
-                    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
-                    buffer_write(_buffer, buffer_text, string(_name));
-                    buffer_write(_buffer, buffer_u16,  0x3A22); // Double quote then colon
+	                    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+	                    buffer_write(_buffer, buffer_text, string(_name));
+	                    buffer_write(_buffer, buffer_u16,  0x3A22); // Double quote then colon
                     
-                    __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
+	                    __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
                     
-                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
-                    
+	                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
+					}                    
                     ++_i;
                 }
                 

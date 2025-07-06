@@ -16,29 +16,30 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
     
     var _cacheBuffer = undefined;
     
-    var _readStart       = undefined;
-    var _inString        = false;
-    var _stringUsesCache = false;
-    var _inValue         = false;
-    var _expectingComma  = false;
-    var _expectingColon  = false;
+    var _readStart				= undefined;
+    var _inString				= false;
+    var _stringUsesCache		= false;
+    var _inValue				= false;
+    var _expectingComma			= false;
+    var _expectingColon			= false;
     
-    var _inStructKey   = false;
-    var _structKey     = undefined;
-    var _inStructValue = false;
-    var _inArray       = false;
+    var _inStructKey			= false;
+    var _structKey				= undefined;
+    var _inStructValue			= false;
+    var _inArray				= false;
     
-    var _inComment           = false;
-    var _inMultilineComment  = false;
-    var _newComment          = false;
-    var _newMultilineComment = false;
+    var _inComment				= false;
+    var _inMultilineComment		= false;
+    var _newComment				= false;
+    var _newMultilineComment	= false;
     
     var _stack    = [];
     var _root     = undefined;
     var _stackTop = undefined;
     
     var _bufferSize = buffer_get_size(_buffer);
-    while(buffer_tell(_buffer) < _bufferSize)
+	var _pos = buffer_tell(_buffer);
+    while(_pos < _bufferSize)
     {
         var _byte = buffer_read(_buffer, buffer_u8);
         if (_byte == 0x00) break;
@@ -231,7 +232,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                         catch(_error)
                         {
                             show_debug_message(_error);
-                            show_error("SNAP:\nCould not convert \"" + string(_value) + "\" to numerical value\n ", true);
+                            show_debug_message($"SNAP @Position {_pos}\nCould not convert \"" + string(_value) + "\" to numerical value\n ", true);
                         }
                     break;
                 }
@@ -286,7 +287,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("SNAP:\nFound unexpected comma\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound unexpected comma\n ", true);
                     }
                 break;
                 
@@ -299,18 +300,18 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("SNAP:\nFound unexpected colon\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound unexpected colon\n ", true);
                     }
                 break;
                 
                 case ord("\""):
                     if (_expectingComma)
                     {
-                        show_error("SNAP:\nFound \", was expecting comma\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound \", was expecting comma\n ", true);
                     }
                     else if (_expectingColon)
                     {
-                        show_error("SNAP:\nFound \", was expecting colon\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound \", was expecting colon\n ", true);
                     }
                     else
                     {
@@ -322,11 +323,11 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 case ord("["):
                     if (_expectingComma)
                     {
-                        show_error("SNAP:\nFound [, was expecting comma\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound [, was expecting comma\n ", true);
                     }
                     else if (_expectingColon)
                     {
-                        show_error("SNAP:\nFound [, was expecting colon\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound [, was expecting colon\n ", true);
                     }
                     else
                     {
@@ -334,7 +335,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                         
                         if (_inStructKey)
                         {
-                            show_error("SNAP:\nCannot use an array as a struct key\n ", true);
+                            show_debug_message($"SNAP @Position {_pos}\nCannot use an array as a struct key\n ", true);
                         }
                         else if (_inStructValue)
                         {
@@ -379,22 +380,22 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("SNAP:\nFound unexpected ]\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound unexpected ]\n ", true);
                     }
                 break;
                 
                 case ord("{"):
                     if (_expectingComma)
                     {
-                        show_error("SNAP:\nFound {, was expecting comma\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound \{, was expecting comma\n ", true);
                     }
                     else if (_expectingColon)
                     {
-                        show_error("SNAP:\nFound {, was expecting colon\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound \{, was expecting colon\n ", true);
                     }
                     else if (_inStructKey)
                     {
-                        show_error("SNAP:\nCannot use a struct as a struct key\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nCannot use a struct as a struct key\n ", true);
                     }
                     else
                     {
@@ -424,7 +425,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 case ord("}"):
                     if (_expectingColon)
                     {
-                        show_error("SNAP:\nFound }, was expecting colon\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound }, was expecting colon\n ", true);
                     }
                     else if (_inStructKey || _inStructValue)
                     {
@@ -448,7 +449,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("SNAP:\nFound unexpected }\n ", true);
+                        show_debug_message($"SNAP @Position {_pos}\nFound unexpected }\n ", true);
                     }
                 break;
                 
@@ -471,15 +472,15 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     {
                         if (_expectingComma)
                         {
-                            show_error("SNAP:\nWas expecting comma\n ", true);
+                            show_debug_message($"SNAP @Position {_pos}\nWas expecting comma\n ", true);
                         }
                         else if (_expectingColon)
                         {
-                            show_error("SNAP:\nWas expecting colon\n ", true);
+                            show_debug_message($"SNAP @Position {_pos}\nWas expecting colon\n ", true);
                         }
                         else if (_inStructKey)
                         {
-                            show_error("SNAP:\nStruct keys must be strings\n ", true);
+                            show_debug_message($"SNAP @Position {_pos}\nStruct keys must be strings\n ", true);
                         }
                         
                         _readStart = buffer_tell(_buffer)-1;
@@ -488,11 +489,12 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 break;
             }
         }
-    }
+		_pos = buffer_tell(_buffer);
+	}
     
     if (_cacheBuffer != undefined) buffer_delete(_cacheBuffer);
     
-    if (array_length(_stack) > 0) show_error("SNAP:\nOne or more JSON objects/arrays not terminataed\n ", true);
+    if (array_length(_stack) > 0) show_debug_message($"SNAP @Position {_pos}\nOne or more JSON objects/arrays not terminated\n ", true);
     
     if (_inOffset != undefined)
     {
