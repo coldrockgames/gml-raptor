@@ -16,6 +16,7 @@
   "Folders":[
     {"$GMFolder":"","%Name":"__GAME_SETUP__","folderPath":"folders/__GAME_SETUP__.yy","name":"__GAME_SETUP__","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_game_version","folderPath":"folders/__GAME_SETUP__/_game_version.yy","name":"_game_version","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"SkinsAndThemes","folderPath":"folders/__GAME_SETUP__/SkinsAndThemes.yy","name":"SkinsAndThemes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_gml_raptor_","folderPath":"folders/_gml_raptor_.yy","name":"_gml_raptor_","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"_third_party_packages_","folderPath":"folders/_gml_raptor_/_third_party_packages_.yy","name":"_third_party_packages_","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Canvas","folderPath":"folders/_gml_raptor_/_third_party_packages_/Canvas.yy","name":"Canvas","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -72,7 +73,6 @@
     {"$GMFolder":"","%Name":"Helpers","folderPath":"folders/_gml_raptor_/Helpers.yy","name":"Helpers","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"AnimatedFlag","folderPath":"folders/_gml_raptor_/Helpers/AnimatedFlag.yy","name":"AnimatedFlag","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Highscorer","folderPath":"folders/_gml_raptor_/Helpers/Highscorer.yy","name":"Highscorer","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"SkinsAndThemes","folderPath":"folders/__GAME_SETUP__/SkinsAndThemes.yy","name":"SkinsAndThemes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"main","folderPath":"folders/Rooms/main.yy","name":"main","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],

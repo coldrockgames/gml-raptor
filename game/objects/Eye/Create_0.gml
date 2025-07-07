@@ -4,6 +4,8 @@
 // Inherit the parent event
 event_inherited();
 
+// in raptor-pro this is saveable, therefore needs a "data" member
+vsgetx(self, "data", {});
 data.camera_index = camera_index;
 data.is_attached = false;
 data.attached_to = noone;
