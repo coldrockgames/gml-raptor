@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__CollageBuilderClass",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__CollageBuilderClass",
+  "parent":{
+    "name":"Classes",
+    "path":"folders/_gml_raptor_/_third_party_packages_/Collage/System/Classes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

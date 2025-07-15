@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CollageSprite",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CollageSprite",
+  "parent":{
+    "name":"Collage",
+    "path":"folders/_gml_raptor_/Core/Collage.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

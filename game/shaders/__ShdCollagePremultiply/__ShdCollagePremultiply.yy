@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"__ShdCollagePremultiply",
+  "name":"__ShdCollagePremultiply",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/_gml_raptor_/_third_party_packages_/Collage/System/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

@@ -40,7 +40,7 @@ function __clean_file_name(_filename) {
 }
 
 /// @func	file_read_text_file_absolute(filename, cryptkey = "", remove_utf8_bom = true, add_to_cache = false)
-/// @desc	reads an entire file and returns the contents as string
+/// @desc	reads an entire text file from an absolute path and returns the contents as string
 ///			checks whether the file exists, and if not, undefined is returned.
 ///			crashes, if the file is not a text file
 function file_read_text_file_absolute(filename, cryptkey = "", remove_utf8_bom = true, add_to_cache = false) {
@@ -77,6 +77,43 @@ function file_read_text_file_absolute(filename, cryptkey = "", remove_utf8_bom =
 	ENDTRY
 }
 
+/// @func	file_read_binary_absolute(filename, cryptkey = "", add_to_cache = false)
+/// @desc	reads an entire binary file from an absolute path and returns the contents as buffer
+///			checks whether the file exists, and if not, undefined is returned.
+function file_read_binary_absolute(filename, cryptkey = "", add_to_cache = false) {
+	__ensure_file_cache();
+	filename = __clean_file_name(filename);
+	
+	if (variable_struct_exists(__FILE_CACHE, filename)) {
+		vlog($"Cache hit for file '{filename}'");
+		return struct_get(__FILE_CACHE, filename);
+	}
+	
+	TRY
+		dlog($"Loading binary file {filename}");
+	    var buffer = buffer_load(filename);
+		var bufsize = max(0, buffer_get_size(buffer));
+		vlog($"Loaded {bufsize} bytes from file");
+		if (bufsize > 0) {
+			if (add_to_cache) {
+				dlog($"Added file '{filename}' to cache");
+				struct_set(__FILE_CACHE, filename, buffer);
+			}
+		    return buffer;
+		}
+		return undefined;
+	CATCH return undefined; 
+	ENDTRY
+}
+
+/// @func	file_read_binary(filename, cryptkey = "", remove_utf8_bom = true, add_to_cache = false)
+/// @desc	reads an entire binary file and returns the contents as buffer
+///			checks whether the file exists, and if not, undefined returned.
+///			Returns undefined, if the file is not a text file
+function file_read_binary(filename, cryptkey = "", add_to_cache = false) {
+	return file_read_binary_absolute(__FILE_WORKINGFOLDER_FILENAME, cryptkey, add_to_cache);
+}
+
 /// @func	file_read_text_file(filename, cryptkey = "", remove_utf8_bom = true, add_to_cache = false)
 /// @desc	reads an entire file and returns the contents as string
 ///			checks whether the file exists, and if not, undefined returned.
@@ -103,6 +140,21 @@ function file_write_text_file(filename, text, cryptkey = "") {
 	TRY
 		var buffer = buffer_create(string_byte_length(text) + 1, buffer_fixed, 1);
 		buffer_write(buffer, buffer_string, text);
+		buffer_save(buffer, __FILE_WORKINGFOLDER_FILENAME);
+		buffer_delete(buffer);
+		return true;
+	CATCH return false; ENDTRY
+}
+
+/// @func	file_write_binary(filename, buffer_to_write, cryptkey = "")
+/// @desc	Saves a given buffer as a binary file.
+function file_write_binary(filename, buffer_to_write, cryptkey = "") {
+	__ensure_file_cache();
+	TRY
+		var bufsize = buffer_get_size(buffer_to_write);
+		dlog($"Saving {bufsize} bytes to binary '{filename}'");
+		var buffer = buffer_create(bufsize, buffer_u8, 1);
+		buffer_copy(buffer_to_write, 0, bufsize, buffer, 0);
 		buffer_save(buffer, __FILE_WORKINGFOLDER_FILENAME);
 		buffer_delete(buffer);
 		return true;

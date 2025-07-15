@@ -701,29 +701,30 @@ function Animation(_obj_owner, _delay, _duration, _animcurve, _repeats = 1, _fin
 		ANIMATIONS.add(self);
 
 		// Update data to current values
-		__start_x			= owner.x;
-		__start_y			= owner.y;
-		__start_xscale		= owner.image_xscale;
-		__start_yscale		= owner.image_yscale;
-		__start_angle		= owner.image_angle;
-		__start_hspeed		= owner.hspeed;
-		__start_vspeed		= owner.vspeed;
-		__start_speed		= owner.speed;
-		__start_direction	= owner.direction;
-
-		// re-set the targets, if we need to
-		if (__move_target)
-			set_move_target(__param_xtarget, __param_ytarget);
+		if (!is_empty_anim) {
+			__start_x			= owner.x;
+			__start_y			= owner.y;
+			__start_xscale		= owner.image_xscale;
+			__start_yscale		= owner.image_yscale;
+			__start_angle		= owner.image_angle;
+			__start_hspeed		= owner.hspeed;
+			__start_vspeed		= owner.vspeed;
+			__start_speed		= owner.speed;
+			__start_direction	= owner.direction;
 		
-		if (__scale_target)
-			set_scale_target(__param_scale_xtarget, __param_scale_ytarget);
+			// re-set the targets, if we need to
+			if (__move_target)
+				set_move_target(__param_xtarget, __param_ytarget);
+		
+			if (__scale_target)
+				set_scale_target(__param_scale_xtarget, __param_scale_ytarget);
 			
-		if (__rotation_target)
-			set_rotation_target(__param_rotation_target);
+			if (__rotation_target)
+				set_rotation_target(__param_rotation_target);
 			
-		if (__speed_target)
-			set_speed_target(__param_hspeed_target, __param_vspeed_target, __param_speed_target, __param_direction_target);
-
+			if (__speed_target)
+				set_speed_target(__param_hspeed_target, __param_vspeed_target, __param_speed_target, __param_direction_target);
+		}
 		// reset timing
 		__time				= 0;
 		__time_step			= 0;

@@ -31,9 +31,9 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 	
 	myself = _myself;
 	
-	/// @func bind_pull(_my_property, _source_instance, _source_property, _converter = undefined, _on_value_changed = undefined)
-	/// @desc Bind my property to RECEIVE the value from _source_instance._source_property
-	///				 ("pull" the value)
+	/// @func	bind_pull(_my_property, _source_instance, _source_property, _converter = undefined, _on_value_changed = undefined)
+	/// @desc	Bind my property to RECEIVE the value from _source_instance._source_property
+	///			("pull" the value)
 	static bind_pull = function(_my_property, _source_instance, _source_property, 
 						   _converter = undefined, _on_value_changed = undefined) {
 		var bnd = new PullBinding(
@@ -48,12 +48,12 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 		return self;
 	}
 	
-	/// @func bind_push(_my_property, _target_instance, _target_property, _converter = undefined, _on_value_changed = undefined)
-	/// @desc Bind my property to SET the value of _target_instance._target_property
-	///				 ("push" the value).
-	///				 This function is especially useful, if you want to push one of your instance
-	///			     properties to a struct, that does not have a "binder" member and therefore can't
-	///				 pull bindings.
+	/// @func	bind_push(_my_property, _target_instance, _target_property, _converter = undefined, _on_value_changed = undefined)
+	/// @desc	Bind my property to SET the value of _target_instance._target_property
+	///			("push" the value).
+	///			This function is especially useful, if you want to push one of your instance
+	///			   properties to a struct, that does not have a "binder" member and therefore can't
+	///			pull bindings.
 	static bind_push = function(_my_property, _target_instance, _target_property, 
 						   _converter = undefined, _on_value_changed = undefined) {
 		var bnd = new PushBinding(
@@ -68,18 +68,18 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 		return self;
 	}
 	
-	/// @func bind_watcher(_my_property, _on_value_changed)
-	/// @desc Binds only a function on value change to a property. This is useful, if you
-	///				 do not want to mirror the bound value to any other member, but just get informed,
-	///				 when the watched value changes. The callback receives two arguments:
-	///				 (new_value, old_value)
+	/// @func	bind_watcher(_my_property, _on_value_changed)
+	/// @desc	Binds only a function on value change to a property. This is useful, if you
+	///			do not want to mirror the bound value to any other member, but just get informed,
+	///			when the watched value changes. The callback receives two arguments:
+	///			(new_value, old_value)
 	static bind_watcher = function(_my_property, _on_value_changed) {
 		var bnd = new WatcherBinding(myself, _my_property, _on_value_changed);
 		__source_bindings[$ bnd.key] = bnd;
 		return self;
 	}
 	
-	/// @func unbind(_my_property, key)
+	/// @func	unbind(_my_property, key)
 	static unbind = function(_my_property, key) {
 		for (var i = 0; i < 2; i++) {
 			var pre = (i == 0 ? "push" : "pull");
@@ -109,8 +109,8 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 		return self;
 	}
 	
-	/// @func unbind_source()
-	/// @desc Unbind me, where this is the SOURCE (inverse direction)
+	/// @func	unbind_source()
+	/// @desc	Unbind me, where this is the SOURCE (inverse direction)
 	static unbind_source = function() {
 		var names = struct_get_names(__source_bindings);
 		for (var i = 0, len = array_length(names); i < len; i++) {
@@ -129,8 +129,36 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 			variable_struct_remove(__source_bindings, key);
 		}
 	}
+
+	/// @func	unbind_all_from(_source_or_target) 
+	/// @desc	Removes all bindings from and to a specific instance
+	static unbind_all_from = function(_source_or_target) {
+		var names = struct_get_names(__source_bindings);
+		for (var i = 0, len = array_length(names); i < len; i++) {
+			var key = names[@i];
+			var src = __source_bindings[$ key];
+			if (src.target_instance == _source_or_target ||
+				src.source_instance == _source_or_target) {
+				with(src) unbind();
+				struct_remove(__source_bindings, key);
+			}
+		}
+		
+		names = struct_get_names(__bindings);
+		for (var i = 0, len = array_length(names); i < len; i++) {
+			var key = names[@i];
+			var src = __bindings[$ key];
+			if (src.target_instance == _source_or_target ||
+				src.source_instance == _source_or_target) {
+				with(src) unbind();
+				struct_remove(__bindings, key);
+			}
+		}
+		return self;
+	}
 	
-	/// @func unbind_all()
+	/// @func	unbind_all()
+	/// @desc	Clear all bindings, here, and in all instances targetting this
 	static unbind_all = function() {
 		unbind_source();
 		var names = struct_get_names(__bindings);
@@ -141,9 +169,9 @@ function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 		return self;
 	}
 	
-	/// @func parent()
-	/// @desc return the parent of this binder, to keep navigating
-	///				 in the builder pattern
+	/// @func	parent()
+	/// @desc	return the parent of this binder, to keep navigating
+	///			in the builder pattern
 	static parent = function() {
 		return __parent;
 	}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CollageImageAsync",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CollageImageAsync",
+  "parent":{
+    "name":"General",
+    "path":"folders/_gml_raptor_/_third_party_packages_/Collage/General.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

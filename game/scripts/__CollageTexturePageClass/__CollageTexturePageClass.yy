@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__CollageTexturePageClass",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__CollageTexturePageClass",
+  "parent":{
+    "name":"Classes",
+    "path":"folders/_gml_raptor_/_third_party_packages_/Collage/System/Classes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

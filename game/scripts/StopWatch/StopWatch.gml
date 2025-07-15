@@ -31,19 +31,21 @@ function StopWatch(_name = "StopWatch") constructor {
 		return (get_timer() - tstart);
 	}
 	
-	/// @func	log_millis(_action = "elapsed")
+	/// @func	log_millis(_action = "elapsed", _restart_after = true)
 	/// @desc	Logs the time with an optional action (like "stopwatch <elapsed> 000ms")
-	static log_millis = function(_action = "elapsed") {
+	static log_millis = function(_action = "elapsed", _restart_after = true) {
 		var rv = (get_timer() - tstart) / 1000;
 		dlog($"{name} {_action} {rv}ms");
+		if (_restart_after) restart();
 		return rv;
 	}
 
-	/// @func	log_micros(_action = "elapsed")
+	/// @func	log_micros(_action = "elapsed", _restart_after = true)
 	/// @desc	Logs the time with an optional action (like "stopwatch <elapsed> 000µs")
-	static log_micros = function(_action = "elapsed") {
+	static log_micros = function(_action = "elapsed", _restart_after = true) {
 		var rv = (get_timer() - tstart);
 		dlog($"{name} {_action} {rv}µs");
+		if (_restart_after) restart();
 		return rv;
 	}
 }
