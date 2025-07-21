@@ -18,6 +18,20 @@ function scribble_measure_text(_string, _font = undefined, _coord2 = undefined) 
 	return _coord2;
 }
 
+/// @func	scribble_ellipsis(_string, _font = undefined, _max_width)
+/// @desc	Reduces a strings' size until it fits into _max_width and adds "..." ellipsis dots
+///			Use this function for labels or texts that might be longer than the space you have available.
+///			ATTENTION! This function creates scribbles in a loop until the text fits. Its expensive!
+///			Use only, when you have no other way to solve the text length problem.
+function scribble_ellipsis(_string, _font = undefined, _max_width) {
+	if (scribble_measure_text(_string, _font).x <= _max_width)
+		return _string;
+	var res = new Coord2();
+	while (_string != "" && scribble_measure_text($"{_string}...", _font, res).x > _max_width)
+		_string = string_skip_end(_string, 1);
+	return $"{_string}...";
+}
+
 /// @func	scribble_create(_align, _string, _font_name = undefined, _text_color = c_white, _unique_key = undefined)
 /// @desc	scribble shortcut to create a scribble object in one line
 function scribble_create(

@@ -66,8 +66,7 @@ function UiSkin(_name = "default") constructor {
 		var item;
 		var hasone = false;
 		
-		var tree = object_tree(_inst_or_type);
-		array_reverse_ext(tree);
+		var tree = array_reverse(object_tree(_inst_or_type, true, false));
 		for (var i = 0, len = array_length(tree); i < len; i++) {
 			item = tree[@i];
 			if (struct_exists(skin, item)) {

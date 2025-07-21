@@ -4,13 +4,15 @@ enum LineMode {
 	//manual // TODO implement
 };	
 
-/// @func	CollageSpriteSheet(_collage, _name, _filename)
-function CollageSpriteSheet(_collage, _name, _filename) constructor {
+/// @func	CollageSpriteSheet(_collage, _name, _filename_or_sprite)
+/// @desc	Create a new sprite sheet either from an external file or
+///			from an internal sprite (like a tileset)
+function CollageSpriteSheet(_collage, _name, _filename_or_sprite) constructor {
 	construct(CollageSpriteSheet);
 	
 	collage					= _collage;
 	name					= _name;
-	filename				= _filename;
+	filename				= _filename_or_sprite;
 
 	sprites					= [];
 
@@ -44,12 +46,62 @@ function CollageSpriteSheet(_collage, _name, _filename) constructor {
 
 	/// @func	add_sprite(_name, _frame_count, _fps = 0)
 	/// @desc	Add a sprite with its frame_count and fps
-	static add_sprite = function(_name, _frame_count, _fps = 0, _tolerance = 0) {
+	static add_sprite = function(_name, _frame_count, _fps = 0) {
 		array_push(sprites, 
-			new CollageSprite(collage, _name, _frame_count, _fps, _tolerance)
+			new CollageSprite(collage, _name, _frame_count, _fps)
 				.set_spritesheet(self)
 		);
 		return self;
+	}
+
+	/// @func	get_sprite(_sprite_name)
+	/// @desc	Retrieve the sprite with the specified name from this sheet
+	///			or undefined, if not found
+	static get_sprite = function(_sprite_name) {
+		var spr;
+		for (var i = 0, len = array_length(sprites); i < len; i++) {
+			spr = sprites[@i];
+			if (spr.name == _sprite_name)
+				return spr;
+		}
+		
+		return undefined;
+	}
+
+	/// @func	get_linear_sprite(_sprite_name) 
+	/// @desc	Creates a linear strip from a given sprite and returns 
+	///			the sprite.
+	///			ATTENTION! You are responsible to sprite_delete() this
+	///			sprite, when you no longer need it!
+	static get_linear_sprite = function(_sprite_name) {
+		var rv		= undefined;
+		
+		var spr		= get_sprite(_sprite_name);
+		var colspr	= collage.GetImageInfo(_sprite_name);
+		var surf	= surface_create(frame_width, frame_height);
+
+		var i		= 0;
+		surface_set_target(surf);
+		repeat(spr.frame_count) {
+			draw_clear_alpha(0, 0);
+			CollageDrawImageExt(colspr, i++, 0, 0, 1, 1, 0, c_white, 1);
+			if (rv == undefined)
+				rv = sprite_create_from_surface(
+					surf, 
+					0, 0, 
+					frame_width, frame_height, 
+					remove_back, smooth, xorigin, yorigin
+				);
+			else
+				sprite_add_from_surface(
+					rv, surf,
+					0, 0, frame_width, frame_height, 
+					remove_back, smooth
+				);
+		}
+		surface_reset_target();
+		
+		return rv;
 	}
 
 	/// @func	set_start_position(_sheet_start_x = 0, _sheet_start_y = 0)
@@ -138,9 +190,15 @@ function CollageSpriteSheet(_collage, _name, _filename) constructor {
 	/// @func	build()
 	/// @desc	Build the sprite sheet now and create the sheet defs
 	static build = function() {
-		if (IS_HTML) __build_async();
-		else		 __build_now(sprite_add(filename, 1, remove_back, smooth, xorigin, yorigin));
-		
+		if (is_string(filename)) {
+			// load an external file
+			if (IS_HTML) __build_async();
+			else		 __build_now(sprite_add(filename, 1, remove_back, smooth, xorigin, yorigin));
+		} else if (sprite_exists(filename)) {
+				__build_now(filename); // use the internal sprite
+		} else
+			elog($"** ERROR ** CollageSpriteSheet: Sprite or file '{filename}' does not exist!");
+			
 		return COLLAGE; // return the manager (root object) to allow adding more things
 	}
 

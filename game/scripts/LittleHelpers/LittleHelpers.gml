@@ -96,20 +96,38 @@ function is_child_of(child, parent) {
 	return to_find != __OBJECT_HAS_NO_PARENT && to_find != __OBJECT_DOES_NOT_EXIST;
 }
 
-/// @func	object_tree(_object_or_instance, _as_strings = true)
+#macro __OBJECT_TREE_CACHE	global.__object_tree_cache
+__OBJECT_TREE_CACHE = {};
+
+/// @func	object_tree(_object_or_instance, _as_strings = true, _full_tree = true)
 /// @desc	Gets the entire object hierarchy as an array for the specified object type or instance.
 ///			At position[0] you will find the _object_or_instance's object_index and at the
 ///			last position of the array you will find the root class of the tree.
-function object_tree(_object_or_instance, _as_strings = true) {
+function object_tree(_object_or_instance, _as_strings = true, _full_tree = true) {
 	if (_object_or_instance == undefined) 
 		return undefined;
-	
-	var rv = [];
+		
 	var ind = instance_exists(_object_or_instance) ? _object_or_instance.object_index : _object_or_instance;
+	var obj_val  = _as_strings ? object_get_name(ind) : ind;
+	
+	var key = $"{obj_val}.{_full_tree}";
+	var ocache = vsget(__OBJECT_TREE_CACHE, key);
+	if (ocache != undefined)
+		return ocache;
+	
+	var have_me = _full_tree; // if full_tree, then every entry is added
+	var rv = [];
+	var push_val = undefined;
 	while (ind != __OBJECT_HAS_NO_PARENT && ind != __OBJECT_DOES_NOT_EXIST) {
-		array_push(rv, _as_strings ? object_get_name(ind) : ind);
+		push_val = _as_strings ? object_get_name(ind) : ind;
+		if (have_me || push_val == obj_val) {
+			have_me = true;
+			array_push(rv, push_val);
+		}
 		ind = object_get_parent(ind);
 	}
+	
+	__OBJECT_TREE_CACHE[$ key] = rv;
 	return rv;
 }
 

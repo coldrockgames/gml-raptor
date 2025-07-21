@@ -47,6 +47,7 @@
 #macro __RAPTOR_BROADCAST_GAME_SAVING				"__raptor_gamefile_saving"
 #macro __RAPTOR_BROADCAST_GAME_SAVED				"__raptor_gamefile_saved"
 #macro __RAPTOR_BROADCAST_SAVEGAME_VERSION_CHECK	"__raptor_savegame_version_check"
+#macro __RAPTOR_BROADCAST_WINDOW_SIZE_CHANGED		"__raptor_window_size_changed"
 
 #macro RAPTOR_SAVEGAME_ACTIVITY_BROADCAST_FILTER	"__raptor_gamefile_*"
 // ---- RAPTOR INTERNAL BROADCASTS ----

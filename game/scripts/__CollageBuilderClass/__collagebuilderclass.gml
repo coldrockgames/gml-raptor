@@ -330,7 +330,7 @@ function __CollageBuilderClass() constructor {
 				if (_drawW + (_tiling[0] ? 4 : 0) > _texWidth || _drawH + (_tiling[1] ? 4 : 0) > _texHeight) {
 					if (!__COLLAGE_SCALE_TO_TEXTURES_ON_PAGE) {
 						__CollageTrace("Image " + "\"" + _spriteData.__name +  "\"" + " is too big! Skipping...");
-						if (_spriteData.__isCopy) {
+						if (_spriteData.__isCopy && !_spriteData.__keep) {
 							sprite_delete(_spriteID);
 						}
 						array_delete(_spriteList, _i, 1);
@@ -349,7 +349,7 @@ function __CollageBuilderClass() constructor {
 				
 				if (_spriteData.__alpha <= 0.001) {
 					__CollageTrace("Image " + "\"" + _spriteData.__name +  "\"" + " alpha is invalid! Value is at " + string(_spriteData.__alpha) + ". Skipping...");
-					if (_spriteData.__isCopy) {
+					if (_spriteData.__isCopy && !_spriteData.__keep) {
 						sprite_delete(_spriteID);
 					}
 					array_delete(_spriteList, _i, 1);
@@ -944,7 +944,7 @@ function __CollageBuilderClass() constructor {
 		var _len = array_length(_normalSprites);
 		var _i = 0;
 		repeat(_len) {
-			if (_normalSprites[_i].spriteData.__isCopy) {
+			if (_normalSprites[_i].spriteData.__isCopy && !_normalSprites[_i].spriteData.__keep) {
 				sprite_delete(_normalSprites[_i].spriteID);
 			}
 			++_i;
@@ -953,7 +953,7 @@ function __CollageBuilderClass() constructor {
 		var _len = array_length(_3DSprites);
 		var _i = 0;
 		repeat(_len) {
-			if (_3DSprites[_i].spriteData.__isCopy) {
+			if (_3DSprites[_i].spriteData.__isCopy && !_3DSprites[_i].spriteData.__keep) {
 				sprite_delete(_3DSprites[_i].spriteID);
 			}
 			++_i;

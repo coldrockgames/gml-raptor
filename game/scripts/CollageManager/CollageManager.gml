@@ -147,9 +147,9 @@ function CollageManager() constructor {
 	
 	static __finalize_build = function() {
 		__build_now();
+		__build_collision_masks();
 		__signal_all_drawers();
 		__delete_temp_sprites();
-		__build_collision_masks();
 	}
 	
 	static __build_now = function() {
@@ -260,12 +260,11 @@ function CollageManager() constructor {
 	
 	static __build_collision_masks = function() {
 		var names = struct_get_names(__sprites);
+		dlog($"CollageManager building collision masks for {array_length(names)} sprites");
 		for (var i = 0, len = array_length(names); i < len; i++) {
 			var n = names[@i];
 			__sprites[$ n].build();
 		}
-		
-
 	}
 	
 	#endregion
@@ -281,17 +280,17 @@ function CollageManager() constructor {
         return new CollageSpriteSheet(__COLLAGE_CACHE[$ __last_collage], _name, _filename);
     }
 
-	/// @func	add_sprite(_name, _index, _tolerance = 0, _separate_texture = false)
+	/// @func	add_sprite(_name, _index, _separate_texture = false)
 	/// @desc	Add an existing sprite to the collage
 	///			The _index parameter must be a valid sprite_index known to the game, not a filename!
-	static add_sprite = function(_name, _index, _tolerance = 0, _separate_texture = false) {
+	static add_sprite = function(_name, _index, _separate_texture = false) {
 		var col = __COLLAGE_CACHE[$ __last_collage];
 		var spr = sprite_get_info(_index);
 		var sprfps = spr.frame_speed;
 		if (spr.frame_type == spritespeed_framespergameframe)
 			sprfps *= game_get_speed(gamespeed_fps);
 		__sprites[$ _name] = 
-			new CollageSprite(col, _name, spr.num_subimages, sprfps, _tolerance)
+			new CollageSprite(col, _name, spr.num_subimages, sprfps)
 				.set_collage_data(col.AddSprite(
 					_index,
 					_name,
@@ -300,54 +299,55 @@ function CollageManager() constructor {
 					sprite_get_yoffset(_index),
 					_separate_texture
 				)
+				.Keep()
 	        )
 		;
         return self;
     }
 
-	/// @func	add_file(_name, _filename, _xorigin = 0, _yorigin = 0, _tolerance = 0, _remove_back = false, _smooth = false, _separate_texture = false)
+	/// @func	add_file(_name, _filename, _xorigin = 0, _yorigin = 0, _remove_back = false, _smooth = false, _separate_texture = false)
 	/// @desc	Add a new single frame sprite from an external image file to the collage 
 	static add_file = function(
 		_name, _filename, 
 		_xorigin = 0, _yorigin = 0, 
-		_tolerance = 0,
 		_remove_back = false, _smooth = false, 
 		_separate_texture = false) {
 		
 		var col = __COLLAGE_CACHE[$ __last_collage];
 
         __sprites[$ _name] = 
-			new CollageSprite(col, _name, 1, 0, _tolerance)
+			new CollageSprite(col, _name, 1, 0)
 				.set_collage_data(col.AddFile(
 					_filename, _name, 1,
 					_remove_back, _smooth,
 					_xorigin, _yorigin,
 					_separate_texture
 				)
+				.Keep()
 			)
 		;
 		__get_async_handler();
         return self;
     }
 
-	/// @func	add_file_strip(_name, _filename, _frame_count = 1, _fps = 0, _xorigin = 0, _yorigin = 0, _tolerance = 0, _remove_back = false, _smooth = false, _separate_texture = false)
+	/// @func	add_file_strip(_name, _filename, _frame_count = 1, _fps = 0, _xorigin = 0, _yorigin = 0, _remove_back = false, _smooth = false, _separate_texture = false)
 	/// @desc	Add a new sprite to the collage from a filestrip image file
 	static add_file_strip = function(_name, _filename, _frame_count = 1, _fps = 0,
 		_xorigin = 0, _yorigin = 0, 
-		_tolerance = 0,
 		_remove_back = false, _smooth = false, 
 		_separate_texture = false) {
 		
 		var col = __COLLAGE_CACHE[$ __last_collage];
 
         __sprites[$ _name] = 
-			new CollageSprite(col, _name, _frame_count, _fps, _tolerance)
+			new CollageSprite(col, _name, _frame_count, _fps)
 				.set_collage_data(col.AddFileStrip(
 		            _filename, _name, _frame_count,
 					_remove_back, _smooth,
 					_xorigin, _yorigin,
 					_separate_texture
 		        )
+				.Keep()
 				.SetSpeed(_fps)
 				.SetSpeedType(gamespeed_fps)
 			)
@@ -356,19 +356,18 @@ function CollageManager() constructor {
         return self;
     }
     
-	/// @func	add_surface(_name, _filename, _xorigin = 0, _yorigin = 0, _tolerance = 0, _remove_back = false, _smooth = false, _separate_texture = false)
+	/// @func	add_surface(_name, _filename, _xorigin = 0, _yorigin = 0, _remove_back = false, _smooth = false, _separate_texture = false)
 	/// @desc	Add a new single frame sprite to the collage from a surface
 	static add_surface = function(
 		_name, _surface, 
 		_xorigin = 0, _yorigin = 0, 
-		_tolerance = 0,
 		_remove_back = false, _smooth = false, 
 		_separate_texture = false) {
 			
 		var col = __COLLAGE_CACHE[$ __last_collage];
 
         __sprites[$ _name] = 
-			new CollageSprite(col, _name, 1, 0, _tolerance)
+			new CollageSprite(col, _name, 1, 0)
 				.set_collage_data(col.AddSurface(
 		            _surface, _name,
 					0, 0, 
@@ -378,25 +377,25 @@ function CollageManager() constructor {
 					_xorigin, _yorigin,
 					_separate_texture
 		        )
+				.Keep()
 			)
 		;		
         return self;
     }
 	
-	/// @func	add_surface_part(_name, _surface, _x, _y, _w, _h, _xorigin = 0, _yorigin = 0, _tolerance = 0, _remove_back = false, _smooth = false, _separate_texture = false)
+	/// @func	add_surface_part(_name, _surface, _x, _y, _w, _h, _xorigin = 0, _yorigin = 0, _remove_back = false, _smooth = false, _separate_texture = false)
 	/// @desc	Add a new single frame sprite to the collage from a part of a surface
 	static add_surface_part = function(
 		_name, _surface, 
 		_x, _y, _w, _h,
 		_xorigin = 0, _yorigin = 0, 
-		_tolerance = 0,
 		_remove_back = false, _smooth = false, 
 		_separate_texture = false) {
 			
 		var col = __COLLAGE_CACHE[$ __last_collage];
 
         __sprites[$ _name] = 
-			new CollageSprite(col, _name, 1, 0, _tolerance)
+			new CollageSprite(col, _name, 1, 0)
 				.set_collage_data(col.AddSurface(
 		            _surface, _name,
 					_x, _y, _w, _h,
@@ -404,17 +403,17 @@ function CollageManager() constructor {
 					_xorigin, _yorigin,
 					_separate_texture
 		        )
+				.Keep()
 			)
 		;		
         return self;
     }
 	
-	/// @func	add_surface_strip(_name, _surface, _frame_count = 1, _fps = 0, _xorigin = 0, _yorigin = 0, _tolerance = 0, _remove_back = false, _smooth = false, _separate_texture = false)
+	/// @func	add_surface_strip(_name, _surface, _frame_count = 1, _fps = 0, _xorigin = 0, _yorigin = 0, _remove_back = false, _smooth = false, _separate_texture = false)
 	/// @desc	Add a new single frame sprite to the collage from a surface
 	static add_surface_strip = function(
 		_name, _surface, _frame_count = 1, _fps = 0,
 		_xorigin = 0, _yorigin = 0, 
-		_tolerance = 0,
 		_remove_back = false, _smooth = false, 
 		_separate_texture = false) {
 			
@@ -431,6 +430,7 @@ function CollageManager() constructor {
 			_xorigin, _yorigin,
 			_separate_texture
 		)
+		.Keep()
 		.SetSpeed(_fps)
 		.SetSpeedType(gamespeed_fps);
 		
@@ -439,7 +439,7 @@ function CollageManager() constructor {
 		col.__InternalAddFileStrip(coldata, _remove_back, _smooth, _xorigin, _yorigin, _separate_texture);
 
         __sprites[$ _name] = 
-			new CollageSprite(col, _name, _frame_count, _fps, _tolerance)
+			new CollageSprite(col, _name, _frame_count, _fps)
 				.set_collage_data(coldata)
 		;		
         return self;
@@ -482,6 +482,20 @@ function CollageManager() constructor {
 	static get_sprite_sheet_names = function() {
         return struct_get_names_ex(__spritesheets);
     }
+
+	/// @func	get_sprite(_sprite_name)
+	/// @desc	Retrieve the sprite with the specified name
+	///			or undefined, if not found
+	static get_sprite = function(_sprite_name) {
+		return vsget(__sprites, _sprite_name);
+	}
+
+	/// @func	get_sprite_sheet(_spritesheet_name)
+	/// @desc	Retrieve the sprite with the specified name
+	///			or undefined, if not found
+	static get_sprite_sheet = function(_spritesheet_name) {
+		return vsget(__spritesheets, _spritesheet_name);
+	}
 
 	#endregion
 

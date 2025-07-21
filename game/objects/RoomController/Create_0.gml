@@ -181,6 +181,7 @@ MOUSE_Y_PREVIOUS = mouse_y;
 #macro WINDOW_SIZE_X_PREVIOUS	global.__window_size_xprevious
 #macro WINDOW_SIZE_Y_PREVIOUS	global.__window_size_yprevious
 #macro WINDOW_SIZE_HAS_CHANGED	global.__window_size_has_changed
+#macro SEND_WINDOW_BROADCAST	BROADCASTER.send(ROOMCONTROLLER, __RAPTOR_BROADCAST_WINDOW_SIZE_CHANGED)
 
 WINDOW_SIZE_X					= window_get_width();
 WINDOW_SIZE_Y					= window_get_height();
@@ -539,6 +540,30 @@ onTransitBack = function(_transition_data) {
 	// ...or supply a transition to the target room
 	// _transition_data.transition = new FadeTransition(_transition_data.target_room, 20, 20);
 	// ...or do nothing of the above to have a simple room_goto fired to the target room
+}
+
+/// @func	fade_out(_fade_out_frames, _finished_callback)
+fade_out = function(_fade_out_frames, _finished_callback) {
+		
+	var fx_layer = layer_create(depth + 1);
+	var fx = fx_create("_filter_tintfilter");
+	layer_set_fx(fx_layer, fx);
+
+	var fade_out_frames = (_fade_out_frames > 0 ? _fade_out_frames : 1);
+	
+	return animation_run(self, 0, fade_out_frames, acLinearAlpha)
+		.set_name("room_fade_out")
+		.set_data("fx_layer", fx_layer)
+		.set_data("fx", fx)
+		.binder()
+			.bind_watcher("image_alpha", function(v) {
+				var data = animation_get(self, "room_fade_out").data;
+				fx_set_parameter(data.fx, "g_TintCol", [1-v, 1-v, 1-v, 1]);
+				layer_set_fx(data.fx_layer, data.fx);
+			})
+		.parent()
+		.add_finished_trigger(_finished_callback)
+	;
 }
 
 #endregion

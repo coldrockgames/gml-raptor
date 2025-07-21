@@ -2,24 +2,32 @@
 /// feather ignore all
 function __CollageSpriteFileDataClass(_identifier, _spriteID, _subImage = 1, _isCopy = undefined) constructor {
 	static __system = __CollageSystem();
-	__name = _identifier;
-	__subImages = _subImage;
-	__xOrigin = 0;
-	__yOrigin = 0;
 	if (!sprite_exists(_spriteID)) {
 		__CollageThrow("Invalid spriteID: " + string(__spriteID));	
 	}
-	__spriteID = _spriteID;
-	__is3D = 0;
-	__isCopy = _isCopy ?? (_spriteID > __system.__CollageGMSpriteCount);
-	__keepTogether = false;
-	__premultiplyAlpha = false;
-	__tiling = 0;
-	__colour = c_white;
-	__alpha = 1;
-	__priority = -1;
-	__speed = 0;
-	__speedType = 0;
+	
+	__name				= _identifier;
+	__subImages			= _subImage;
+	__xOrigin			= 0;
+	__yOrigin			= 0;
+	
+	__spriteID			= _spriteID;
+	__is3D				= 0;
+	__isCopy			= _isCopy ?? (_spriteID > __system.__CollageGMSpriteCount);
+	__keepTogether		= false;
+	__premultiplyAlpha	= false;
+	__tiling			= 0;
+	__colour			= c_white;
+	__alpha				= 1;
+	__priority			= -1;
+	__speed				= 0;
+	__speedType			= 0;
+	__keep				= false;
+	
+	static Keep = function(_keep = true) {
+		__keep = _keep;
+		return self;
+	}
 	
 	static SetClump = function(_bool) {
 		__keepTogether = _bool;

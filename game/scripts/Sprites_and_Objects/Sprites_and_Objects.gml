@@ -79,6 +79,19 @@ function is_dead_object_instance(_inst) {
 			;
 }
 
+/// @func	get_sprite_scale_for(_target_width, _target_height, _into = undefined)
+/// @desc	Calculates the required x/y scale for the sprite to reach the desired width/height.
+///			Result is written to _into_coord2 (if supplied) and returned as Coord2.
+function get_sprite_scale_for(_target_width, _target_height, _into = undefined) {
+	_into ??= new Coord2(1, 1);
+	if (sprite_index > 0) {
+		var w1 = sprite_get_width(sprite_index);
+		var h1 = sprite_get_height(sprite_index);
+		_into.set(_target_width / w1, _target_height / h1);
+	}
+	return _into;
+}
+
 /// @func	scale_sprite_to(target_width, target_height)
 /// @desc	Scale an instances' sprite so that it has the desired dimensions.
 function scale_sprite_to(target_width, target_height) {
