@@ -90,7 +90,7 @@
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"gml-raptor_game_settings.json","ConfigValues":{
         "release":{
-          "CopyToMask":"0",
+          "CopyToMask":"-1",
         },
       },"CopyToMask":-1,"filePath":"datafiles","name":"gml-raptor_game_settings.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"index.html","ConfigValues":{
@@ -101,12 +101,12 @@
     {"$GMIncludedFile":"","%Name":"jsfilelist.json","CopyToMask":-1,"filePath":"datafiles","name":"jsfilelist.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
         "release":{
-          "CopyToMask":"0",
+          "CopyToMask":"-1",
         },
       },"CopyToMask":-1,"filePath":"datafiles/locale/de","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"locale.json","ConfigValues":{
         "release":{
-          "CopyToMask":"0",
+          "CopyToMask":"-1",
         },
       },"CopyToMask":-1,"filePath":"datafiles/locale/en","name":"locale.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"raptor_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"raptor_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -337,7 +337,6 @@
     {"id":{"name":"ObjectPools","path":"scripts/ObjectPools/ObjectPools.yy",},},
     {"id":{"name":"Particle_Configuration","path":"scripts/Particle_Configuration/Particle_Configuration.yy",},},
     {"id":{"name":"ParticleManager","path":"scripts/ParticleManager/ParticleManager.yy",},},
-    {"id":{"name":"PopupManager","path":"scripts/PopupManager/PopupManager.yy",},},
     {"id":{"name":"PropertyBinder","path":"scripts/PropertyBinder/PropertyBinder.yy",},},
     {"id":{"name":"Pythagoras","path":"scripts/Pythagoras/Pythagoras.yy",},},
     {"id":{"name":"Random","path":"scripts/Random/Random.yy",},},

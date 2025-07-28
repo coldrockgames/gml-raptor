@@ -9,7 +9,7 @@
 
 #macro IS_HTML				(browser_not_a_browser != os_browser)
 #macro IS_MOBILE			is_any_of(os_type, os_android, os_ios)
-#macro IS_DESKTOP_OS		is_any_of(os_type, os_windows, os_linux, os_macosx)
+#macro IS_DESKTOP_OS		(is_any_of(os_type, os_windows, os_linux, os_macosx) && !IS_HTML)
 #macro IS_CONSOLE			is_any_of(os_type, os_ps4, os_ps5, os_switch, os_gdk, os_xboxone, os_xboxseriesxs)
 
 // detect if the scribble library is loaded

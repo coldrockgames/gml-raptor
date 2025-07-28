@@ -51,9 +51,10 @@ if (USE_CRASHDUMP_HANDLER) {
 }
 
 load_settings();
-if (!IS_HTML && os_type == os_windows) {
+if (IS_DESKTOP_OS) {
 	window_enable_borderless_fullscreen(vsgetx(GAMESETTINGS, "borderless_fullscreen", FULLSCREEN_IS_BORDERLESS));
 	window_set_fullscreen(vsgetx(GAMESETTINGS, "start_fullscreen", START_FULLSCREEN));
+	mlog($"Desktop OS found, applying full screen settings {GAMESETTINGS.start_fullscreen}{START_FULLSCREEN}, borderless {GAMESETTINGS.borderless_fullscreen}"); 
 }
 
 mlog(__LOG_GAME_INIT_FINISH);

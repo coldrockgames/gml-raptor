@@ -36,9 +36,10 @@ GOTO COMPILE
 
 :OPTIONS
 SET OPT=%~dp0\options
-frep %OPT%\html5\options_html5.yy """option_html5_version""" "  ""option_html5_version"":""%MAJOR%.%MINOR%.%BUILD%.0""," -l
-frep %OPT%\windows\options_windows.yy """option_windows_version""" "  ""option_windows_version"":""%MAJOR%.%MINOR%.%BUILD%.0""," -l
-frep %OPT%\android\options_android.yy """option_android_version""" "  ""option_android_version"":""%MAJOR%.%MINOR%.%BUILD%.0""," -l
+SET NEWVERSION=%MAJOR%.%MINOR%.%BUILD%.0
+powershell -Command "(Get-Content %OPT%\html5\options_html5.yy    ) -replace '^\s*\"option_html5_version\".*', '  \"option_html5_version\":\"%NEWVERSION%\",' | Set-Content %OPT%\html5\options_html5.yy    "
+powershell -Command "(Get-Content %OPT%\windows\options_windows.yy) -replace '^\s*\"option_windows_version\".*', '  \"option_windows_version\":\"%NEWVERSION%\",' | Set-Content %OPT%\windows\options_windows.yy"
+powershell -Command "(Get-Content %OPT%\android\options_android.yy) -replace '^\s*\"option_android_version\".*', '  \"option_android_version\":\"%NEWVERSION%\",' | Set-Content %OPT%\android\options_android.yy"
 GOTO COMPILE
 
 :SKIP
@@ -49,6 +50,7 @@ IF [%YYTARGET_runtime%]==[Javascript] GOTO DO_FILE_LIST
 GOTO CONFIG_CHECK
 
 :DO_FILE_LIST
+ECHO HTML-Target found! Preparing jsfilelist.json...
 SET JEXT=%RAPTOR_DEBUG_JSON_EXTENSION%
 SET SEXT=%RAPTOR_DEBUG_SCRIPTOR_EXTENSION%
 SET PEXT=%RAPTOR_DEBUG_PARTICLE_EXTENSION%
@@ -63,8 +65,11 @@ for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%PEXT%"'
 ECHO     ], >>%FLIST%
 ECHO     "directories": [ >>%FLIST%
 for /f "delims=" %%i in ('dir /s /b /ad /on "%YYprojectDir%\datafiles\*.*"') do @echo "%%i", >>"%FLIST%"
-FREP %FLIST% """%YYprojectDir%\datafiles\\" "        """
-FREP %FLIST% "\\" "/"
+
+SET "ESCAPED=%YYprojectDir:\=\\%"
+powershell -Command "(Get-Content %FLIST%) -replace '\"%ESCAPED%\\datafiles\\', '        \"' | Set-Content %FLIST%"
+powershell -Command "(Get-Content %FLIST%) -replace '\\', '/' | Set-Content %FLIST%"
+
 ECHO     ] >>%FLIST%
 ECHO } >>%FLIST%
 
