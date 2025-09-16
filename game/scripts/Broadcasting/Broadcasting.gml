@@ -36,20 +36,26 @@
 */
 
 // ---- RAPTOR INTERNAL BROADCASTS ----
-#macro __RAPTOR_BROADCAST_MSGBOX_OPENED				"__raptor_msgbox_opened"
-#macro __RAPTOR_BROADCAST_MSGBOX_CLOSED				"__raptor_msgbox_closed"
-#macro __RAPTOR_BROADCAST_POPUP_SHOWN				"__raptor_popup_shown"
-#macro __RAPTOR_BROADCAST_POPUP_HIDDEN				"__raptor_popup_hidden"
-#macro __RAPTOR_BROADCAST_DATA_GAME_LOADED			"__raptor_gamefile_datamode_loaded"
-#macro __RAPTOR_BROADCAST_DATA_GAME_SAVED			"__raptor_gamefile_datamode_saved"
-#macro __RAPTOR_BROADCAST_GAME_LOADING				"__raptor_gamefile_loading"
-#macro __RAPTOR_BROADCAST_GAME_LOADED				"__raptor_gamefile_loaded"
-#macro __RAPTOR_BROADCAST_GAME_SAVING				"__raptor_gamefile_saving"
-#macro __RAPTOR_BROADCAST_GAME_SAVED				"__raptor_gamefile_saved"
-#macro __RAPTOR_BROADCAST_SAVEGAME_VERSION_CHECK	"__raptor_savegame_version_check"
-#macro __RAPTOR_BROADCAST_WINDOW_SIZE_CHANGED		"__raptor_window_size_changed"
+#macro RAPTOR_BROADCAST_MSGBOX_OPENED			"raptor_msgbox_opened"
+#macro RAPTOR_BROADCAST_MSGBOX_CLOSED			"raptor_msgbox_closed"
+#macro RAPTOR_BROADCAST_POPUP_SHOWN				"raptor_popup_shown"
+#macro RAPTOR_BROADCAST_POPUP_HIDDEN			"raptor_popup_hidden"
+#macro RAPTOR_BROADCAST_POPUP_DESTROYED			"raptor_popup_destroyed"
+#macro RAPTOR_BROADCAST_DATA_GAME_LOADING		"raptor_gamefile_datamode_loading"
+#macro RAPTOR_BROADCAST_DATA_GAME_LOADED		"raptor_gamefile_datamode_loaded"
+#macro RAPTOR_BROADCAST_DATA_GAME_SAVING		"raptor_gamefile_datamode_saving"
+#macro RAPTOR_BROADCAST_DATA_GAME_SAVED			"raptor_gamefile_datamode_saved"
+#macro RAPTOR_BROADCAST_GAME_LOADING			"raptor_gamefile_loading"
+#macro RAPTOR_BROADCAST_GAME_LOADED				"raptor_gamefile_loaded"
+#macro RAPTOR_BROADCAST_GAME_LOADING_NEW_ROOM	"raptor_gamefile_loading_new_room"
+#macro RAPTOR_BROADCAST_GAME_SAVING				"raptor_gamefile_saving"
+#macro RAPTOR_BROADCAST_GAME_SAVED				"raptor_gamefile_saved"
+#macro RAPTOR_BROADCAST_SAVEGAME_VERSION_CHECK	"raptor_savegame_version_check"
+#macro RAPTOR_BROADCAST_WINDOW_SIZE_CHANGED		"raptor_window_size_changed"
+#macro RAPTOR_BROADCAST_SCENE_LOCKED			"raptor_scene_locked"
+#macro RAPTOR_BROADCAST_SCENE_UNLOCKED			"raptor_scene_unlocked"
 
-#macro RAPTOR_SAVEGAME_ACTIVITY_BROADCAST_FILTER	"__raptor_gamefile_*"
+#macro RAPTOR_SAVEGAME_ACTIVITY_BROADCAST_FILTER	"raptor_gamefile_*"
 // ---- RAPTOR INTERNAL BROADCASTS ----
 
 global.__raptor_broadcast_uid = 0;
@@ -67,20 +73,11 @@ function Sender() constructor {
 	/// @desc	adds a listener for a specific kind of message.
 	///			NOTE: If a receiver with that name already exists, it gets overwritten!
 	///			The _message_filter is a wildcard string, that may
-	///			contain "*" as placeholder either at the start of the string,
-	///			at the end, or both, but not in-between.
-	///			VALID FILTERS are:
-	///			*_died
-	///			enemy*
-	///			*dragon*
-	///			INVALID FILTERS are all that contain * in the middle, like
-	///			enemy_*_died
-	///			So, plan your broadcast names accordingly to be able to filter
-	///			as you need!
+	///			contain "*" as placeholder according to the string_match specifications
 	static add_receiver = function(_owner, _name, _message_filter, _callback) {
 		if (_owner == undefined) {
 			wlog($"** WARNING ** add_receiver '{_name}' ignored, no 'owner' given!");
-			return;
+			return self;
 		}
 		
 		var rcv = new __receiver(_owner, _name, _message_filter, _callback);
@@ -97,8 +94,9 @@ function Sender() constructor {
 	/// @desc	Removes the receiver with the specified name and returns true, if found.
 	///			If it does not exist, it is silently ignored, but false is returned.
 	static remove_receiver = function(_name) {
+		var r;
 		for (var i = 0, len = array_length(receivers); i < len; i++) {
-			var r = receivers[@ i];
+			r = receivers[@ i];
 			if (r.name == _name) {
 				array_delete(receivers, i, 1);
 				__receivercount--;
@@ -137,6 +135,38 @@ function Sender() constructor {
 		return cnt;
 	}
 
+	/// @func	receiver_exists(_name)
+	/// @desc	Checks whether a receiver with the specified name exists
+	static receiver_exists = function(_name) {
+		for (var i = 0, len = array_length(receivers); i < len; i++)
+			if (receivers[@ i].name == _name) 
+				return true;
+				
+		return false;
+	}
+
+	/// @func	receiver_count(_name_or_owner)
+	/// @desc	Counts the existing receivers.
+	///			Supply a (wildcard-)string as argument to count
+	///			receivers that match a specified name or supply
+	///			an owner instance to count the number of receivers
+	///			registered for this instance.
+	static receiver_count = function(_name_or_owner) {
+		var rv = 0;
+		
+		if (is_string(_name_or_owner)) {
+			for (var i = 0, len = array_length(receivers); i < len; i++)
+				if (string_match(receivers[@ i].name, _name_or_owner)) 
+					rv++
+		} else {
+			for (var i = 0, len = array_length(receivers); i < len; i++)
+				if (receivers[@ i].owner == _name_or_owner)
+					rv++			
+		}
+		
+		return rv;
+	}
+
 	/// @func	send(_from, _title, _data = undefined)
 	/// @desc	Sends a broadcast and returns self for call chaining if you want to
 	///				send multiple broadcasts.
@@ -162,11 +192,15 @@ function Sender() constructor {
 			//ENDTRY
 		});
 
+		var r;
+		if (DEBUG_LOG_BROADCASTS) var rcvcnt = 0;
 		for (var i = 0, len = array_length(loopers); i < len; i++) {
-			var r = loopers[@ i];
+			r = loopers[@ i];
 			if (r.filter_hit(_title)) {
-				if (DEBUG_LOG_BROADCASTS)
-					dlog($"Sending broadcast #{bcid}: title='{_title}'; to='{r.name}';");
+				if (DEBUG_LOG_BROADCASTS) {
+					vlog($"Sending broadcast #{bcid}: title='{_title}'; to='{r.name}';");
+					rcvcnt++;
+				}
 				if (r.callback(bc))
 					array_push(removers, r.name);
 			}
@@ -177,8 +211,15 @@ function Sender() constructor {
 			}
 		}
 		
-		if (DEBUG_LOG_BROADCASTS)
-			vlog($"Broadcast #{bcid}: '{_title}' finished in {(get_timer() - started)}µs");
+		if (DEBUG_LOG_BROADCASTS) {
+			var ended = get_timer() - started;
+			var unit = "µs";
+			if (ended > 1000) {
+				unit = "ms";
+				ended /= 1000;
+			}
+			dlog($"Broadcast #{bcid}: '{_title}' with {rcvcnt} receivers finished in {ended}{unit}");
+		}
 		
 		for (var i = 0, len = array_length(removers); i < len; i++) 
 			remove_receiver(removers[@ i]);

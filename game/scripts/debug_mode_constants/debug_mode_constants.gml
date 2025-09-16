@@ -19,25 +19,37 @@
 #macro beta:CONFIGURATION_NAME					"beta"
 #macro release:CONFIGURATION_NAME				"prod"
 
-gml_release_mode(!DEBUG_MODE_ACTIVE);			
+gml_release_mode(!DEBUG_MODE_ACTIVE);
+
+#macro DEBUG_DEFAULT_FRAME_COLOR_WORLD			global.__debug_default_frame_color_world
+#macro DEBUG_DEFAULT_FRAME_COLOR_UI				global.__debug_default_frame_color_ui
+#macro DEBUG_DEFAULT_FRAME_COLOR_OVER			global.__debug_default_frame_color_over
+#macro DEBUG_DEFAULT_FRAME_COLOR_CONTAINER		global.__debug_default_frame_color_container
 
 #macro DEBUG_FRAME_COLOR						__raptor_debug_frame_color
 #macro DEBUG_FRAME_COLOR_OVER					__raptor_debug_frame_color_over
-#macro __RAPTOR_DEBUG_FRAME_COLOR_STR			"__raptor_debug_frame_color"
-#macro __RAPTOR_DEBUG_FRAME_COLOR_OVER_STR		"__raptor_debug_frame_color_over"
 
-#macro DEBUG_SHOW_OBJECT_FRAMES	global.__debug_show_object_frames
-#macro DEBUG_SHOW_OBJECT_DEPTH	global.__debug_show_object_depth
-#macro DEBUG_MODE_WINDOW_WIDTH	global.__debug_mode_window_width
-#macro DEBUG_MODE_WINDOW_HEIGHT	global.__debug_mode_window_height
+#macro DEBUG_FRAME_COLOR_STR					"__raptor_debug_frame_color"
+#macro DEBUG_FRAME_COLOR_OVER_STR				"__raptor_debug_frame_color_over"
 
-DEBUG_SHOW_OBJECT_FRAMES	= false;
-DEBUG_SHOW_OBJECT_DEPTH		= false;
-DEBUG_MODE_WINDOW_WIDTH		= 1280;
-DEBUG_MODE_WINDOW_HEIGHT	= 720;
+#macro DEBUG_VIEW_SHOWN							global.__debug_shown
+#macro DEBUG_SHOW_OBJECT_FRAMES					global.__debug_show_object_frames
+#macro DEBUG_SHOW_OBJECT_DEPTH					global.__debug_show_object_depth
+#macro DEBUG_MODE_WINDOW_WIDTH					global.__debug_mode_window_width
+#macro DEBUG_MODE_WINDOW_HEIGHT					global.__debug_mode_window_height
 
-global.__debug_shown		= false;
-global.__debug_check_done	= false;
+DEBUG_SHOW_OBJECT_FRAMES			= false;
+DEBUG_SHOW_OBJECT_DEPTH				= false;
+DEBUG_MODE_WINDOW_WIDTH				= 1280;
+DEBUG_MODE_WINDOW_HEIGHT			= 720;
+
+DEBUG_DEFAULT_FRAME_COLOR_WORLD		= c_green;
+DEBUG_DEFAULT_FRAME_COLOR_UI		= c_orange;
+DEBUG_DEFAULT_FRAME_COLOR_OVER		= c_fuchsia;
+DEBUG_DEFAULT_FRAME_COLOR_CONTAINER	= c_red;
+
+DEBUG_VIEW_SHOWN					= false;
+global.__debug_check_done			= false;
 
 function check_debug_mode() {
 	if (DEBUG_MODE_ACTIVE && !global.__debug_check_done) {

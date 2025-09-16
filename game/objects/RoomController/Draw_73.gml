@@ -8,8 +8,9 @@ if (ACTIVE_TRANSITION != undefined) {
 }
 
 if (CONFIGURATION_DEV) {
-	if (!global.__debug_shown) exit;
+	if (!DEBUG_VIEW_SHOWN) exit;
+	global.__debug_instance_count = instance_count;
 
 	if (DEBUG_SHOW_OBJECT_FRAMES || DEBUG_SHOW_OBJECT_DEPTH)
-		__draw_bbox_rotated();
+		__draw_bbox_rotated(false);
 }

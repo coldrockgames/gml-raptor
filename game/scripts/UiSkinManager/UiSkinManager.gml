@@ -4,15 +4,16 @@
 	demand different graphics for your ui.	
 */
 
-#macro ENSURE_SKINS				if (!variable_global_exists("__ui_skins")) UI_SKINS = new UiSkinManager(); \
-								if (UI_SKINS.get_skin(__DEFAULT_UI_SKIN_NAME) == undefined) \
-								UI_SKINS.add_skin(new DefaultSkin(__DEFAULT_UI_SKIN_NAME), true);
-
 #macro UI_SKINS					global.__ui_skins
 #macro SKIN						UI_SKINS.active_skin
 
 #macro __DEFAULT_UI_SKIN_NAME	"default"
 #macro __RAPTOR_PRE_SKIN_APPLY	"__raptor_skin_applied"
+#macro __RAPTOR_PRE_LATE_APPLY	"__raptor_late_applied"
+
+#macro ENSURE_SKINS				if (!variable_global_exists("__ui_skins")) UI_SKINS = new UiSkinManager(); \
+								if (UI_SKINS.get_skin(__DEFAULT_UI_SKIN_NAME) == undefined) \
+								UI_SKINS.add_skin(new DefaultSkin(__DEFAULT_UI_SKIN_NAME), true);
 
 function UiSkinManager() constructor {
 	construct(UiSkinManager);

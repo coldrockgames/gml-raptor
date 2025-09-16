@@ -69,7 +69,7 @@ function TileScanner(_layername_or_id = undefined, _scan_on_create = true, _tile
 			xp = 0;
 			yp++;
 		}
-		__scan_timer.log_micros($"{tilecount} tiles in");
+		__scan_timer.checkpoint($"{tilecount} tiles in");
 		return tiles;
 	}
 	

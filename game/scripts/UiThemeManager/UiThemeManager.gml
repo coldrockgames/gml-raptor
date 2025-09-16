@@ -4,14 +4,14 @@
 	"UI_THEME.activate(_theme_name)"
 */
 
-#macro ENSURE_THEMES			if (!variable_global_exists("__ui_themes")) UI_THEMES = new UiThemeManager(); \
-								if (UI_THEMES.get_theme(__DEFAULT_UI_THEME_NAME) == undefined) \
-									UI_THEMES.add_theme(new DefaultTheme(__DEFAULT_UI_THEME_NAME), true);
-
 #macro UI_THEMES				global.__ui_themes
 #macro THEME					UI_THEMES.active_theme
 
 #macro __DEFAULT_UI_THEME_NAME	"default"
+
+#macro ENSURE_THEMES			if (!variable_global_exists("__ui_themes")) UI_THEMES = new UiThemeManager(); \
+								if (UI_THEMES.get_theme(__DEFAULT_UI_THEME_NAME) == undefined) \
+									UI_THEMES.add_theme(new DefaultTheme(__DEFAULT_UI_THEME_NAME), true);
 
 /// @func UiThemeManager()
 /// @desc The global theme manager. Accessible through UI_THEMES

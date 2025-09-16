@@ -5,13 +5,17 @@
 #macro __RAPTOR_DEBUG_VIEW_EDGE			4
 
 #macro __RAPTOR_DEBUG_VIEW_WIDTH		300
-#macro __RAPTOR_DEBUG_VIEW_HEIGHT		276
+#macro __RAPTOR_DEBUG_VIEW_HEIGHT		280
 
 #macro __RAPTOR_DEBUG_CAM_VIEW_WIDTH	300
-#macro __RAPTOR_DEBUG_CAM_VIEW_HEIGHT	276
+#macro __RAPTOR_DEBUG_CAM_VIEW_HEIGHT	280
+
+#macro __RAPTOR_DEBUG_FRAME_DISTANCE	0
 
 function __raptor_debug_view_opened() {
-	
+	// Debug camera view
+	var DEBUG_BUTTON_SIZE	= 20
+
 	// Default debug view
 	dlog("Creating 'raptor' debug view");
 	global.__raptor_debug_view = dbg_view("raptor", DEBUG_VIEW_SHOW_RAPTOR_PANEL, 
@@ -20,24 +24,25 @@ function __raptor_debug_view_opened() {
 		__RAPTOR_DEBUG_VIEW_WIDTH, 
 		__RAPTOR_DEBUG_VIEW_HEIGHT
 	);
+	
+	global.__debug_instance_count = instance_count;
 	dbg_section("Object Frames", true);
-	dbg_checkbox(ref_create(global, "__debug_show_object_frames"), "Object Frames"); 
-	dbg_checkbox(ref_create(global, "__debug_show_object_depth"), "Depth");
+	dbg_checkbox(ref_create(global, "__debug_show_object_frames"), "Draw Frames"); dbg_same_line();
+	dbg_text("Count: "); dbg_same_line(); dbg_text(ref_create(global, "__debug_instance_count"));
+	dbg_checkbox(ref_create(global, "__debug_show_object_depth"), "Draw Depth");
+	dbg_color(ref_create(global, "__debug_default_frame_color_world"), "World"); 
+	dbg_color(ref_create(global, "__debug_default_frame_color_ui"), "UI"); 
 	dbg_section("ListPools", true);
 	dbg_text("Bindings:     "); dbg_same_line(); dbg_text(ref_create(BINDINGS, "__listcount"));
 	dbg_text("Animations:   "); dbg_same_line(); dbg_text(ref_create(ANIMATIONS, "__listcount"));
 	dbg_text("StateMachines:"); dbg_same_line(); dbg_text(ref_create(STATEMACHINES, "__listcount"));
-	dbg_section("Broadcasts", true);
-	dbg_text("Receivers:"); dbg_same_line(); dbg_text(ref_create(BROADCASTER, "__receivercount")); 
+	dbg_text("BC-Receivers: "); dbg_same_line(); dbg_text(ref_create(BROADCASTER, "__receivercount")); 
 	dbg_same_line(); dbg_text(" | "); dbg_same_line();
-	dbg_text("Sent:     "); dbg_same_line(); dbg_text(ref_create(global, "__raptor_broadcast_uid"));
+	dbg_text("Sent: "); dbg_same_line(); dbg_text(ref_create(global, "__raptor_broadcast_uid"));
 	dbg_section("Mouse", true);
-	dbg_text("World:"); dbg_same_line(); dbg_text(ref_create(global, "__world_mouse_xprevious")); dbg_same_line(); dbg_text("/"); dbg_same_line(); dbg_text(ref_create(global, "__world_mouse_yprevious"));
-	dbg_text("UI   :"); dbg_same_line(); dbg_text(ref_create(global, "__gui_mouse_x"));	          dbg_same_line(); dbg_text("/"); dbg_same_line(); dbg_text(ref_create(global, "__gui_mouse_y"));
-
-	// Debug camera view
-	var DEBUG_CAM_BUTTON_SIZE	= 20
-	
+	dbg_text("World:"); dbg_same_line(); dbg_text(ref_create(global, "__world_mouse_xprevious")); dbg_same_line(); dbg_text("/"); dbg_same_line(); dbg_text(ref_create(global, "__world_mouse_yprevious")); dbg_same_line();
+	dbg_text("UI:"); dbg_same_line(); dbg_text(ref_create(global, "__gui_mouse_x"));	          dbg_same_line(); dbg_text("/"); dbg_same_line(); dbg_text(ref_create(global, "__gui_mouse_y"));
+		
 	dlog("Creating 'raptor-camera' debug view");
 	global.__raptor_debug_cam_view = dbg_view("raptor-camera", DEBUG_VIEW_SHOW_CAMERA_PANEL, 
 		__RAPTOR_DEBUG_VIEW_EDGE + __RAPTOR_DEBUG_VIEW_WIDTH + __RAPTOR_DEBUG_VIEW_EDGE, 
@@ -63,26 +68,26 @@ function __raptor_debug_view_opened() {
 	dbg_same_line(); dbg_button("^", function() { 
 			ROOMCONTROLLER.camera_move_by(3, 0, -global.__raptor_debug_cam_view_data.move_step)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border); 
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE
 	);
 	dbg_same_line(); dbg_text("      Zoom");
 	dbg_text(" ");
 	dbg_same_line(); dbg_button("<", function() { 
 			ROOMCONTROLLER.camera_move_by(3, -global.__raptor_debug_cam_view_data.move_step, 0)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border); 
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE
 	);
 	dbg_same_line(); dbg_button("o", function() {
 			ROOMCONTROLLER.camera_move_to(3, global.__raptor_debug_cam_view_data.left, global.__raptor_debug_cam_view_data.top)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border);
 			ROOMCONTROLLER.camera_zoom_to(3, global.__raptor_debug_cam_view_data.width)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border);
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE
 	);
 	dbg_same_line(); dbg_button(">", function() { 
 			ROOMCONTROLLER.camera_move_by(3,  global.__raptor_debug_cam_view_data.move_step, 0)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border); 
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE
 	);
 	dbg_same_line(); dbg_text(" ");
 	dbg_same_line(); dbg_button("+", function() { 
@@ -91,28 +96,30 @@ function __raptor_debug_view_opened() {
 				global.__raptor_debug_cam_view_data.zoom_min_width, 
 				global.__raptor_debug_cam_view_data.zoom_max_width)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border);
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE
 	);
 	dbg_same_line(); dbg_button("-", function() { 
 			ROOMCONTROLLER.camera_zoom_by(3,  global.__raptor_debug_cam_view_data.zoom_step, 500, 1900)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border); 
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE);
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE);
 	dbg_text("     ");
 	dbg_same_line(); dbg_button("v", function() { 
 			ROOMCONTROLLER.camera_move_by(3, 0, global.__raptor_debug_cam_view_data.move_step)
 				.set_stop_at_room_borders(global.__raptor_debug_cam_view_data.respect_border); 
-		}, DEBUG_CAM_BUTTON_SIZE, DEBUG_CAM_BUTTON_SIZE);
+		}, DEBUG_BUTTON_SIZE, DEBUG_BUTTON_SIZE);
 	dbg_slider_int(ref_create(global.__raptor_debug_cam_view_data, "move_step"),        5,  500, "Camera Move Step", 5); dbg_same_line(); dbg_text("px");
 	dbg_slider_int(ref_create(global.__raptor_debug_cam_view_data, "zoom_step"),        5,  500, "Camera Zoom Step", 5); dbg_same_line(); dbg_text("px");
 	dbg_slider_int(ref_create(global.__raptor_debug_cam_view_data, "zoom_min_width"), 320, 3840, "Camera Min Width", 5); dbg_same_line(); dbg_text("px");
 	dbg_slider_int(ref_create(global.__raptor_debug_cam_view_data, "zoom_max_width"), 320, 3840, "Camera Max Width", 5); dbg_same_line(); dbg_text("px");
-	dbg_checkbox  (ref_create(global.__raptor_debug_cam_view_data, "respect_border"), "Respect Room Borders");	
+	dbg_checkbox  (ref_create(global.__raptor_debug_cam_view_data, "respect_border"), "Respect Room Borders");
+	
 }
 
 function __raptor_debug_view_closed() {
-	dlog("Deleting 'raptor' debug view");
+	dlog("Deleting 'raptor' debug views");
 	dbg_view_delete(global.__raptor_debug_view);
 	dbg_view_delete(global.__raptor_debug_cam_view);
 	ROOMCONTROLLER.camera_move_to(3, global.__raptor_debug_cam_view_data.left, global.__raptor_debug_cam_view_data.top);
 	ROOMCONTROLLER.camera_zoom_to(3, global.__raptor_debug_cam_view_data.width);
+	save_settings();
 }

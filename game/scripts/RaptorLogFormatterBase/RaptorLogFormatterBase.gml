@@ -3,6 +3,7 @@
 */
 
 function RaptorLogFormatterBase() constructor {
+	construct(RaptorLogFormatterBase);
 
 	__log_levels	= ["V", "D", "I", "W", "E", "F", "!"];
 	__init_buffer	= new RingBuffer(LOG_BUFFER_SIZE, "");
@@ -20,7 +21,10 @@ function RaptorLogFormatterBase() constructor {
 		if (_level > 0 || __log_level == 0) {
 			__logline = format_event(__log_levels[@_level], _message);
 			__active_buffer.add(__logline);
-			if (_level >= __log_level) show_debug_message(__logline);
+			if (_level >= __log_level) {
+				for (var i = 0; i < RaptorLogger.appenders.appender_count; i++) 
+					RaptorLogger.appenders.instances[@i].push_line(__logline);
+			}
 		}
 	}
 

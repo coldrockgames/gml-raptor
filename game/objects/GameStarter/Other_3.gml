@@ -2,5 +2,5 @@
 
 mlog($"Invoking onGameEnd()");
 onGameEnd();
-save_settings(true);
-
+save_settings();
+RAPTOR_LOGGER.shutdown();

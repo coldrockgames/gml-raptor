@@ -18,8 +18,8 @@
 #macro BINDINGS	global.__BINDINGS
 BINDINGS		= new ListPool("BINDINGS");
 
-#macro STRING_TO_NUMBER_CONVERTER	function(_value) { return real(_value); }
-#macro NUMBER_TO_STRING_CONVERTER	function(_value) { return string(_value); }
+#macro STRING_TO_NUMBER_CONVERTER	function(_name, _value) { return real(_value); }
+#macro NUMBER_TO_STRING_CONVERTER	function(_name, _value) { return string(_value); }
 
 function PropertyBinder(_myself = undefined, _parent = undefined) constructor {
 	construct(PropertyBinder);

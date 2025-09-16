@@ -3,9 +3,9 @@
 	
 	- The current RoomController object is a child of RoomController and is visible
 	- DEBUG_MODE_ACTIVE = true; (activates toggling debug info with the F12 key)
-	- global.__debug_shown is true (toggled by the F12 key)
+	- DEBUG_VIEW_SHOWN is true (toggled by the F12 key)
 	
-	(c)2022- coldrock.games, @grisgram at github
+	(c)coldrock.games
 */
 // Feather ignore all in ./*
 
@@ -13,7 +13,7 @@
 
 // When the debug gets opened, which panels shall become visible?
 #macro DEBUG_VIEW_SHOW_RAPTOR_PANEL			true
-#macro DEBUG_VIEW_SHOW_CAMERA_PANEL			true
+#macro DEBUG_VIEW_SHOW_CAMERA_PANEL			false
 
 /// @func	drawDebugInfo()
 /// @desc	Use this function to draw anything to the screen each frame.

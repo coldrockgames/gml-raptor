@@ -2,6 +2,17 @@
     Helper functions for arrays
 */
 
+/// @func	array_clone(_source)
+/// @desc	Creates a copy of the specified _source array.
+///			NOTE: This is not a deep copy! It's just a small
+///			convenience function which covers array_create + array_copy
+///			in one function.
+function array_clone(_source) {
+	var rv = array_create(array_length(_source));
+	array_copy(rv, 0, _source, 0, array_length(_source));
+	return rv;
+}
+
 /// @func		array_create_2d(sizex, sizey, initial_value = 0)
 /// @desc	Create a 2-dimensional array and fill it with a specified initial value
 function array_create_2d(sizex, sizey, initial_value = 0) {
@@ -167,4 +178,12 @@ function array_remove(array, value) {
 		return true;
 	}
 	return false;
+}
+
+/// @func	array_index_of(array, value)
+/// @desc	Get the index of a specified value in the array or -1, if not found.
+function array_index_of(array, value) {
+	for (var i = 0, len = array_length(array); i < len; i++)
+		if (array[@i] == value) return i;
+	return -1;
 }

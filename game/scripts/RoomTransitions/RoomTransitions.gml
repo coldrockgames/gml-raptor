@@ -17,7 +17,7 @@ function __RoomTransition(_target_room, _need_fx_layer, _data = undefined) : Dat
 	data			= _data ?? {};
 	
 	source_room		= room;
-	target_room		= _target_room;
+	target_room		= asset_from_string(_target_room);
 	need_fx_layer	= _need_fx_layer;
 	
 	in_step			= EMPTY_FUNC;
@@ -66,6 +66,11 @@ function __RoomTransition(_target_room, _need_fx_layer, _data = undefined) : Dat
 		__ACTIVE_TRANSITION_STEP = -1;
 		TRANSITION_RUNNING = false;
 		__destroy_fx_layer();
+		// always add the was_loading member
+		// savegame_load adds it when loading, but if you never load
+		// the member wouldn't be here
+		data ??= {};
+		vsgetx(data, "was_loading", false); 
 		with(ROOMCONTROLLER) onTransitFinished(other.data);
 	}
 

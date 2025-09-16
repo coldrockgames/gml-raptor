@@ -53,7 +53,7 @@ function file_read_text_file_absolute(filename, cryptkey = "", remove_utf8_bom =
 	}
 	
 	TRY
-		dlog($"Loading text file {filename}");
+		vlog($"Loading text file {filename}");
 	    var _buffer = buffer_load(filename);
 		var bufsize = max(0, buffer_get_size(_buffer));
 		vlog($"Loaded {bufsize} bytes from file");
@@ -90,7 +90,7 @@ function file_read_binary_absolute(filename, cryptkey = "", add_to_cache = false
 	}
 	
 	TRY
-		dlog($"Loading binary file {filename}");
+		vlog($"Loading binary file {filename}");
 	    var buffer = buffer_load(filename);
 		var bufsize = max(0, buffer_get_size(buffer));
 		vlog($"Loaded {bufsize} bytes from file");
@@ -179,14 +179,14 @@ function file_read_struct(filename, cryptkey = "", add_to_cache = false) {
 	return file_read_struct_plain(filename, add_to_cache);
 }
 
-/// @func	file_write_struct_plain(filename, struct, print_pretty = true)
+/// @func	file_write_struct_plain(filename, struct, print_pretty = DEBUG_MODE_ACTIVE)
 /// @desc	Saves a given struct as a plain text json file.
-function file_write_struct_plain(filename, struct, print_pretty = true) {
+function file_write_struct_plain(filename, struct, print_pretty = DEBUG_MODE_ACTIVE) {
 	__ensure_file_cache();
 	filename = __clean_file_name(filename);
 	TRY
 		dlog($"Saving plain text struct to '{filename}'");
-		file_write_text_file(filename, SnapToJSON(struct, print_pretty));
+		file_write_text_file(filename, json_stringify(struct, print_pretty));
 		if (variable_struct_exists(__FILE_CACHE, filename)) {
 			dlog($"Updated cache for file '{filename}' (struct)");
 			struct_set(__FILE_CACHE, filename, deep_copy(struct));
@@ -211,7 +211,7 @@ function file_read_struct_plain(filename, add_to_cache = false) {
 			vlog($"Read {(string_is_empty(contents) ? "0" : string_length(contents))} characters from file");
 			var rv = undefined;
 			if (!string_is_empty(contents)) {
-				var indata = SnapFromJSON(contents);
+				var indata = (IS_HTML ? SnapFromJSON(contents) : json_parse(contents));
 				rv = __file_reconstruct_root(indata);
 				if (add_to_cache) {
 					dlog($"Added file '{filename}' to cache (struct)");
@@ -219,7 +219,14 @@ function file_read_struct_plain(filename, add_to_cache = false) {
 				}
 			}
 			return rv;
-		CATCH return undefined;	ENDTRY
+		CATCH 
+			if (string_contains(EXCEPTION_MESSAGE, "JSON parse error")) {
+				if (CONFIGURATION_DEV && os_type == os_windows)
+					show_message($"JSON ERROR IN {filename}:\n\n{EXCEPTION_MESSAGE}");
+				throw("JSON PARSE ERROR");
+			}
+			return undefined;	
+		ENDTRY
 	} else
 		elog($"** ERROR ** File '{__FILE_WORKINGFOLDER_FILENAME}' does not exist!");
 	return undefined;

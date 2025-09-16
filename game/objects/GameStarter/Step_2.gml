@@ -9,7 +9,10 @@ spinner_y = VIEW_HEIGHT - spinner_h - 16;
 if (game_init_step && first_step) {
 	async_wait_timeout = max(async_wait_timeout, async_min_wait_time);
 	game_init_step = false;
-	window_center();
+	if (vsgetx(GAMESETTINGS, "first_start", true)) {
+		window_center();
+		GAMESETTINGS.first_start = false;
+	}
 }
 first_step = false;
 

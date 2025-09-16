@@ -35,6 +35,8 @@
 // After that, this setting is taken from the GameSettings.
 // This is to allow you easily changing the startup values through your
 // Settings dialog in the window, so the user can choose, what he prefers.
+#macro REMEMBER_WINDOW_POSITION		true
+
 #macro		   START_FULLSCREEN		false
 #macro release:START_FULLSCREEN		true
 #macro FULLSCREEN_IS_BORDERLESS		true
@@ -64,8 +66,6 @@
 function onGameStart() {
 
 	// Debug/Dev configuration
-	DEBUG_SHOW_OBJECT_FRAMES	= false;
-	DEBUG_SHOW_OBJECT_DEPTH		= false;
 	DEBUG_MODE_WINDOW_WIDTH		= 1280;
 	DEBUG_MODE_WINDOW_HEIGHT	= 720;
 

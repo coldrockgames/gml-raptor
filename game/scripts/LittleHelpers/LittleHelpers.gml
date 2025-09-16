@@ -57,73 +57,41 @@ function percent_mult(val, total) {
 /// @param {object_index} child An object instance or object_index of the child to analyze
 /// @param {object} parent		The object_index (just the type) of the parent to find
 /// @returns {bool}
-#macro __OBJECT_HAS_NO_PARENT	-100
-#macro __OBJECT_DOES_NOT_EXIST	-1
 function is_child_of(child, parent) {
 	if (is_null(child)) return false;
-	if (is_string(parent)) parent = asset_get_index(parent);
+	if (is_string(child)) child = asset_get_index(child);
+	if (!is_string(parent)) parent = typename_of(parent);
 
-	if (!instance_exists(parent) && string_starts_with(string(parent), "ref script"))
-		return false;
-		
-	var to_find, to_find_parent;
-	if (instance_exists(child)) {
-		to_find = child.object_index;
-		if (IS_HTML || !instance_exists(parent)) {
-			if (object_get_name(to_find) == object_get_name(parent)) return true;
-		} else
-			if (to_find == parent.object_index) return true;
-		to_find = child;
-	} else {
-		to_find = child;
-		if (IS_HTML) {
-			if (object_get_name(to_find) == object_get_name(parent)) return true;
-		} else
-			if (child == parent) return true;
-	}
-	
-	try {
-		to_find = to_find.object_index;
-		while (to_find != __OBJECT_HAS_NO_PARENT && to_find != __OBJECT_DOES_NOT_EXIST) {
-			if (to_find == parent) 
-				return true;
-			to_find = object_get_parent(to_find);
-		}
-	} catch (_) {
-		return false;
-	}
-	
-	return to_find != __OBJECT_HAS_NO_PARENT && to_find != __OBJECT_DOES_NOT_EXIST;
+	return array_contains(object_tree(child), parent);
 }
 
 #macro __OBJECT_TREE_CACHE	global.__object_tree_cache
 __OBJECT_TREE_CACHE = {};
 
-/// @func	object_tree(_object_or_instance, _as_strings = true, _full_tree = true)
+#macro __OBJECT_HAS_NO_PARENT	-100
+#macro __OBJECT_DOES_NOT_EXIST	-1
+
+/// @func	object_tree(_object_or_instance, _as_strings = true)
 /// @desc	Gets the entire object hierarchy as an array for the specified object type or instance.
 ///			At position[0] you will find the _object_or_instance's object_index and at the
 ///			last position of the array you will find the root class of the tree.
-function object_tree(_object_or_instance, _as_strings = true, _full_tree = true) {
+function object_tree(_object_or_instance, _as_strings = true) {
 	if (_object_or_instance == undefined) 
 		return undefined;
 		
-	var ind = instance_exists(_object_or_instance) ? _object_or_instance.object_index : _object_or_instance;
+	var ind = is_object_instance(_object_or_instance) ? _object_or_instance.object_index : _object_or_instance;
 	var obj_val  = _as_strings ? object_get_name(ind) : ind;
 	
-	var key = $"{obj_val}.{_full_tree}";
+	var key = $"{obj_val}";
 	var ocache = vsget(__OBJECT_TREE_CACHE, key);
 	if (ocache != undefined)
 		return ocache;
 	
-	var have_me = _full_tree; // if full_tree, then every entry is added
 	var rv = [];
 	var push_val = undefined;
 	while (ind != __OBJECT_HAS_NO_PARENT && ind != __OBJECT_DOES_NOT_EXIST) {
 		push_val = _as_strings ? object_get_name(ind) : ind;
-		if (have_me || push_val == obj_val) {
-			have_me = true;
-			array_push(rv, push_val);
-		}
+		array_push(rv, push_val);
 		ind = object_get_parent(ind);
 	}
 	
@@ -185,7 +153,7 @@ function typename_of(_type) {
 ///			as a string, without its type name or other informations
 ///			or undefined, when _instance is undefined
 function address_of(_instance) {
-	if (!is_null(_instance)) {
+	if (!is_null(_instance) && !is_string(_instance)) {
 		if (IS_HTML) {
 			if (!variable_global_exists("__raptor_html_struct_pointers")) {
 				__FAKE_GAMECONTROLLER;
@@ -220,8 +188,12 @@ function address_of(_instance) {
 			}
 			
 			return $"ptr_{wr.__address_fake}";
-		} else
-			return $"{ptr(_instance)}";
+		} else {
+			var i = 1;
+			var p = $"{ptr(_instance)}";
+			while (string_char_at(p, i) == "0") i++;
+			return $"{string_skip_start(p, i - 1)}";
+		}
 	}
 	return undefined;
 }
@@ -503,6 +475,7 @@ function method_exists(_instance, _method) {
 function invoke_if_exists(_instance, _method) {
 	var meth = is_callable(_method) ? _method : vsget(_instance, _method);
 	if (is_callable(meth)) {
+		with(_instance)
 		switch (argument_count) {
 			case  2: return meth(); break;
 			case  3: return meth(argument[2]); break;
@@ -529,29 +502,34 @@ function invoke_if_exists(_instance, _method) {
 /// @returns {any} The return value of the method or undefined, if the method does not exist
 function invoke_if_exists_ex(_instance, _method, _pa) {
 	var meth = is_callable(_method) ? _method : vsget(_instance, _method);
-		
+	
 	if (is_callable(meth)) {
-		if (_pa == undefined) 
-			return meth();
+		with(_instance) {
+			if (_pa == undefined) 
+				return meth();
 			
-		switch (array_length(_pa)) {
-			case  0: return meth(); break;
-			case  1: return meth(_pa[0]); break;
-			case  2: return meth(_pa[0],_pa[1],); break;
-			case  3: return meth(_pa[0],_pa[1],_pa[2]); break;
-			case  4: return meth(_pa[0],_pa[1],_pa[2],_pa[3]); break;
-			case  5: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4]); break;
-			case  6: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5]); break;
-			case  7: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6]); break;
-			case  8: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7]); break;
-			case  9: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8]); break;
-			case 10: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9]); break;
-			case 11: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10]); break;
-			case 12: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11]); break;
-			case 13: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12]); break;
-			case 14: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12],_pa[13]); break;
-			case 15: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12],_pa[13],_pa[14]); break;
-			case 16: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12],_pa[13],_pa[14],_pa[15]); break;
+			if (!is_array(_pa))
+				_pa = [ _pa ];
+			
+			switch (array_length(_pa)) {
+				case  0: return meth(); break;
+				case  1: return meth(_pa[0]); break;
+				case  2: return meth(_pa[0],_pa[1],); break;
+				case  3: return meth(_pa[0],_pa[1],_pa[2]); break;
+				case  4: return meth(_pa[0],_pa[1],_pa[2],_pa[3]); break;
+				case  5: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4]); break;
+				case  6: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5]); break;
+				case  7: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6]); break;
+				case  8: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7]); break;
+				case  9: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8]); break;
+				case 10: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9]); break;
+				case 11: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10]); break;
+				case 12: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11]); break;
+				case 13: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12]); break;
+				case 14: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12],_pa[13]); break;
+				case 15: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12],_pa[13],_pa[14]); break;
+				case 16: return meth(_pa[0],_pa[1],_pa[2],_pa[3],_pa[4],_pa[5],_pa[6],_pa[7],_pa[8],_pa[9],_pa[10],_pa[11],_pa[12],_pa[13],_pa[14],_pa[15]); break;
+			}
 		}
 	}
 	return undefined;

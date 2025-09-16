@@ -85,7 +85,6 @@ CAM_MAX_Y					= 0;
 #macro VIEW_BOTTOM_EDGE				(VIEW_TOP_EDGE  + UI_VIEW_HEIGHT)
 #macro VIEW_CENTER_X				(VIEW_LEFT_EDGE + VIEW_WIDTH / 2)
 #macro VIEW_CENTER_Y				(VIEW_TOP_EDGE  + VIEW_HEIGHT / 2)
-#macro VIEW_CENTER					VIEW_CENTER_X, VIEW_CENTER_Y
 #macro VIEW_ASPECT_RATIO			(VIEW_WIDTH / VIEW_HEIGHT)
 
 // Room helpers
@@ -97,7 +96,6 @@ CAM_MAX_Y					= 0;
 #macro ROOM_BOTTOM_EDGE				ROOM_HEIGHT - 1
 #macro ROOM_CENTER_X				(ROOM_LEFT_EDGE + ROOM_WIDTH / 2)
 #macro ROOM_CENTER_Y				(ROOM_TOP_EDGE  + ROOM_HEIGHT / 2)
-#macro ROOM_CENTER					ROOM_CENTER_X, ROOM_CENTER_Y
 #macro ROOM_ASPECT_RATIO			(ROOM_WIDTH / ROOM_HEIGHT)
 
 // Virtual Room helpers
@@ -112,7 +110,6 @@ VIRTUAL_ROOM = undefined;
 #macro VIRTUAL_ROOM_BOTTOM_EDGE		VIRTUAL_ROOM.get_bottom()
 #macro VIRTUAL_ROOM_CENTER_X		VIRTUAL_ROOM.get_center_x()
 #macro VIRTUAL_ROOM_CENTER_Y		VIRTUAL_ROOM.get_center_y()
-#macro VIRTUAL_ROOM_CENTER			VIRTUAL_ROOM_CENTER_X, VIRTUAL_ROOM_CENTER_Y
 #macro VIRTUAL_ROOM_ASPECT_RATIO	(VIRTUAL_ROOM_WIDTH / VIRTUAL_ROOM_HEIGHT)
 
 // SELF Coordinates (object dimensions only, without absolute screen position)
@@ -122,7 +119,6 @@ VIRTUAL_ROOM = undefined;
 #macro SELF_HEIGHT_UNSCALED			sprite_get_height(sprite_index)
 #macro SELF_CENTER_X				(sprite_width / 2 - sprite_xoffset)
 #macro SELF_CENTER_Y				(sprite_height / 2 - sprite_yoffset)
-#macro SELF_CENTER					SELF_CENTER_X, SELF_CENTER_Y
 #macro SELF_LEFT_EDGE				-sprite_xoffset
 #macro SELF_TOP_EDGE				-sprite_yoffset
 #macro SELF_RIGHT_EDGE				(sprite_width - 1 - sprite_xoffset)
@@ -136,7 +132,6 @@ VIRTUAL_ROOM = undefined;
 // These include the absolute position (x/y of the object)
 #macro SELF_VIEW_CENTER_X			(x + SELF_CENTER_X)
 #macro SELF_VIEW_CENTER_Y			(y + SELF_CENTER_Y)
-#macro SELF_VIEW_CENTER				SELF_VIEW_CENTER_X, SELF_VIEW_CENTER_Y
 #macro SELF_VIEW_LEFT_EDGE			(x + SELF_LEFT_EDGE)
 #macro SELF_VIEW_TOP_EDGE			(y + SELF_TOP_EDGE)
 #macro SELF_VIEW_RIGHT_EDGE			(x + SELF_RIGHT_EDGE)
@@ -146,3 +141,8 @@ VIRTUAL_ROOM = undefined;
 #macro SELF_DRAW_ON_GUI				(self[$ "draw_on_gui"] ?? false)
 #macro SELF_MOUSE_IS_OVER			(self[$ "mouse_is_over"] ?? false)
 #macro SELF_IS_ENABLED				(self[$ "is_enabled"] ?? true)
+#macro SELF_IS_TOUCHABLE			(self[$ "is_touchable"] ?? true)
+#macro SELF_IS_INTERACTIVE			(!SCENE_IS_LOCKED && SELF_IS_TOUCHABLE && SELF_IS_ENABLED)
+
+// A spawn-position far outside the room
+#macro NIRVANA						-100000

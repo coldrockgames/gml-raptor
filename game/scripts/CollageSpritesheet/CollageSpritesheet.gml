@@ -1,4 +1,4 @@
-enum LineMode {
+enum line_mode {
 	zero,
 	rectangle,
 	//manual // TODO implement
@@ -16,7 +16,7 @@ function CollageSpriteSheet(_collage, _name, _filename_or_sprite) constructor {
 
 	sprites					= [];
 
-	line_mode				= LineMode.zero;
+	linemode				= line_mode.zero;
 	new_line_start			= 0;
 
 	spritesheet_width		= 0;
@@ -162,7 +162,7 @@ function CollageSpriteSheet(_collage, _name, _filename_or_sprite) constructor {
 	/// @desc	Sets whether the spritesheet starts 
 	///			the next line at position 0 (default)
 	static set_line_mode_zero = function() {
-        line_modex = LineMode.zero;
+        linemode = line_mode.zero;
 		new_line_start	= 0;
 		return self;
     };
@@ -171,7 +171,7 @@ function CollageSpriteSheet(_collage, _name, _filename_or_sprite) constructor {
 	/// @desc	Sets whether the SpriteSheet starts 
 	///			the next line at the start position
 	static set_line_mode_rectangle = function() {
-        line_modex = LineMode.rectangle;
+        linemode = line_mode.rectangle;
 		new_line_start	= horizontal_alignment ? sheet_start_x : sheet_start_y;
         return self;
     };
@@ -181,7 +181,7 @@ function CollageSpriteSheet(_collage, _name, _filename_or_sprite) constructor {
 	///			through .add_frame(...)
 	static set_line_mode_manual = function() {
 		throw("set_line_mode_manual: This function is not yet implemented");
-		//__last_spritesheet.set_line_mode(LineMode.manual);
+		//__last_spritesheet.set_line_mode(line_mode.manual);
         return self;
     };
 

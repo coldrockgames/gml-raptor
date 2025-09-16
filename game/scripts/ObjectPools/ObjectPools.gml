@@ -129,22 +129,22 @@ function pool_is_assigned(instance = self) {
 	return (vsget(instance, __POOL_SOURCE_NAME) != undefined);
 }
 
-/// @func					pool_assign_instance(pool_name, instance)
-/// @desc				Assign an instance to a pool so it can be returned to it.
+/// @func	pool_assign_instance(pool_name, instance)
+/// @desc	Assign an instance to a pool so it can be returned to it.
 /// @param {string} pool_name
 /// @param {instance} instance
 function pool_assign_instance(pool_name, instance) {
 	struct_set(instance, __POOL_SOURCE_NAME, pool_name);
 }
 
-/// @func		pool_get_size(pool_name)
+/// @func	pool_get_size(pool_name)
 /// @desc	Gets current size of the pool
 function pool_get_size(pool_name) {
 	return array_length(__get_pool_list(pool_name));
 }
 
-/// @func					pool_clear(pool_name)
-/// @desc				Clears a named pool and destroys all instances contained
+/// @func	pool_clear(pool_name)
+/// @desc	Clears a named pool and destroys all instances contained
 /// @param {string} pool_name
 function pool_clear(pool_name) {
 	var pool = __get_pool_list(pool_name);
@@ -156,7 +156,7 @@ function pool_clear(pool_name) {
 	__OBJECT_POOLS[$ pool_name] = [];
 }
 
-/// @func		pool_dump_all()
+/// @func	pool_dump_all()
 /// @desc	Dumps the names and sizes of all registered pools to the log
 function pool_dump_all() {
 	var sb = new StringBuilder(512);
@@ -173,9 +173,9 @@ function pool_dump_all() {
 	return rv;
 }
 
-/// @func		pool_clear_all()
+/// @func	pool_clear_all()
 /// @desc	Clear all pools. Use this when leaving the room.
-///					NOTE: The ROOMCONTROLLER automatically does this for you in the RoomEnd event
+///			NOTE: The ROOMCONTROLLER automatically does this for you in the RoomEnd event
 function pool_clear_all() {
 	__OBJECT_POOLS = {};
 }

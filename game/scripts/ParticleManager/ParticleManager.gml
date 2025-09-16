@@ -14,23 +14,69 @@
 #macro ENSURE_PARTICLES		if (!variable_global_exists("__raptor_particles")) PARTICLES = {};
 ENSURE_PARTICLES;
 
-/// @func	ParticleManager(particle_layer_name)
+/// @func	GlobalParticleManager(_layer_name, _system_index = 0)
+/// @desc	Create a global, layer-bound ParticleManager
+function GlobalParticleManager(_layer_name, _system_index = 0) :
+	ParticleManager(part_system_create_layer(_layer_name, false)) constructor {
+	ilog($"GlobalParticleManager created for layer '{_layer_name}'");
+
+	__layer_name		= _layer_name;
+	__system_index		= _system_index;
+	__local_parent		= undefined;
+	__is_global			= true;
+	
+}
+
+/// @func	LocalParticleManager(_attach_to, _system_index)
+/// @desc	Create a local, depth-following layer-free ParticleManager
+function LocalParticleManager(_attach_to, _system_index) :
+	ParticleManager(part_system_create(), true) constructor {
+	ilog($"LocalParticleManager created for instance '{name_of(_attach_to)}'");
+
+	__layer_name		= undefined;
+	__system_index		= _system_index;
+	__local_parent		= _attach_to;
+	__is_global			= false;
+	copy_to_local();
+}
+
+/// @func	ParticleManager(_particle_system)
 /// @desc	Helps in organizing particles for a level
 /// @param {string} particle_layer_name
 /// @returns {struct} ParticleManager
-function ParticleManager(particle_layer_name, system_index = 0) constructor {
-	ilog($"ParticleManager created for layer '{particle_layer_name}'");
-	system = part_system_create_layer(particle_layer_name, false);
+function ParticleManager(_particle_system, _manual_cleanup = false) constructor {
+	system = _particle_system;
 	
+	__is_global			= true;
+	__layer_name		= "";
+	__system_index		= -1;
+	__manual_cleanup	= _manual_cleanup;
 	__emitter_object	= __DEFAULT_EMITTER_OBJECT;
-	__layer_name		= particle_layer_name;
-	__system_index		= system_index;
 	__particle_types	= {};
 	__emitters			= {};
 	__emitter_ranges	= {};
 	
 	__buffered_delta	= {};
 	__buffered_target	= {};
+	
+	/// @func	copy_to_local()
+	/// @desc	Copy all emitters and particle types from global to self
+	copy_to_local = function() {
+		var src = is_array(PARTSYS) ? PARTSYS[@ __system_index] : PARTSYS;
+		// particle types are independent of the system, just link their struct to ours
+		__particle_types = src.__particle_types;				// just a reference!
+		__emitter_ranges = deep_copy(src.__emitter_ranges);	// deep copy those
+		// only manual task is to re-create all the emitters and link them to our system
+		var names = struct_get_names(src.__emitters);
+		for (var i = 0, len = array_length(names); i < len; i++) {
+			var n = names[@i];
+			var e = src.__emitters[$ n];
+			var eminame = e.emitter_name;
+			var newemi	= new __emitter(part_emitter_create(system), e.default_particle);
+			newemi.emitter_name = eminame;
+			struct_set(__emitters, eminame, newemi);
+		}
+	}
 	
 	/// @func	__resolve_emitter_name(name_or_emitter)
 	static __resolve_emitter_name = function(name_or_emitter) {
@@ -123,10 +169,11 @@ function ParticleManager(particle_layer_name, system_index = 0) constructor {
 			is_gui_draw		: is_gui,
 			partsys_index	: ix,
 			follow_instance	: follow_this_instance ? instance : undefined,
+			__local_parent	: __local_parent,
 		};
 		
 		layer_name_or_depth = layer_name_or_depth ?? __layer_name;
-		var rv	= use_object_pools ?
+		var rv	= (use_object_pools && __is_global) ?
 			pool_get_instance(__POOL_EMITTERS, __emitter_object, layer_name_or_depth, init) :
 			instance_create(xp, yp, layer_name_or_depth, __emitter_object, init);
 
@@ -282,7 +329,10 @@ function ParticleManager(particle_layer_name, system_index = 0) constructor {
 			i++;
 		}
 		__particle_types = {};
-
+		__cleanup_system_and_emitters();		
+	}
+	
+	static __cleanup_system_and_emitters = function() {
 		if (part_system_exists(system)) {
 			names = struct_get_names(__emitters);
 			i = 0; repeat(array_length(names)) {
@@ -405,7 +455,7 @@ function __emitter(part_emitter, default_particle_name = "") constructor {
 function __emitter_range(name) constructor {
 	ename = name;
 	
-	ctor		= undefined;
+	init		= undefined;
 	center		= undefined;
 	minco		= undefined;
 	maxco		= undefined;
@@ -415,9 +465,9 @@ function __emitter_range(name) constructor {
 	edist		= undefined;
 	
 	static clone_from = function(_original) {
-		ctor		= {
-			minco: _original.ctor.minco.clone2(),
-			maxco: _original.ctor.maxco.clone2()
+		init		= {
+			minco: _original.init.minco.clone2(),
+			maxco: _original.init.maxco.clone2()
 		};
 		center		= _original.center.clone2();
 		minco		= _original.minco.clone2();
@@ -431,7 +481,7 @@ function __emitter_range(name) constructor {
 	
 	/// @func with_values(xmin, xmax, ymin, ymax, shape, distribution)
 	static with_values = function(xmin, xmax, ymin, ymax, shape, distribution) {
-		ctor = {
+		init = {
 			minco: new Coord2(xmin, ymin),
 			maxco: new Coord2(xmax, ymax)
 		};
@@ -447,8 +497,8 @@ function __emitter_range(name) constructor {
 	
 	/// @func		scale_to(_instance)
 	static scale_to = function(_instance) {
-		minco.set(ctor.minco.x * _instance.image_xscale, ctor.minco.y * _instance.image_yscale);
-		maxco.set(ctor.maxco.x * _instance.image_xscale, ctor.maxco.y * _instance.image_yscale);
+		minco.set(init.minco.x * _instance.image_xscale, init.minco.y * _instance.image_yscale);
+		maxco.set(init.maxco.x * _instance.image_xscale, init.maxco.y * _instance.image_yscale);
 		center.set((maxco.x - minco.x) / 2, (maxco.y - minco.y) / 2);
 		baseminco.set(minco.x, minco.y);
 		basemaxco.set(maxco.x, maxco.y);
@@ -456,8 +506,8 @@ function __emitter_range(name) constructor {
 
 	/// @func	scale_to_factor(_xscale, _yscale)
 	static scale_to_factor = function(_xscale, _yscale) {
-		minco.set(ctor.minco.x * _xscale, ctor.minco.y * _yscale);
-		maxco.set(ctor.maxco.x * _xscale, ctor.maxco.y * _yscale);
+		minco.set(init.minco.x * _xscale, init.minco.y * _yscale);
+		maxco.set(init.maxco.x * _xscale, init.maxco.y * _yscale);
 		center.set((maxco.x - minco.x) / 2, (maxco.y - minco.y) / 2);
 		baseminco.set(minco.x, minco.y);
 		basemaxco.set(maxco.x, maxco.y);		

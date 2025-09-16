@@ -14,15 +14,18 @@ GAMESETTINGS = undefined;
 function GameSettings() constructor {
 	construct(GameSettings);
 
-	// --- Custom / additional default settings values ---
-	
-	// ---------------------------------------------------	
-
+	first_start				= true;
+	remember_position		= REMEMBER_WINDOW_POSITION;
 	start_fullscreen		= START_FULLSCREEN;
 	borderless_fullscreen	= FULLSCREEN_IS_BORDERLESS;
 	audio					= AUDIOSETTINGS;
 	use_system_cursor		= false;
 	locale					= LG_CURRENT_LOCALE;
+	
+	if (remember_position) {
+		window_width			= window_get_width();
+		window_height			= window_get_height();
+	}
 	
 	if (HIGHSCORES != undefined) 
 		highscoredata = HIGHSCORES.data;
@@ -35,6 +38,8 @@ function GameSettings() constructor {
 		ilog($"GameSettings reset");
 		save_settings();
 	}
+	
+	on_game_settings_created(self);
 }
 
 /// @function load_settings()
@@ -46,10 +51,36 @@ function load_settings() {
 	AUDIOSETTINGS = GAMESETTINGS.audio;
 	LG_init(vsget(GAMESETTINGS, "locale"));
 	
-	// --- Custom / additional actions after loading settings ---
-	
-	// ----------------------------------------------------------
-	
+	with(GAMESETTINGS) {
+		if ( vsgetx(self, "remember_position", REMEMBER_WINDOW_POSITION) &&
+			!vsgetx(self, "start_fullscreen", START_FULLSCREEN)) {
+			window_set_position(
+				vsgetx(self, "window_left",  window_get_x()),
+				vsgetx(self, "window_top",   window_get_y())
+			);
+			window_set_size(
+				vsgetx(self, "window_width",  window_get_width()),
+				vsgetx(self, "window_height", window_get_height())
+			);
+		}
+		
+		// debug colors
+		if (CONFIGURATION_DEV) {
+			var dbg_views = vsget(self, "debug_views");
+			if (dbg_views != undefined) {
+				DEBUG_DEFAULT_FRAME_COLOR_WORLD		= dbg_views.frame_world;
+				DEBUG_DEFAULT_FRAME_COLOR_UI		= dbg_views.frame_ui;
+				DEBUG_DEFAULT_FRAME_COLOR_OVER		= dbg_views.frame_over;
+				DEBUG_DEFAULT_FRAME_COLOR_CONTAINER = dbg_views.frame_container;
+				DEBUG_SHOW_OBJECT_FRAMES			= dbg_views.show_frames;	
+				DEBUG_SHOW_OBJECT_DEPTH				= dbg_views.show_depth;
+			}
+		}
+		
+	}
+
+	on_game_settings_loaded(GAMESETTINGS);
+
 	dlog($"Settings loaded");
 }
 
@@ -57,13 +88,35 @@ function load_settings() {
 function save_settings() {
 	dlog($"Saving settings...");
 	
-	// --- Custom / additional actions when saving settings ---
+	on_game_settings_saving(GAMESETTINGS);
+
+	with(GAMESETTINGS) {
 	
-	// --------------------------------------------------------
+		locale = LG_CURRENT_LOCALE;
+		
+		if (vsgetx(self, "remember_position", REMEMBER_WINDOW_POSITION)) {
+			window_width		= window_get_width();
+			window_height		= window_get_height();
+			window_left			= window_get_x();	
+			window_top			= window_get_y();	
+			start_fullscreen	= window_get_fullscreen();
+		}
+		
+		if (CONFIGURATION_DEV) {
+			debug_views = {
+				frame_world:		DEBUG_DEFAULT_FRAME_COLOR_WORLD,
+				frame_ui:			DEBUG_DEFAULT_FRAME_COLOR_UI,
+				frame_over:			DEBUG_DEFAULT_FRAME_COLOR_OVER,
+				frame_container:	DEBUG_DEFAULT_FRAME_COLOR_CONTAINER,
+				show_frames:		DEBUG_SHOW_OBJECT_FRAMES,
+				show_depth:			DEBUG_SHOW_OBJECT_DEPTH,
+			}
+		}
+		
+		if (HIGHSCORES != undefined)
+			highscoredata = HIGHSCORES.data;
+	}
 	
-	GAMESETTINGS.locale = LG_CURRENT_LOCALE;	
-	if (HIGHSCORES != undefined)
-		GAMESETTINGS.highscoredata = HIGHSCORES.data;
 	file_write_struct(GAME_SETTINGS_FILENAME, GAMESETTINGS, FILE_CRYPT_KEY)
 	dlog($"Settings saved");
 }

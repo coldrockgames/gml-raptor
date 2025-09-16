@@ -3,7 +3,7 @@
 // --- GLOBAL GAME THINGS ---
 event_inherited();
 #macro GAMECONTROLLER				global.__game_controller
-#macro __FAKE_GAMECONTROLLER		if (!variable_global_exists("__game_controller")) GAMECONTROLLER=SnapFromJSON("{\"image_index\":0}");
+#macro __FAKE_GAMECONTROLLER		if (!variable_global_exists("__game_controller")) GAMECONTROLLER=json_parse("{\"image_index\":0}");
 GAMECONTROLLER = self;
 
 #macro BROADCASTER					global.__broadcaster
@@ -27,8 +27,8 @@ __add_async_file_callback = function(_owner, _async_id, _callback) {
 	};
 	ASYNC_OPERATION_RUNNING = true;
 }
-
-__invoke_async_file_callback = function(_async_id, _result) {
+	
+	__invoke_async_file_callback = function(_async_id, _result) {
 	TRY
 		var cbn = $"RAC{_async_id}";
 		var cb = vsget(__RAPTOR_ASYNC_CALLBACKS, cbn);
@@ -44,9 +44,9 @@ __invoke_async_file_callback = function(_async_id, _result) {
 
 /// @func	toggle_debug_view()
 toggle_debug_view = function() {
-	global.__debug_shown = !global.__debug_shown;
-	show_debug_overlay(global.__debug_shown);
-	if (global.__debug_shown) {
+	DEBUG_VIEW_SHOWN = !DEBUG_VIEW_SHOWN;
+	show_debug_overlay(DEBUG_VIEW_SHOWN);
+	if (DEBUG_VIEW_SHOWN) {
 		__raptor_debug_view_opened();
 		onDebugViewStarted(); 
 	} else {
@@ -77,8 +77,8 @@ curr_height = browser_height;
 if (__html_active)
 	browser_scrollbars_enable();
 
-/// @func					update_canvas()
-/// @desc				Update the browser canvas
+/// @func	update_canvas()
+/// @desc	Update the browser canvas
 update_canvas = function() {
 	if (!__html_active)
 		return;

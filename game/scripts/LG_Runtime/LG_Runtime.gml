@@ -6,6 +6,7 @@
 #macro __LG_FALLBACK			global.__lg_fallback_map
 #macro __LG_STRINGS				global.__lg_string_map
 #macro __LG_RESOLVE_CACHE		global.__lg_cache
+#macro __LG_CACHE_ENABLED		global.__lg_cache_enabled
 #macro __LG_ASYNC_FILES			global.__lg_async_files
 
 #macro __LG_LOCALE_BASE_NAME	"locale_"
@@ -103,6 +104,7 @@ function LG_init(locale_to_use = undefined) {
 	__LG_FALLBACK		= undefined;
 	__LG_STRINGS		= undefined;
 	__LG_RESOLVE_CACHE	= {};
+	__LG_CACHE_ENABLED	= true;
 	LG_OS_LANGUAGE		= os_get_language();
 	LG_CURRENT_LOCALE	= (locale_to_use == undefined ? LG_OS_LANGUAGE : locale_to_use);
 	
@@ -183,6 +185,16 @@ function LG() {
 			return undefined;
 			
 		for (var i = 1; i < array_length(array); i++) {
+			array[@ i] = LG.findvars(array[@ i], self);
+			
+			var ref = LG.findref(array[@ i]);
+			while (ref != undefined) {
+				var refresolve = findvars(ref, self);
+				var resolved = LG(string_trim(string_copy(refresolve, 3, string_length(refresolve) - 3)));
+				array[@ i] = string_replace(array[@ i], ref, resolved);
+				ref = LG.findref(array[@ i]);
+			}
+
 			var subarr = string_split(array[@ i], "/", true);
 			var sublen = array_length(subarr);
 			array_copy(args, len, subarr, 0, sublen);
@@ -231,21 +243,36 @@ function LG() {
 	
 	// this inner function looks for a [?...] string reference and returns it
 	static findref = function(str) {
-		var startpos = string_pos("[?", str);
+		var startpos = string_index_of(str, "[?");
 		if (startpos > 0) {
-			var runner = string_copy(str, startpos, string_length(str) - startpos + 1);
-			var endpos = string_pos("]", runner);
+			var runner = string_substring(str, startpos);
+			// find the matching close bracket (more inner brackets might occur)
+			var endpos = startpos + 1;
+			var skipbrackets = 0;
+			var nextchar = string_char_at(runner, endpos);
+			var maxpos = string_length(runner);
+			while (skipbrackets >= 0 || nextchar != "]") {
+				endpos++;
+				if (endpos > maxpos) {
+					endpos = -1;
+					break;
+				}
+				nextchar = string_char_at(runner, endpos);
+				if (nextchar == "[") skipbrackets++;
+				if (nextchar == "]") skipbrackets--;
+			}
+			//var endpos = string_last_index_of(runner, "]");
 			if (endpos > 2)
-				return string_copy(runner, 1, endpos);
+				return string_substring(runner, 1, endpos);
 		}
 		return undefined;
 	}
 	
-	// this inner function looks for variable values [:...] and tries to resolve it
+	// this inner function looks for variable values [:...] and tries to resolve them
 	static findvars = function(str, _scope) {
 		static __resolve_variable = function(_scope, str) {
 			var sa = string_split(string_substring(str, 1, string_pos("]", str) - 1), ".");
-			TRY
+			try {
 				var next = struct_get(_scope, sa[0]);
 				for (var i = 1, len = array_length(sa); i < len; i++) 
 					next = struct_get(next, sa[@i]);
@@ -254,9 +281,9 @@ function LG() {
 					return string(next());
 				else
 					return string(next);
-			CATCH
-				return $"??? {str} ???";
-			ENDTRY
+			} catch (_) {
+				return $"??? {string_replace_all(string_replace_all(string(str),"[",""),"]","")} ???";
+			}
 		}
 	
 		var startpos = 1;
@@ -288,52 +315,55 @@ function LG() {
 		return str;
 	}
 	
+	var may_cache = true;
 	var cacheKey = "";
 	var args = [__LG_STRINGS];
 	for (var i = 0; i < argument_count; i++) {
 		if (is_null(argument[@i]) || string_is_empty(argument[@i]))
 			continue;
-			
+		
 		var argconv = string_starts_with(argument[i], "=") ? string_skip_start(argument[i], 1) : argument[i];
 		if (string_ends_with(argconv, "*")) {
 			wildcard = true;
+			may_cache = false;
 			argconv = string_skip_end(argconv, 1);
 		}
 		if (argconv != "") {
+			may_cache &= !string_contains(argconv, "[:") && !string_contains(argconv, "[?");
 			array_push(args, argconv);
 			cacheKey = string_concat(cacheKey, (argconv + (i < argument_count - 1 ? "/" : "")));
 		}
 	}
 	
-	if (!wildcard && variable_struct_exists(__LG_RESOLVE_CACHE, cacheKey)) {
+	if (__LG_CACHE_ENABLED && !wildcard && variable_struct_exists(__LG_RESOLVE_CACHE, cacheKey)) {
 		return struct_get(__LG_RESOLVE_CACHE, cacheKey);
 	}
 	
 	var result = find(wildcard, args);
-	var may_cache = true;
 	if (result == undefined) {
 		args[@ 0] = __LG_FALLBACK;
 		result = find(wildcard, args);
 	}
 	if (result == undefined) {
 		array_delete(args, 0, 1);
-		result = string_concat("???", string_replace(string_replace(string(args),"[",""),"]",""), "???");
+		result = string_concat("???", string_replace_all(string_replace_all(string(args),"[",""),"]",""), "???");
 	} else {
 		var ref = findref(result);
 		while (ref != undefined) {
-			var resolved = LG(string_trim(string_copy(ref, 3, string_length(ref) - 3)));
+			var refresolve = findvars(ref, self);
+			var resolved = LG(string_trim(string_copy(refresolve, 3, string_length(refresolve) - 3)));
 			result = string_replace(result, ref, resolved);
 			ref = findref(result);
 		}
 		var before = result;
 		result = findvars(result, self);
-		may_cache = (before == result);
+		may_cache &= (before == result);
 	}
 	
 	if (LG_SCRIBBLE_COMPATIBLE == false)
 		string_replace_all(result, "[[", "[");
 	
-	if (may_cache && !wildcard && !string_is_empty(cacheKey)) // we do not cache random picks
+	if (__LG_CACHE_ENABLED && may_cache && !string_is_empty(cacheKey)) // we do not cache random picks
 		struct_set(__LG_RESOLVE_CACHE, cacheKey, result);
 		
 	return result;
@@ -361,4 +391,3 @@ if (LG_AUTO_INIT_ON_STARTUP) {
 	show_debug_message("Initializing LG localization subsystem.");
 	LG_init();
 }
-	

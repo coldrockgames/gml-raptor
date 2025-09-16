@@ -62,7 +62,7 @@ for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*.txt"') 
 for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%JEXT%"') do @echo "%%i", >>"%FLIST%"
 for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%SEXT%"') do @echo "%%i", >>"%FLIST%"
 for /f "delims=" %%i in ('dir /s /b /a-d /on "%YYprojectDir%\datafiles\*%PEXT%"') do @echo "%%i", >>"%FLIST%"
-ECHO     ], >>%FLIST%
+ECHO     ""], >>%FLIST%
 ECHO     "directories": [ >>%FLIST%
 for /f "delims=" %%i in ('dir /s /b /ad /on "%YYprojectDir%\datafiles\*.*"') do @echo "%%i", >>"%FLIST%"
 
@@ -70,17 +70,25 @@ SET "ESCAPED=%YYprojectDir:\=\\%"
 powershell -Command "(Get-Content %FLIST%) -replace '\"%ESCAPED%\\datafiles\\', '        \"' | Set-Content %FLIST%"
 powershell -Command "(Get-Content %FLIST%) -replace '\\', '/' | Set-Content %FLIST%"
 
-ECHO     ] >>%FLIST%
+ECHO     ""] >>%FLIST%
 ECHO } >>%FLIST%
 
 :CONFIG_CHECK
 IF [%YYconfig%]==[beta] GOTO RUNJX
 IF [%YYconfig%]==[release] GOTO RUNJX
-GOTO END
+GOTO SOURCE_CODE_LOCATION
 
 :RUNJX
 REM The json compiler is not part of the raptor free edition
+REM goto delete_hot_reload here as hot reloading is a pro feature
+GOTO DELETE_HOT_RELOAD
+:SOURCE_CODE_LOCATION
+REM goto delete_hot_reload here as hot reloading is a pro feature
+GOTO DELETE_HOT_RELOAD
+
+:DELETE_HOT_RELOAD
+IF EXIST %YYprojectDir%\datafiles\hotreload.json DEL /Q %YYprojectDir%\datafiles\hotreload.json
 GOTO END
 
 :END
-ECHO Buildnumber update completed.
+ECHO gml-raptor build script completed.

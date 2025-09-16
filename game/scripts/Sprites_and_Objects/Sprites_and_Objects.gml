@@ -11,10 +11,10 @@ function instance_create(xp, yp, layer_name_or_depth, object, struct = undefined
 	layer_name_or_depth = if_null(layer_name_or_depth, 0);
 	var skin = SKIN.__get_inherited_skindata(object);
 	if (skin != undefined) {
-		struct = struct_join_into(struct ?? {}, skin);
+		struct = struct_enrich_into({}, struct, skin);
 		struct_set(struct, __RAPTOR_PRE_SKIN_APPLY, true);
 	}
-		
+
 	if (struct == undefined)
 		return is_string(layer_name_or_depth) ?
 			instance_create_layer(xp, yp, layer_name_or_depth, object) :
@@ -55,28 +55,42 @@ function instance_clone(_instance = self, layer_name_or_depth = undefined, struc
 /// @func	is_object_instance(_inst)
 /// @desc	Checks whether a variable holds a living (not deactivated) object instance
 function is_object_instance(_inst) {
-	if (is_null(_inst) || (typeof(_inst) != "ref" && (is_real(_inst) || is_string(_inst))))
+	if (is_null(_inst) || is_string(_inst) || is_array(_inst) || is_bool(_inst) || is_callable(_inst)) 
 		return false;
-	
-	return	!is_string(_inst) &&
-			!is_array(_inst) &&
-			real(_inst) >= 100000 &&
-			(typeof(_inst) == "ref" || is_struct(_inst) || instance_exists(_inst)) &&
-			struct_exists(_inst, "id") && 
-			struct_exists(_inst, "object_index") && 
-			!is_null(object_get_name(vsget(_inst, "object_index")));
+
+	// normalize instance-refs (structs) as id, if available
+	// HTML-effect: if '_inst' is just a real number here, nothing bad happens
+	if (is_struct(_inst) || vsget(_inst, "id") != undefined) {
+		if (real(_inst) >= 100000 && variable_struct_exists(_inst, "id")) _inst = _inst.id; 
+		else 
+			return false;
+	}
+
+	// Definitive Probe: make a probe in a with-statement
+	// (with only succeeds if the object can be "entered", i.e. has a scope)
+	var probe = _inst;
+	try { 
+		with (probe)
+			if (id == probe) return true; 
+	} catch (_) { 
+		return false; 
+	}
+	return false;	
 }
 
 /// @func	is_dead_object_instance(_inst)
 /// @desc	Checks whether a variable holds a dead/destroyed object instance pointer
 function is_dead_object_instance(_inst) {
-	return	!is_null(_inst) && 
-			!is_string(_inst) &&
-			!is_array(_inst) &&
-			real(_inst) >= 100000 &&
-			(typeof(_inst) == "ref" || vsget(_inst, "id") || vsget(_inst, "object_index")) &&
-			!instance_exists(_inst)
-			;
+	if (is_null(_inst) || is_string(_inst) || is_array(_inst) || is_bool(_inst) || is_callable(_inst)) 
+		return false;
+
+	// normalize instance-refs (structs) as id, if available
+	if (is_struct(_inst) || vsget(_inst, "id") != undefined) {
+		if (variable_struct_exists(_inst, "id")) _inst = _inst.id; 
+		else 
+			return false;
+	}
+	return real(_inst) >= 100000 && !instance_exists(_inst);
 }
 
 /// @func	get_sprite_scale_for(_target_width, _target_height, _into = undefined)
@@ -147,10 +161,12 @@ function is_mouse_over(_instance, _is_gui = false) {
 }
 
 global.__topmost_instance_finder_list = ds_list_create();
-/// @func	get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined)
-/// @desc	Gets the topmost object at the specified coordinates
-///			In addition, you may specify an array of types and/or instances, which shall be ignored
-function get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined) {
+/// @func	get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined, _draw_on_gui = undefined)
+/// @desc	Gets the topmost object at the specified coordinates.
+///			In addition, you may specify an array of types and/or instances, 
+///			which shall be ignored,	as well as force the "draw_on_gui" to be 
+///			either ignored too (default, undefined) or to have a specific value (true or false).
+function get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined, _draw_on_gui = undefined) {
 	ds_list_clear(global.__topmost_instance_finder_list);
 	var cnt = instance_position_list(_x, _y, _obj_type, global.__topmost_instance_finder_list, false);
 	if (cnt > 0) {
@@ -173,6 +189,7 @@ function get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefi
 			}
 			if (!tree_found &&
 				(_ignore_instances == undefined || !array_contains(_ignore_instances, newdepth.id)) && 
+				(_draw_on_gui == undefined || vsget(newdepth, "draw_on_gui") == _draw_on_gui) &&
 				newdepth.depth < mindepth.depth) mindepth = newdepth;
 			i++;
 		}

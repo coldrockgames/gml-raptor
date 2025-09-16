@@ -15,6 +15,28 @@ function __Binding(
 	_on_value_changed	= undefined) constructor {
 	construct(__Binding);
 
+	group_len			= 1;
+	group_binding		= is_array(_my_property) || is_array(_source_property);
+	if (group_binding) {
+		if (!is_array(_my_property) || !is_array(_source_property))
+			throw("Group binding requires both property arguments to be arrays.");
+		var mylen = array_length(_my_property);
+		var srlen = array_length(_source_property);
+		if ((mylen == 0 && srlen == 0) || (mylen != 0 && srlen != 0 && mylen != srlen))
+			throw("Group binding arrays must either match size or _source_property must be an empty array");
+		if (mylen == 0) {
+			_my_property = array_create(srlen);
+			array_copy(_my_property, 0, _source_property, 0, srlen);
+		} else if (srlen == 0) {
+			_source_property = array_create(mylen);
+			array_copy(_source_property, 0, _my_property, 0, mylen);
+		}
+		group_len = max(mylen, srlen); // whichever is > 0
+	} else {
+		_my_property = [ _my_property ];
+		_source_property = [ _source_property ];
+	}
+
 	key = $"{_prefix}_{name_of(_myself)}.{_my_property}.{name_of(_source_instance)}";
 	
 	target_instance		= _myself;
@@ -35,20 +57,24 @@ function __Binding(
 	if (DEBUG_LOG_BINDINGS)
 		dlog($"{_prefix}_binding created: {name_of(target_instance ?? self)}.{target_property ?? source_property} is bound to {name_of(source_instance)}.{source_property}");
 	
-	__new_value = undefined;
-	__old_value = undefined;
+	__new_value = array_create(group_len, undefined);
+	__old_value = array_create(group_len, undefined);
+	__sp_runner = undefined;
 	static update_binding = function() {
-		__new_value = (converter != undefined ? 
-			converter(source_instance[$ source_property], source_instance) : 
-			source_instance[$ source_property]);
+		for (var i = 0, len = array_length(source_property); i < len; i++) {
+			__sp_runner = source_property[@i];
+			__new_value[@i] = (converter != undefined ? 
+				converter(__sp_runner, source_instance[$ __sp_runner], source_instance) : 
+				source_instance[$ __sp_runner]);
 
-		if (__new_value != __old_value) {
-			target_instance[$ target_property] = __new_value;
-			__value_buf = __old_value;
-			__old_value = __new_value;
-			if (!__first_change && on_value_changed != undefined)
-				on_value_changed(__new_value, __value_buf, source_instance);
-			__first_change = false;
+			if (__new_value[@i] != __old_value[@i]) {
+				target_instance[$ target_property[@i]] = __new_value[@i];
+				__value_buf = __old_value[@i];
+				__old_value[@i] = __new_value[@i];
+				if (!__first_change && on_value_changed != undefined)
+					on_value_changed(__sp_runner, __new_value[@i], __value_buf, source_instance);
+				__first_change = false;
+			}
 		}
 	}
 
@@ -100,14 +126,17 @@ function WatcherBinding(
 	construct(WatcherBinding);
 		
 	static update_binding = function() {
-		__new_value = source_instance[$ source_property];
+		for (var i = 0, len = array_length(source_property); i < len; i++) {
+			__sp_runner = source_property[@i];
+			__new_value[@i] = source_instance[$ __sp_runner];
 
-		if (__new_value != __old_value) {
-			__value_buf = __old_value;
-			__old_value = __new_value;
-			if (!__first_change && on_value_changed != undefined)
-				on_value_changed(__new_value, __value_buf, source_instance);
-			__first_change = false;
+			if (__new_value[@i] != __old_value[@i]) {
+				__value_buf = __old_value[@i];
+				__old_value[@i] = __new_value[@i];
+				if (on_value_changed != undefined)
+					on_value_changed(__sp_runner, __new_value[@i], __value_buf, source_instance);
+				__first_change = false;
+			}
 		}
 	}
 }

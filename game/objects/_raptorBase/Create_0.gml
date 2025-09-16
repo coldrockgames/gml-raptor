@@ -80,8 +80,8 @@ commit_move = function() {
 
 /// @func __can_touch_this(_instance)
 __can_touch_this = function(_instance) {
-	with(_instance) 
-		return !__INSTANCE_UNREACHABLE;
+	with(_instance)
+		return SELF_IS_INTERACTIVE && !INSTANCE_UNREACHABLE;
 }
 
 __topmost_object_list = ds_list_create();
@@ -103,7 +103,7 @@ is_topmost = function(_x, _y, _with_ui = true) {
 		__topmost_runner = undefined;
 		for (var i = 0; i < __topmost_count; i++) {
 			__topmost_runner = __topmost_object_list[|i];
-			if (!__can_touch_this(__topmost_runner)) continue;
+			if (!can_touch_this(__topmost_runner)) continue;
 			__topmost_mindepth = min(__topmost_mindepth, __topmost_runner.depth);
 		}
 		if (_with_ui)

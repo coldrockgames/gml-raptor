@@ -1,19 +1,25 @@
 /// @desc start the game engine(s)
 
-#macro GAME_CHANNEL_STRING	global.__game_channel_string
+#macro GAME_CHANNEL_STRING				global.__game_channel_string
 GAME_CHANNEL_STRING = LG($"=legal/game_channel_{CONFIGURATION_NAME}");
 
-#macro GAME_VERSION_STRING	global.__game_version_string
-#macro GAME_VERSION_MAJOR	global.__game_version_major
-#macro GAME_VERSION_MINOR	global.__game_version_minor
-#macro GAME_VERSION_BUILD	global.__game_version_build
+#macro GAME_VERSION_STRING				global.__game_version_string
+#macro GAME_VERSION_MAJOR				global.__game_version_major
+#macro GAME_VERSION_MINOR				global.__game_version_minor
+#macro GAME_VERSION_BUILD				global.__game_version_build
 
+#macro RAPTOR_HOT_RELOAD_SOURCE		global.__raptor_hot_reload_source
+#macro RAPTOR_HOT_RELOAD_AVAILABLE	global.__raptor_hot_reload_available
+
+RAPTOR_HOT_RELOAD_AVAILABLE	= false;
+RAPTOR_HOT_RELOAD_SOURCE	= undefined;
 
 if (!debug_mode)
 	randomize();
 
 // Now we have a game controller and can create the real logger
 RAPTOR_LOGGER.set_formatter(new LOG_FORMATTER());
+RAPTOR_LOGGER.game_starting();
 
 // Look for version file
 mlog(__LOG_GAME_INIT_START);
@@ -37,10 +43,12 @@ ilog($"Game seed is {random_get_seed()}");
 ilog($"Startup arguments are {ARGS.args}");
 ilog($"Detecting scribble library: {(IS_SCRIBBLE_LOADED ? "" : "NOT ")}found!");
 ilog($"Detecting Canvas library: {(IS_CANVAS_LOADED ? "" : "NOT ")}found!");
-ilog($"Detecting SNAP library: {(IS_SNAP_LOADED ? "" : "NOT ")}found!");
+ilog($"Detecting Collage library: {(IS_COLLAGE_LOADED ? "" : "NOT ")}found!");
 
 ilog($"Checking for Debug mode: {(DEBUG_MODE_ACTIVE ? "ACTIVE" : "DISABLED")}");
 check_debug_mode();
+
+ilog($"Detecting hot-reload feature: {(RAPTOR_HOT_RELOAD_AVAILABLE ? "ACTIVE": "DISABLED")}");
 
 if (USE_CRASHDUMP_HANDLER) {
 	ilog($"Activating crash dump handler");
@@ -61,6 +69,7 @@ mlog(__LOG_GAME_INIT_FINISH);
 ilog($"Invoking onGameStart()");
 onGameStart();
 
-if (DEBUG_MODE_ACTIVE)
-	window_set_size(DEBUG_MODE_WINDOW_WIDTH, DEBUG_MODE_WINDOW_HEIGHT);
+if (DEBUG_MODE_ACTIVE &&
+	(!REMEMBER_WINDOW_POSITION || vsgetx(GAMESETTINGS, "first_start", true)))
+		window_set_size(DEBUG_MODE_WINDOW_WIDTH, DEBUG_MODE_WINDOW_HEIGHT);
 

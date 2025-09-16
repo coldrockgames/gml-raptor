@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"RaptorLogAppenderBase",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RaptorLogAppenderBase",
+  "parent":{
+    "name":"appenders",
+    "path":"folders/_gml_raptor_/Core/Logger/appenders.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

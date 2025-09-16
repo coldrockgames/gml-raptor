@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Game_Settings",
   "parent":{
-    "name":"__GAME_SETUP__",
-    "path":"folders/__GAME_SETUP__.yy",
+    "name":"_startup_",
+    "path":"folders/_gml_raptor_/Core/_startup_.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

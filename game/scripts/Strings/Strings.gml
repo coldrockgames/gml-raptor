@@ -49,6 +49,7 @@ function string_format_number_left(value, int_digits = 1, dec_digits = 0) {
 /// @param {string} str			The string
 /// @param {integer} count		The number of characters to skip.
 function string_skip_start(str, count) {
+	if (count <= 0) return str;
 	var len = string_length(str);
 	if (count > 0 && len > count)
 		return string_copy(str, count + 1, len - count);
@@ -61,6 +62,7 @@ function string_skip_start(str, count) {
 /// @param {string} str			The string
 /// @param {integer} count		The number of characters to skip/truncate.
 function string_skip_end(str, count) {
+	if (count <= 0) return str;
 	var len = string_length(str);
 	if (count > 0 && len > count)
 		return string_copy(str, 1, len - count);
@@ -161,6 +163,8 @@ function string_last_index_of(str, substr, startpos = 1) {
 ///			* somewhere in the middle means "starts with and ends with" (hello -> he*o)
 ///			You may combine the above in any way you like! ("Hello, World" -> "He*o*Wo*d*")
 ///			NOTE: if no '*' is in wildcard_str, then a == exact match counts!
+///			NOTE: if wildcard_str == "*" then result is str != undefined
+///				  (undefined will always return false)
 ///			Examples:
 ///			string_match("hello", "hel*") -> true
 ///			string_match("hello", "*hel*") -> true
@@ -170,7 +174,7 @@ function string_last_index_of(str, substr, startpos = 1) {
 /// @returns {bool}	
 function string_match(str, wildcard_str) {
     if (wildcard_str == "*") 
-        return true;
+        return str != undefined;
 
 	if (string_index_of(wildcard_str, "*") == 0)
 		return str == wildcard_str;
@@ -353,7 +357,7 @@ function string_parse_hex(str) {
 	return rv;
 }
 
-/// @func	string_get_hex(str)
+/// @func	string_get_hex(decimal, len = 2, to_uppercase = true)
 /// @desc	Converts a decimal value to a hex string of a specified length.
 ///			ATTENTION! If you convert numbers that are too large for the specified
 ///			length, you might lose information! (Like trying to convert 123456789 into a 2-digit hex string)

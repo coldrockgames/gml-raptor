@@ -3,6 +3,8 @@
 #macro GAMESTARTER		global.__gamestarter
 GAMESTARTER				= self;
 
+__FAKE_GAMECONTROLLER;
+
 __reset = function() {
 	// spinner animation
 	spinner_font			= undefined;
@@ -98,8 +100,6 @@ show_loading_text = function(_lg_string) {
 	spinner_text = LG_resolve(_lg_string);
 }
 
-// For the expensive cache, fake the GAME_FRAME content
-__FAKE_GAMECONTROLLER;
 // Inherit the parent event
 event_inherited();
 

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ISensor",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ISensor",
+  "parent":{
+    "name":"Sensory",
+    "path":"folders/_gml_raptor_/Core/Interfaces/Sensory.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

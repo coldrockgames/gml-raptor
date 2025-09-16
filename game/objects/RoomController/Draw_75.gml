@@ -7,5 +7,9 @@ if (ACTIVE_TRANSITION != undefined) {
 	}
 }
 
-if (!global.__debug_shown) exit;
+if (!DEBUG_VIEW_SHOWN) exit;
 drawDebugInfo();
+
+if (CONFIGURATION_DEV && (DEBUG_SHOW_OBJECT_FRAMES || DEBUG_SHOW_OBJECT_DEPTH))
+	__draw_bbox_rotated(true);
+		

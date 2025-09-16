@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"RaptorSimpleFormatter",
   "parent":{
-    "name":"Logger",
-    "path":"folders/_gml_raptor_/Core/Logger.yy",
+    "name":"formatters",
+    "path":"folders/_gml_raptor_/Core/Logger/formatters.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -31,30 +31,49 @@
 	If you have multiple systems active, you must specify the index of the system this Emitter
 	shall use. (Index 0 is the first system, in order of the strings you specified in the
 	RoomController).
+	
+	To create best particle effects, use the ParticleEditor by GameMaker Casts.
+	It can be downloaded from the coldrock server at
+	https://www.coldrock.games/dl/particle-editor/ParticleEditor2.zip
+	or directly from itch.io at
+	https://gamemakercasts.itch.io/particle-editor
 */
 
 // Inherit the parent event
 event_inherited();
+
+enum emitter_render {
+	partsys, local
+}
 
 is_streaming	= false;
 is_gui_draw		= false;
 
 __clone_created = !stream_with_clone;
 __my_emitter	= emitter_name;
+__my_partsys	= undefined;
 
 __raptor_onPoolActivate = function() {
-	follow_instance = undefined;
-	__clone_created = !stream_with_clone;
 	__my_emitter	= emitter_name;
+	__my_partsys	= emitter_mode == emitter_render.partsys ? 
+		(is_array(PARTSYS) ? PARTSYS[@ partsys_index] : PARTSYS) :
+		new LocalParticleManager(self, partsys_index);
+	part_system_automatic_draw(__my_partsys.system, emitter_mode == emitter_render.partsys);
 }
 
 __raptor_onPoolDeactivate = function() {
 	stop();
-	struct_remove(__get_partsys().__emitter_ranges, __my_emitter);
+	struct_remove(__my_partsys.__emitter_ranges, __my_emitter);
+	follow_instance = undefined;
+	__clone_created = !stream_with_clone;
 }
 
-__get_partsys = function() {
-	return (is_array(PARTSYS) ? PARTSYS[@ partsys_index] : PARTSYS);
+__raptor_onPoolActivate();
+
+/// @func	set_emitter_name(_emitter_name)
+/// @desc	Assign a new emitter to use
+set_emitter_name = function(_emitter_name) {
+	__my_emitter = _emitter_name;
 }
 
 /// @func	set_offset(xoff, yoff, _follow_instance = undefined)
@@ -79,8 +98,10 @@ __update_position = function(ps = undefined, force = false) {
 			x = follow_instance.x + follow_offset.x * (scale_with_instance ? follow_instance.image_xscale : 1);
 			y = follow_instance.y + follow_offset.y * (scale_with_instance ? follow_instance.image_yscale : 1);
 		}
+		if (follow_depth) 
+			depth = follow_instance.depth + depth_offset;
 		if (x != xprevious || y != yprevious || force || (is_gui_draw && CAM_HAS_CHANGED)) {
-			ps ??= __get_partsys();
+			ps ??= __my_partsys;
 			
 			if (is_gui_draw)
 				ps.emitter_scale_to_factor(__my_emitter, UI_VIEW_TO_CAM_FACTOR_X, UI_VIEW_TO_CAM_FACTOR_Y);
@@ -109,6 +130,7 @@ stream = function(particles_per_frame = undefined, particle_name = undefined) {
 	var pn = particle_name ?? stream_particle_name;
 	var pc = particles_per_frame ?? stream_particle_count;
 	
+	stream_particle_name = pn;
 	stream_particle_count = pc;
 	if (string_is_empty(__my_emitter)) {
 		if (DEBUG_LOG_PARTICLES)
@@ -117,20 +139,19 @@ stream = function(particles_per_frame = undefined, particle_name = undefined) {
 	}
 	
 	var temp_clone = self;
-	var ps = __get_partsys();
 	if (!__clone_created) {
 		if (instance_exists(follow_instance))
-			temp_clone = ps.emitter_attach_clone(__my_emitter, follow_instance);
+			temp_clone = __my_partsys.emitter_attach_clone(__my_emitter, follow_instance);
 		else
-			temp_clone = ps.emitter_clone(__my_emitter);
+			temp_clone = __my_partsys.emitter_clone(__my_emitter);
 		temp_clone.follow_offset = follow_offset.clone2();
 		__my_emitter = temp_clone.emitter_name;
-		ps.emitter_move_range_to(__my_emitter, x, y);
+		__my_partsys.emitter_move_range_to(__my_emitter, x, y);
 		__clone_created = true;
 	}
 	
 	if (string_is_empty(pn))
-		pn = ps.emitter_get(__my_emitter).default_particle;
+		pn = __my_partsys.emitter_get(__my_emitter).default_particle;
 	
 	if (string_is_empty(pn)) {
 		if (DEBUG_LOG_PARTICLES)
@@ -138,11 +159,11 @@ stream = function(particles_per_frame = undefined, particle_name = undefined) {
 		return temp_clone;
 	}
 	
-	ps.stream_stop(__my_emitter);
-	__update_position(ps, true);
+	__my_partsys.stream_stop(__my_emitter);
+	__update_position(__my_partsys, true);
 	if (DEBUG_LOG_PARTICLES)
-		dlog($"{MY_NAME}: Started streaming {pc} '{pn}' ppf at {ps.emitter_get_range_min(__my_emitter)} through '{__my_emitter}'");
-	ps.stream(__my_emitter, pc, pn);
+		dlog($"{MY_NAME}: Started streaming {pc} '{pn}' ppf at {__my_partsys.emitter_get_range_min(__my_emitter)} through '{__my_emitter}'");
+	__my_partsys.stream(__my_emitter, pc, pn);
 	is_streaming = true;
 	return temp_clone;
 }
@@ -152,8 +173,7 @@ stream = function(particles_per_frame = undefined, particle_name = undefined) {
 stop = function() {
 	if (DEBUG_LOG_PARTICLES)
 		dlog($"{MY_NAME}: Stopped streaming through '{__my_emitter}'");
-	var ps = __get_partsys();	
-	ps.stream_stop(__my_emitter);
+	__my_partsys.stream_stop(__my_emitter);
 	is_streaming = false;
 	return self;
 }
@@ -177,34 +197,34 @@ burst = function(particle_count = undefined, particle_name = undefined, stop_str
 	
 	burst_particle_count = pc;
 	
-	var ps = __get_partsys();
 	if (stop_streaming) stop();
-	__update_position(ps, true);
+	__update_position(__my_partsys, true);
 	if (DEBUG_LOG_PARTICLES)
-		dlog($"{MY_NAME}: Bursting {pc} '{pn}' particles at {ps.emitter_get_range_min(__my_emitter)} through '{__my_emitter}'");
-	ps.burst(__my_emitter, pc, pn);
+		dlog($"{MY_NAME}: Bursting {pc} '{pn}' particles at {__my_partsys.emitter_get_range_min(__my_emitter)} through '{__my_emitter}'");
+	__my_partsys.burst(__my_emitter, pc, pn);
 	return self;
 }
 
 prev_x = x;
 prev_y = y;
 
-if (!string_is_empty(__my_emitter)) {
-	var initps = __get_partsys();	
-	initps.emitter_move_range_to(__my_emitter, x, y);
-}
+__init_done = false;
+__initialize_startup = function() {
+	if (__init_done) return;
 
-__create_init_succeeded = false;
-if (variable_global_exists("__room_particle_system") && !string_is_empty(__my_emitter)) {
-	__create_init_succeeded = true;
+	if (!string_is_empty(__my_emitter)) 
+		__my_partsys.emitter_move_range_to(__my_emitter, x, y);
 
-	var ps = __get_partsys();
-	ps.emitter_move_range_to(__my_emitter, x, y);
+	if (variable_global_exists("__room_particle_system") && !string_is_empty(__my_emitter)) {
+		__init_done = true;
 
-	if (stream_on_create) {
-		stream_start_delay = max(stream_start_delay, 1);
-		if (stream_start_delay > 0 && DEBUG_LOG_PARTICLES)
-			ilog($"{MY_NAME}: Will start streaming in {stream_start_delay} frames");
-		run_delayed(self, stream_start_delay, function() { stream(); });
+		if (stream_on_create) {
+			stream_start_delay = max(stream_start_delay, 1);
+			if (stream_start_delay > 0 && DEBUG_LOG_PARTICLES)
+				ilog($"{MY_NAME}: Will start streaming in {stream_start_delay} frames");
+			run_delayed(self, stream_start_delay, function() { stream(); });
+		}
 	}
 }
+
+__initialize_startup();

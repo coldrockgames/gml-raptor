@@ -8,13 +8,14 @@
 #macro __PARENT_CONSTRUCTOR_NAME			"##_raptor_##.__parent_constructor"
 #macro __INTERFACES_NAME					"##_raptor_##.__interfaces"
 
-#macro interface							() constructor
-
 #macro __STRUCT_JOIN_CIRCULAR_LEVEL			global.__struct_join_circular_level
 #macro __STRUCT_JOIN_CIRCULAR_CACHE			global.__struct_join_circular_cache
 #macro __ENSURE_STRUCT_JOIN_CIRCULAR_CACHE	if (!variable_global_exists("__struct_join_circular_cache")) { __STRUCT_JOIN_CIRCULAR_CACHE = []; __STRUCT_JOIN_CIRCULAR_LEVEL = 0; }
 __ENSURE_STRUCT_JOIN_CIRCULAR_CACHE;
 __STRUCT_JOIN_CIRCULAR_LEVEL = 0;
+
+#macro __CTOR_FUNCTION_NAME					"__ctor"
+#macro ctor									__ctor = function() 
 
 /// @func	construct(_class_name_or_asset)
 /// @desc	Register a class as a constructible class to raptor.
@@ -112,6 +113,8 @@ function implement(_interface) {
 	sname = vsget(res, __CONSTRUCTOR_NAME, sname);
 	if (!array_contains(self[$ __INTERFACES_NAME], sname))
 		array_push(self[$ __INTERFACES_NAME], sname);
+	invoke_if_exists(self, __CTOR_FUNCTION_NAME);
+	struct_remove(self, __CTOR_FUNCTION_NAME);
 }
 
 /// @func	implements(struct, _interface)
@@ -234,7 +237,8 @@ function __struct_join_into(target, from) {
 					is_struct(member) && 
 					!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
 					if (!is_struct(self[$ name])) {
-						wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+						if (vsget(self, name) != undefined)
+							wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
 						self[$ name] = member;
 					} else {
 						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
@@ -302,7 +306,8 @@ function __struct_join_into_no_rebind(target, from) {
 					is_struct(member) && 
 					!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
 					if (!is_struct(self[$ name])) {
-						wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+						if (vsget(self, name) != undefined)
+							wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
 						self[$ name] = member;
 					} else {
 						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
@@ -311,6 +316,112 @@ function __struct_join_into_no_rebind(target, from) {
 				} else
 					self[$ name] = member;
 			}
+		}
+	}
+}
+
+/// @func	struct_enrich(structs...)
+/// @desc	Enriches two or more structs together into a new struct.
+///			Methods in the structs will be rebound to the new struct
+///			ATTENTION! No static members can be transferred! Best use this for data structs only!
+function struct_enrich(structs) {
+	var rv = {};
+	for (var i = 0; i < argument_count; i++) 
+		struct_join_into(rv, argument[i]);
+	return rv;
+}
+
+/// @func	struct_enrich_into(target, sources...)
+/// @desc	Integrate all source structs into the target struct by copying
+///			all members from source to target but only non-existing members.
+///			Circular references are handled. It is safe to join child-parent-child references.
+///			Methods in the structs will be rebound to the new struct
+///			ATTENTION! No static members can be transferred! Best use this for data structs only!
+function struct_enrich_into(target, sources) {
+	__ENSURE_STRUCT_JOIN_CIRCULAR_CACHE;
+	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
+		__STRUCT_JOIN_CIRCULAR_CACHE = [];
+	
+	var from		= undefined;
+	var from_cstr	= undefined;
+	var target_cstr	= undefined;
+	__STRUCT_JOIN_CIRCULAR_LEVEL++;
+	for (var i = 1; i < argument_count; i++) {
+		from = argument[i];
+		if (from == undefined) continue;
+		target_cstr = struct_get(target, __CONSTRUCTOR_NAME);
+		from_cstr	= struct_get(from, __CONSTRUCTOR_NAME);
+		if (target_cstr != from_cstr && from_cstr != undefined) {
+			static_set(target, static_get(from));
+			if (target_cstr != undefined)
+				wlog($"** WARNING ** Static struct mismatch encountered while joining '{from_cstr}' into '{target_cstr}'");
+		}
+		__struct_enrich_into(target, from);
+	}
+	__STRUCT_JOIN_CIRCULAR_LEVEL--;
+	if (__STRUCT_JOIN_CIRCULAR_LEVEL == 0)
+		__STRUCT_JOIN_CIRCULAR_CACHE = [];
+		
+	return target;
+}
+
+function __struct_enrich_into(target, from) {
+	var names	= struct_get_names(from);
+	var name	= undefined;
+	var member	= undefined;
+	for (var j = 0; j < array_length(names); j++) {
+		name = names[@j];
+		member = from[$ name];
+		with (target) {
+			if (struct_exists(self, name))
+				continue;
+			if (is_method(member))
+				self[$ name] = method(self, member);
+			else {
+				vsgetx(self, name, member);
+				if (member != undefined && 
+					is_struct(member) && 
+					!array_contains(__STRUCT_JOIN_CIRCULAR_CACHE, member)) {
+					if (!is_struct(self[$ name])) {
+						wlog($"** WARNING ** Type mismatch encountered while joining '{name}'");
+						self[$ name] = member;
+					} else {
+						array_push(__STRUCT_JOIN_CIRCULAR_CACHE, member);
+						struct_enrich_into(self[$ name], member);
+					}
+				} else
+					self[$ name] = member;
+			}
+		}
+	}
+}
+
+/// @func	struct_clear(_struct, _members_to_keep = [])
+/// @desc	Removes all members from a struct, except the
+///			##raptor## internal members (constructors and inheritance meta data)
+///			but keeps the struct reference intact.
+///			The optional second argument may contain a string array of member names
+///			to keep when clearing the struct.
+///			These members may contain wildcards, like "arg*"
+function struct_clear(_struct, _members_to_keep = []) {
+	if (!is_struct(_struct)) {
+		wlog($"** WARNING ** struct_clear called with an argument that is not a struct!");
+		return;
+	}
+	
+	var names = struct_get_names(_struct);
+	var n;
+	var found = false;
+	for (var i = 0, len = array_length(names); i < len; i++) {
+		n = names[@i];
+		if (!is_any_of(n, __CONSTRUCTOR_NAME, __PARENT_CONSTRUCTOR_NAME)) {
+			found = false;
+			for (var j = 0, jen = array_length(_members_to_keep); j < jen; j++) {
+				found = string_match(n, _members_to_keep[@j]);
+				if (found) break;
+			}
+			
+			if (!found) struct_remove(_struct, n);
 		}
 	}
 }
@@ -430,71 +541,36 @@ function struct_is_empty(_struct) {
 	return array_length(struct_get_names(_struct)) == 0;
 }
 
-#region virtual and override
-
-// This is used by the "virtual" and "override" method pair
-#macro __FUNCTION_INHERITANCE		global.__function_inheritance
-__FUNCTION_INHERITANCE = {}
-
-/// @func	virtual(_object_type, _function_name, [_function])
-/// @desc	You must declare a function as "virtual" to be able to "override" it later.
-///			This keeps track of the inheritance chain, and due to the way, how "events"
-///			work in GameMaker, you need to tell the engine, who you are, when you "virtualize"
-///			the function, by also supplying your object_type.
-///	Example: 
-///		virtual(_myBaseObject, "my_function", function() {...});
-function virtual(_object_type, _function_name, _function = undefined) {
-	var key = is_string(_object_type) ? _object_type : object_get_name(_object_type);
-	var str = vsgetx(__FUNCTION_INHERITANCE, _function_name, {});
-	var arr = vsgetx(str, key, []);
-	if (!array_contains(arr, key)) {
-		array_push(arr, key);
-	}
-	if (_function != undefined)
-		self[$ _function_name] = method(self, _function);
-}
-
-/// @func	override(_object_type, _function_name, _new_function)
-/// @desc	NOTE: WORKS FOR OBJECTS ONLY! NOT FOR STRUCTS!
-///			Allows a clean override of any function in an object instance and keeps
+/// @func	override(_typename, _function_name, _new_function)
+///			Allows a clean override of any function in an object instance or struct and keeps
 ///			the original function available under the parent objects' name + function_name
+///			NOTE: Supply the current class/object name AS STRING as first parameter.
+///			This is due to GameMaker's not-so-really-object-oriented behavior, because
+///			the event_inherited() function is not really a function and a Create event
+///			always runs exclusively in the top inheritance level. A Create event can not
+///			get the type name of its own class, just the typename of final child object.
 ///	Example:
 /// For 3 inheritance levels, lets call them mother, child and grandchild
-/// mother defines		virtual(mother,		 "a", function() {...});
-/// child does			override(child,		 "a", function() {...});
-/// grandchild does		override(grandchild, "a", function() {...});
+/// mother defines		virtual ("mother",     "a", function() {...});
+/// child does			override("child",      "a", function() {...});
+/// grandchild does		override("grandchild", "a", function() {...});
 /// Now child and grand_child may call mother_a() and grandchild also has child_a() available. 
-function override(_object_type, _function_name, _new_function) {
-	var str = vsget(__FUNCTION_INHERITANCE, _function_name);
-	if (str != undefined) {
-		var names = variable_struct_get_names(str);
-		for (var i = 0, len = array_length(names); i < len; i++) {
-			var rootpar = names[@i];
-			if (is_child_of(self, asset_get_index(rootpar))) {
-				var arr = vsget(str, rootpar);
-				var myname = is_string(_object_type) ? _object_type : object_get_name(_object_type);
-				var newname = "";
-				if (array_last(arr) != myname) {
-					var par = array_last(arr);
-					newname = $"{par}_{_function_name}";
-					array_push(arr, myname);
-				} else {
-					var arrlen = array_length(arr);
-					if (arrlen > 1) {
-						var par = arr[@ arrlen - 2];
-						newname = $"{par}_{_function_name}";
-					}
-				}
-				if (newname != "") {
-					self[$ newname] = method(self, self[$ _function_name]);
-					self[$ _function_name] = method(self, _new_function);
-					return;
-				}
-			}
+function override(_typename, _function_name, _new_function) {
+	var tree = is_object_instance(self) ? object_tree(self) : class_tree(self);
+	if (!is_string(_typename)) _typename = typename_of(_typename);
+	
+	// we need only the name of our direct parent, i.e. tree[myindex+1]
+	var myidx = array_index_of(tree, _typename);
+	if (is_between(myidx, 0, array_length(tree) - 2)) {
+		if (is_callable(self[$ _function_name])) {
+			var parent = tree[@ myidx + 1];
+			var newname = $"{parent}_{_function_name}";
+		
+			self[$ newname] = method(self, self[$ _function_name]);
+			self[$ _function_name] = method(self, _new_function);
+			return;
 		}
 	}
 	// This is a... runtime-compile-error?!?
-	throw($"** ERROR ** Function '{_function_name}' can not be overridden as it has not been declared 'virtual'");
+	throw($"** ERROR ** Function '{_function_name}' override failed, it does not exist or is not callable in base object/class '{_typename}'");
 }
-
-#endregion
