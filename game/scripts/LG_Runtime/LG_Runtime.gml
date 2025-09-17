@@ -247,7 +247,7 @@ function LG() {
 		if (startpos > 0) {
 			var runner = string_substring(str, startpos);
 			// find the matching close bracket (more inner brackets might occur)
-			var endpos = startpos + 1;
+			var endpos = 2; // start with first character after [
 			var skipbrackets = 0;
 			var nextchar = string_char_at(runner, endpos);
 			var maxpos = string_length(runner);
@@ -261,7 +261,7 @@ function LG() {
 				if (nextchar == "[") skipbrackets++;
 				if (nextchar == "]") skipbrackets--;
 			}
-			//var endpos = string_last_index_of(runner, "]");
+
 			if (endpos > 2)
 				return string_substring(runner, 1, endpos);
 		}

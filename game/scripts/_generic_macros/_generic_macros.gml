@@ -84,12 +84,12 @@ function set_scene_unlocked(_unlock_mouse = true, _unlock_keyboard = true) {
 
 // Those macros define all situations that can lead to an invisible element on screen
 #macro __LAYER_OR_OBJECT_HIDDEN		(!visible || (layer != -1 && !layer_get_visible(layer)) || vsget(self, "is_window_hidden", EMPTY_FUNC)())
-#macro __HIDDEN_BEHIND_POPUP		(GUI_POPUP_VISIBLE && depth > GUI_POPUP_MIN_DEPTH)
+#macro __HIDDEN_BEHIND_POPUP		false
 
 #macro INSTANCE_UNREACHABLE			(__LAYER_OR_OBJECT_HIDDEN || __HIDDEN_BEHIND_POPUP)
 
 // All controls skip their events, if this is true
-#macro SKIP_EVENT_MOUSE				(SCENE_LOCK_MOUSE || is_mouse_over_debug_overlay() || __INSTANCE_UNREACHABLE)
+#macro SKIP_EVENT_MOUSE				(SCENE_LOCK_MOUSE || is_mouse_over_debug_overlay() || INSTANCE_UNREACHABLE)
 #macro SKIP_EVENT_NO_MOUSE			(SCENE_LOCK_MOUSE || INSTANCE_UNREACHABLE)
 #macro SKIP_EVENT_UNTARGETTED		(SCENE_IS_LOCKED || INSTANCE_UNREACHABLE || !SELF_IS_INTERACTIVE)
 
