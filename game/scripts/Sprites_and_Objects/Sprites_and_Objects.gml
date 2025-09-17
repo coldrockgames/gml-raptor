@@ -167,15 +167,19 @@ global.__topmost_instance_finder_list = ds_list_create();
 ///			which shall be ignored,	as well as force the "draw_on_gui" to be 
 ///			either ignored too (default, undefined) or to have a specific value (true or false).
 function get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefined, _ignore_instances = undefined, _draw_on_gui = undefined) {
+	static default_mindepth = { depth: DEPTH_BOTTOM_MOST };
+	
 	ds_list_clear(global.__topmost_instance_finder_list);
 	var cnt = instance_position_list(_x, _y, _obj_type, global.__topmost_instance_finder_list, false);
 	if (cnt > 0) {
-		var mindepth = ds_list_find_value(global.__topmost_instance_finder_list, 0);
-		var newdepth = undefined;
-		var i = 1;
-		var tree;
-		var tree_found;
-		repeat(ds_list_size(global.__topmost_instance_finder_list) - 1) {
+		var any_found		= false;
+		var mindepth		= default_mindepth;
+		var newdepth		= undefined;
+		var i				= 0;
+		var tree			= undefined;
+		var tree_found		= false;;
+		
+		repeat(cnt) {
 			tree_found = false;
 			newdepth = ds_list_find_value(global.__topmost_instance_finder_list, i);
 			if (_ignore_types != undefined) {
@@ -190,10 +194,13 @@ function get_topmost_instance_at(_x, _y, _obj_type = all, _ignore_types = undefi
 			if (!tree_found &&
 				(_ignore_instances == undefined || !array_contains(_ignore_instances, newdepth.id)) && 
 				(_draw_on_gui == undefined || vsget(newdepth, "draw_on_gui") == _draw_on_gui) &&
-				newdepth.depth < mindepth.depth) mindepth = newdepth;
+				newdepth.depth < mindepth.depth) {
+					any_found = true;
+					mindepth = newdepth;
+				}
 			i++;
 		}
-		return mindepth;
+		return any_found ? mindepth : undefined;
 	}
 	return undefined;
 }

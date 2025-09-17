@@ -78,8 +78,8 @@ commit_move = function() {
 	yprevious = y;
 }
 
-/// @func __can_touch_this(_instance)
-__can_touch_this = function(_instance) {
+/// @func	can_touch_this(_instance)
+can_touch_this = function(_instance) {
 	with(_instance)
 		return SELF_IS_INTERACTIVE && !INSTANCE_UNREACHABLE;
 }

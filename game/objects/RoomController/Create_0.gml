@@ -589,7 +589,7 @@ fade_out = function(_fade_out_frames, _finished_callback, _data = undefined) {
 		.set_data("user_data", _data)
 		.set_data("callback", _finished_callback)
 		.binder()
-			.bind_watcher("image_alpha", function(v) {
+			.bind_watcher("image_alpha", function(n, v) {
 				var data = animation_get(self, "room_fade_out").data;
 				fx_set_parameter(data.fx, "g_TintCol", [1-v, 1-v, 1-v, 1]);
 				layer_set_fx(data.fx_layer, data.fx);
